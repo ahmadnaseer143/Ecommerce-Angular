@@ -14,7 +14,8 @@
                     <ng-container *ngFor="let item of navigationList; let i = index;">
                         <li class="text-center fw-bold">{{item.category | titlecase}}</li>
                         <li *ngFor="let subCategory of item.subCategories" [style.cursor]="'pointer'">
-                            <a class="dropdown-item">
+                            <a class="dropdown-item" OpenProducts
+                                [category]="{id: 0, 'category': item.category, 'subCategory': subCategory}">
                                 {{subCategory | titlecase}}
                             </a>
                         </li>
@@ -34,7 +35,7 @@
             <button type="button" class="btn btn-outline-light">Account</button>
             <button type="button" class="btn btn-outline-light" routerLink="/cart">
                 Cart
-                <span class="badge bg-warning text-dark">Cart items</span>
+                <span class="badge bg-warning text-dark">8</span>
             </button>
             <button type="button" class="btn btn-outline-light" routerLink="/orders">Orders</button>
             <button type="button" class="btn btn-outline-light">Logout</button>
