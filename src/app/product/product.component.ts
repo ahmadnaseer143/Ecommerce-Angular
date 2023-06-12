@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent {
-  @Input() view: 'grid' | 'list' = 'list';
+  @Input() view: 'grid' | 'list' = 'grid';
 
 }

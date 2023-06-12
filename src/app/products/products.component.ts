@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent {
-
+  view: 'grid' | 'list' = 'list';
+  sortBy: 'default' | 'htl' | 'lth' = 'default';
 }

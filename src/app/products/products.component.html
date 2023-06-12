@@ -1,1 +1,65 @@
-<p>products works!</p>
+<div class="my-container mx-auto border border-dark">
+    <!-- Toolbar -->
+    <div class="border mb-5 p-3 d-flex justify-content-around">
+        <div class="btn-group" role="group">
+            <button [ngClass]="{'active' : view === 'grid'}" type="button" class="btn btn-outline-secondary"
+                (click)="view='grid'">Grid</button>
+            <button [ngClass]="{'active' : view === 'list'}" type="button" class="btn btn-outline-secondary"
+                (click)="view='list'">List</button>
+        </div>
+
+        <div class="w-50 d-flex">
+            <span class="me-5 d-flex align-items-center fs-5 fw-bold">Sort By</span>
+            <div class="btn-group" role="group">
+                <button [ngClass]="{'active' : sortBy === 'default'}" type="button" class="btn btn-outline-secondary"
+                    (click)="sortBy='default'">Default</button>
+
+                <button [ngClass]="{'active' : sortBy === 'htl'}" type="button" class="btn btn-outline-secondary"
+                    (click)="sortBy='htl'">Price
+                    (High to Low)</button>
+                <button [ngClass]="{'active' : sortBy === 'lth'}" type="button" class="btn btn-outline-secondary"
+                    (click)="sortBy='lth'">Price
+                    (Low
+                    to High)</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="border p-5">
+
+        <!-- Grid View -->
+        <div class="grid-view" *ngIf="view==='grid'">
+            <div class="row g-5">
+                <div class="col-3" *ngFor="let product of [1,1,1,1,1]">
+                    <app-product></app-product>
+                </div>
+            </div>
+        </div>
+
+        <!-- List View -->
+        <div class="list-view" *ngIf="view==='list'">
+            <div class="row mb-5">
+                <div class="col" *ngFor="let product of [1,1,1,1,1]">
+                    <app-product [view]="'list'"></app-product>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col">
+            <app-product></app-product>
+        </div>
+        <div class="col">
+            <app-product></app-product>
+        </div>
+        <div class="col">
+            <app-product></app-product>
+        </div>
+        <div class="col">
+            <app-product></app-product>
+        </div>
+    </div>
+</div> -->
