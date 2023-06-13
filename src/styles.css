@@ -10,3 +10,7 @@
 .my-rounded-corner {
     border-radius: 1rem;
 }
+
+.modal-backdrop.fade.show {
+    z-index: 19;
+}
