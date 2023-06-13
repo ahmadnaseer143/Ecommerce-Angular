@@ -25,7 +25,7 @@ export class HomeComponent {
       }
     },
     {
-      bannerImage: "Banner/bannermobile.avif",
+      bannerImage: "Banner/bannermobile.jpg",
       category: {
         id: 1,
         category: 'electronics',
