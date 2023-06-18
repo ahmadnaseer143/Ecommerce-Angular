@@ -44,9 +44,17 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.33, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.5, )"
             }
           },
           "imports": [

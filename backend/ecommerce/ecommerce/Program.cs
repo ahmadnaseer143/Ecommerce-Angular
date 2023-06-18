@@ -1,4 +1,18 @@
+using ecommerce.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// add cors
+builder.Services.AddCors(options =>
+{
+  options.AddDefaultPolicy(builder =>
+  {
+    builder.WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+  });
+});
+
 
 // Add services to the container.
 
@@ -7,7 +21,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// add dependecy of DataAccess
+builder.Services.AddSingleton<IDataAccess, DataAccess>();
+
+
 var app = builder.Build();
+
+app.UseCors();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

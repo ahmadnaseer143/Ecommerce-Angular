@@ -1,27 +1,48 @@
-import { Component, ViewChild, ViewContainerRef, ElementRef, Type } from '@angular/core';
-import { NavigationItem } from '../models/models';
+import {
+  Component,
+  ViewChild,
+  ViewContainerRef,
+  ElementRef,
+  Type,
+} from '@angular/core';
+import { Category, NavigationItem } from '../models/models';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
   @ViewChild('modalTitle') modalTitle!: ElementRef;
   @ViewChild('container', { read: ViewContainerRef, static: true })
   container!: ViewContainerRef;
-  navigationList: NavigationItem[] = [
-    {
-      category: "Electronics",
-      subCategories: ["Mobiles", "Laptops"]
-    },
-    {
-      category: "Furniture",
-      subCategories: ["Chairs", "Tables"]
-    },
-  ]
+  navigationList: NavigationItem[] = [];
+
+  constructor(private navigationService: NavigationService) {}
+
+  ngOnInit(): void {
+    // Get Category List
+    this.navigationService.getCategoryList().subscribe((list: Category[]) => {
+      for (let item of list) {
+        let present = false;
+        for (let navItem of this.navigationList) {
+          if (navItem.category === item.category) {
+            navItem.subCategories.push(item.subCategory);
+            present = true;
+          }
+        }
+        if (!present) {
+          this.navigationList.push({
+            category: item.category,
+            subCategories: [item.subCategory],
+          });
+        }
+      }
+    });
+  }
 
   openModal(name: string) {
     this.container.clear();
@@ -38,5 +59,4 @@ export class HeaderComponent {
 
     this.container.createComponent(componentType);
   }
-
 }
