@@ -1,4 +1,5 @@
 using ecommerce.Models;
+using ECommerce.API.Models;
 
 namespace ecommerce.Data
 {
@@ -12,5 +13,7 @@ namespace ecommerce.Data
     List<Product> GetProducts(string category, string subCategory, int count);
 
     Product GetProduct(int id);
+
+    bool InsertUser(User user);
   }
 }

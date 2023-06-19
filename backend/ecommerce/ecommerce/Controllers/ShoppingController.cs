@@ -1,4 +1,5 @@
 using ecommerce.Data;
+using ECommerce.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace ecommerce.Controllers
   public class ShoppingController : ControllerBase
   {
     readonly IDataAccess dataAccess;
+    private readonly string DateFormat;
 
     public ShoppingController(IDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
+      DateFormat = configuration["Constants:DateFormat"];
 
     }
 
@@ -39,6 +42,21 @@ namespace ecommerce.Controllers
     {
       var result = dataAccess.GetProduct(id);
       return Ok(result);
+    }
+
+
+    [HttpPost("RegisterUser")]
+    public IActionResult RegisterUser([FromBody] User user)
+    {
+      user.CreatedAt = DateTime.Now.ToString(DateFormat);
+      user.ModifiedAt = DateTime.Now.ToString(DateFormat);
+
+      var result = dataAccess.InsertUser(user);
+
+      string? message;
+      if (result) message = "Account Created";
+      else message = "Email already taken";
+      return Ok(message);
     }
   }
 }

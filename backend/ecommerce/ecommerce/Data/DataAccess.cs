@@ -1,4 +1,5 @@
 using ecommerce.Models;
+using ECommerce.API.Models;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
@@ -180,5 +181,44 @@ namespace ecommerce.Data
       }
       return product;
     }
+
+    public bool InsertUser(User user)
+    {
+      using (MySqlConnection connection = new(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+        connection.Open();
+
+        string query = "SELECT COUNT(*) FROM Users WHERE Email=@em;";
+        command.CommandText = query;
+        command.Parameters.Add("@em", MySqlDbType.VarChar).Value = user.Email;
+        int count = Convert.ToInt32(command.ExecuteScalar());
+        if (count > 0)
+        {
+          connection.Close();
+          return false;
+        }
+
+        query = "INSERT INTO Users (FirstName, LastName, Address, Mobile, Email, Password, CreatedAt, ModifiedAt) VALUES (@fn, @ln, @add, @mb, @em, @pwd, @cat, @mat);";
+
+        command.CommandText = query;
+        command.Parameters.Clear();
+        command.Parameters.Add("@fn", MySqlDbType.VarChar).Value = user.FirstName;
+        command.Parameters.Add("@ln", MySqlDbType.VarChar).Value = user.LastName;
+        command.Parameters.Add("@add", MySqlDbType.VarChar).Value = user.Address;
+        command.Parameters.Add("@mb", MySqlDbType.VarChar).Value = user.Mobile;
+        command.Parameters.Add("@em", MySqlDbType.VarChar).Value = user.Email;
+        command.Parameters.Add("@pwd", MySqlDbType.VarChar).Value = user.Password;
+        command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = user.CreatedAt;
+        command.Parameters.Add("@mat", MySqlDbType.VarChar).Value = user.ModifiedAt;
+
+        command.ExecuteNonQuery();
+      }
+      return true;
+    }
+
   }
 }

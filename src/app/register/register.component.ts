@@ -5,6 +5,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { NavigationService } from '../services/navigation.service';
+import { User } from '../models/models';
 
 @Component({
   selector: 'app-register',
@@ -17,8 +19,9 @@ export class RegisterComponent {
   message = '';
 
   constructor(
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private navigationService: NavigationService
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -54,8 +57,22 @@ export class RegisterComponent {
   }
 
   register() {
-  }
+    let user: User = {
+      id: 0,
+      firstName: this.FirstName.value,
+      lastName: this.LastName.value,
+      email: this.Email.value,
+      address: this.Address.value,
+      mobile: this.Mobile.value,
+      password: this.PWD.value,
+      createdAt: '',
+      modifiedAt: '',
+    };
 
+    this.navigationService.registerUser(user).subscribe((res: any) => {
+      this.message = res.toString();
+    });
+  }
 
   get FirstName(): FormControl {
     return this.registerForm.get('firstName') as FormControl;
