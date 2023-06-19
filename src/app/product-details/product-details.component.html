@@ -1,104 +1,158 @@
 <div class="my-container mx-auto border border-dark">
-    <!-- Imge and details -->
-    <div class="row g-0">
-        <div class="col-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <img src="../../assets/mobiles/iphone/{{imageIndex}}" alt="" class="w-100">
-            </div>
-            <div class="image-thumbnails mt-4 d-flex justify-content-between align-items-center">
-                <img src="../../assets/mobiles/iphone/1.jpg" alt="" class="w-100" (click)='imageIndex="1.jpg"'>
-                <img src="../../assets/mobiles/iphone/2.webp" alt="" class="w-100" (click)='imageIndex="2.webp"'>
-                <img src="../../assets/mobiles/iphone/3.webp" alt="" class="w-100" (click)='imageIndex="3.webp"'>
-                <img src="../../assets/mobiles/iphone/1.jpg" alt="" class="w-100" (click)='imageIndex="1.jpg"'>
-                <img src="../../assets/mobiles/iphone/4.jpg" alt="" (click)='imageIndex="4.jpg"' class="w-100">
-            </div>
-        </div>
-        <!-- Product Details -->
-        <div class="col-8">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Header</h2>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title text-success">Final Price
-                        <span class="text-primary">
-                            -20%
-                        </span>
-                    </h1>
-                    <h4 class="card-subtitle text-danger text-decoration-line-through">
-                        Original Price
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <h6 class="card-subtitle my-2 text-primary">
-                        10 Products are available
-                    </h6>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-success">
-                            Add to cart
-                        </button>
-                    </div>
-
-                </div>
-                <div class="card-body">
-                    <h5 class="card-text">Description</h5>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-action" *ngFor="let item of [1,1,1,1]">
-                            {{item}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+  <!-- Imge and details -->
+  <div class="row g-0">
+    <div class="col-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <img
+          src="../../assets/mobiles/iphone/{{ imageIndex }}"
+          alt=""
+          class="w-100"
+        />
+      </div>
+      <div
+        class="image-thumbnails mt-4 d-flex justify-content-between align-items-center"
+      >
+        <img
+          src="../../assets/mobiles/iphone/1.jpg"
+          alt=""
+          class="w-100"
+          (click)="imageIndex = '1.jpg'"
+        />
+        <img
+          src="../../assets/mobiles/iphone/2.webp"
+          alt=""
+          class="w-100"
+          (click)="imageIndex = '2.webp'"
+        />
+        <img
+          src="../../assets/mobiles/iphone/3.webp"
+          alt=""
+          class="w-100"
+          (click)="imageIndex = '3.webp'"
+        />
+        <img
+          src="../../assets/mobiles/iphone/1.jpg"
+          alt=""
+          class="w-100"
+          (click)="imageIndex = '1.jpg'"
+        />
+        <img
+          src="../../assets/mobiles/iphone/4.jpg"
+          alt=""
+          (click)="imageIndex = '4.jpg'"
+          class="w-100"
+        />
+      </div>
     </div>
-    <!-- Suggested Products -->
-    <div class="row g-0">
-        <div class="col-12 ps-5 pt-4 pb-3">
-            <h3 class="border boder-secondary text-center py-2 my-rounded-corner w-25">Related Products</h3>
+    <!-- Product Details -->
+    <div class="col-8">
+      <div class="card">
+        <div class="card-header">
+          <h2>{{ product?.title | titlecase }}</h2>
         </div>
-        <div class="col-12">
-            <app-suggested-product></app-suggested-product>
+        <div class="card-body">
+          <h1 class="card-title text-success">
+            {{
+              utilityService.applyDiscount(
+                product.price,
+                product.offer.discount
+              ) | number : "1.2-2"
+            }}
+            <span class="text-primary">
+              after {{ product.offer.discount }} % discount
+            </span>
+          </h1>
+          <h4 class="card-subtitle text-danger text-decoration-line-through">
+            {{ product.price | number : "1.2-2" }}
+          </h4>
         </div>
+        <div class="card-body">
+          <h6 class="card-subtitle my-2 text-primary">
+            {{ product.quantity }} available
+          </h6>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-success">Add to cart</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-text">{{ product.description }}</h5>
+          <ul class="list-group">
+            <li
+              class="list-group-item list-group-item-action"
+              *ngFor="let item of product.description.split('. ')"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <!-- Review -->
-    <div class="row g-0 my-5">
-        <!-- User Review -->
-        <div class="col p-3">
-            <h3>Give your review</h3>
-            <h5 class="mt-4">Write your review</h5>
-            <textarea name="" id="" cols="30" rows="10" class="w-75 p-2"></textarea>
-            <div class="d-flex align-items-start">
-                <button class="btn btn-outline-secondary mt-4 me-5" type="button">
-                    Save Review
-                </button>
-                <div>
-                    <h6 class="text-danger mt-4">Login first, then enter the review</h6>
-                    <h6 class="text-danger">Review cannot be empty!</h6>
-                    <h6 class="text-danger">Review Saved Successfully</h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Other Review -->
-        <div class="col p-3">
-            <h3>Other Reviews</h3>
-            <h6 *ngIf="1">No Reviews Yet!</h6>
-            <div class="card mt-3" *ngFor="let review of [1,2,3]">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-text">
-                        Naseer Ahmad
-                    </div>
-                    <div class="card-text fst-italic">
-                        Reviewed On: <span class="fw-bold">
-                            {{"20 Oct 2022" | date:"dd-MMM-yyyy"}}
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-text">Review</div>
-                </div>
-            </div>
-        </div>
-
+  </div>
+  <!-- Suggested Products -->
+  <div class="row g-0">
+    <div class="col-12 ps-5 pt-4 pb-3">
+      <h3
+        class="border boder-secondary text-center py-2 my-rounded-corner w-25"
+      >
+        Related Products
+      </h3>
     </div>
+    <div class="col-12">
+      <app-suggested-product
+        [category]="product.productCategory"
+      ></app-suggested-product>
+    </div>
+  </div>
+  <!-- Review -->
+  <div class="row g-0 my-5">
+    <!-- User Review -->
+    <div class="col p-3">
+      <h3>Give your review</h3>
+      <h5 class="mt-4">Write your review</h5>
+      <textarea
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        class="w-75 p-2"
+        [formControl]="reviewControl"
+      ></textarea>
+      <div class="d-flex align-items-start">
+        <button
+          class="btn btn-outline-secondary mt-4 me-5"
+          type="button"
+          (click)="submitReview()"
+        >
+          Save Review
+        </button>
+        <div>
+          <h6 class="text-danger mt-4">Login first, then enter the review</h6>
+          <h6 class="text-danger" *ngIf="showError">Review cannot be empty!</h6>
+          <h6 class="text-danger" *ngIf="reviewSaved">
+            Review Saved Successfully
+          </h6>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Review -->
+    <div class="col p-3">
+      <h3>Other Reviews</h3>
+      <h6 *ngIf="1">No Reviews Yet!</h6>
+      <div class="card mt-3" *ngFor="let review of [1, 2, 3]">
+        <div class="card-header d-flex justify-content-between">
+          <div class="card-text">Naseer Ahmad</div>
+          <div class="card-text fst-italic">
+            Reviewed On:
+            <span class="fw-bold">
+              {{ "20 Oct 2022" | date : "dd-MMM-yyyy" }}
+            </span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-text">Review</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

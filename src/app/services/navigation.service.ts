@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs';
 import { Category } from '../models/models';
 
@@ -25,5 +25,19 @@ export class NavigationService {
         })
       )
     );
+  }
+
+  getProducts(category: string, subCategory: string, count: number) {
+    return this.http.get<any[]>(this.baseurl + 'GetProducts', {
+      params: new HttpParams()
+        .set('category', category)
+        .set('subCategory', subCategory)
+        .set('count', count),
+    });
+  }
+
+  getProduct(id: number) {
+    let url = this.baseurl + 'GetProduct/' + id;
+    return this.http.get(url);
   }
 }

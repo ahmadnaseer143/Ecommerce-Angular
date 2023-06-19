@@ -23,5 +23,22 @@ namespace ecommerce.Controllers
       var result = dataAccess.GetProductCategories();
       return Ok(result);
     }
+
+    [HttpGet("GetProducts")]
+
+    public IActionResult GetProducts(string category, string subCategory, int count)
+    {
+      Console.WriteLine(category);
+      var result = dataAccess.GetProducts(category, subCategory, count);
+      return Ok(result);
+    }
+
+    [HttpGet("GetProduct/{id}")]
+
+    public IActionResult GetProduct(int id)
+    {
+      var result = dataAccess.GetProduct(id);
+      return Ok(result);
+    }
   }
 }

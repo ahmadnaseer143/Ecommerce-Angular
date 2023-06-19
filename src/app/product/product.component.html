@@ -1,88 +1,136 @@
-<div class="grid-view" *ngIf="view==='grid'">
-    <div class="card">
-        <div class="card-header">Header</div>
-        <div>
-            <img src="../../assets/mobile.jpg" class="card-img-top img-fluid" alt="Card Image" OpenProductDetails
-                [productId]="1">
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Title</h5>
-            <h6 class="card-subtitle my-2 text-primary">12 Available</h6>
-            <p class="card-text description">Some example text to fill the card body.</p>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title text-success">
-                Final Price
-                <span class="text-primary">-20%</span>
-            </h5>
-            <h6 class="card-subtitle text-danger text-decoration-line-through">Original Price</h6>
-        </div>
-        <div class="card-footer d-grid gap-2">
-            <button class="btn btn-outline-success" type="button">Add to cart</button>
-        </div>
+<div class="grid-view" *ngIf="view === 'grid'">
+  <div class="card">
+    <div class="card-header">Header</div>
+    <div>
+      <img
+        src="../../assets/mobile.jpg"
+        class="card-img-top img-fluid"
+        alt="Card Image"
+        OpenProductDetails
+        [productId]="product.id"
+      />
     </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <h6 class="card-subtitle my-2 text-primary">{{ product.quantity }}</h6>
+      <p class="card-text description">
+        {{ product.description }}
+      </p>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title text-success">
+        {{
+          utilityService.applyDiscount(product.price, product.offer.discount)
+            | number : "1.2-2"
+        }}
+        <span class="text-primary">
+          after {{ product.offer.discount }} % discount</span
+        >
+      </h5>
+      <h6 class="card-subtitle text-danger text-decoration-line-through">
+        {{ product.price | number : "1.2-2" }}
+      </h6>
+    </div>
+    <div class="card-footer d-grid gap-2">
+      <button class="btn btn-outline-success" type="button">Add to cart</button>
+    </div>
+  </div>
 </div>
 
 <!-- List View -->
-<div class="list-view" *ngIf="view==='list'">
-    <div class="card">
-        <div class="card-body">
-            <div class="row g-0">
-                <div class="col-md-4 opverflow-hidden d-flex justify-content-center align-items-center">
-                    <img src="../../assets/mobile.jpg" class="card-img-top img-fluid rounded-start" alt="Card Image"
-                        OpenProductDetails [productId]="1">
-                </div>
-                <div class="col-md-8">
-                    <h5 class="card-title">Title</h5>
-                    <h6 class="card-subtitle my-2 text-primary">12 Available</h6>
-                    <p class="card-text description">Some example text to fill the card body.</p>
-                    <div class="card-footer d-grid gap-2">
-                        <button class="btn btn-outline-success" type="button">Add to cart</button>
-                    </div>
-                </div>
-            </div>
+<div class="list-view" *ngIf="view === 'list'">
+  <div class="card">
+    <div class="card-body">
+      <div class="row g-0">
+        <div
+          class="col-md-4 opverflow-hidden d-flex justify-content-center align-items-center"
+        >
+          <img
+            src="../../assets/mobile.jpg"
+            class="card-img-top img-fluid rounded-start"
+            alt="Card Image"
+            OpenProductDetails
+            [productId]="product.id"
+          />
         </div>
+        <div class="col-md-8">
+          <h5 class="card-title">{{ product.title }}</h5>
+          <h6 class="card-subtitle my-2 text-primary">
+            {{ product.quantity }}
+          </h6>
+          <p class="card-text description">
+            {{ product.description }}
+          </p>
+          <div class="card-footer d-grid gap-2">
+            <button class="btn btn-outline-success" type="button">
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Cart Item View -->
 <div class="cart-item-view" *ngIf="view === 'currcartitem'">
-    <div class="card">
-        <div class="row g-0">
-
-            <div class="col-4 overflow-hidden d-flex justify-content-center align-items-center">
-                <img src="../../assets/mobiles/iphone/1.jpg" class="img-fluid rounded-start" alt="Product Image"
-                    OpenProductDetails [productId]="1">
-            </div>
-            <div class="col-8">
-                <div class="card-body">
-                    <h5 class="card-title title"> Title</h5>
-                    <h5 class="card-title text-success">
-                        Final Price
-                        <span class="text-primary"> 20% </span>
-                    </h5>
-                    <h6 class="card-subtitle text-danger text-decoration-line-through">
-                        Original Price
-                    </h6>
-                </div>
-                <div class="card-footer text-muted d-grid gap-2">
-                    <div class="btn btn-outline-danger" type="button">Remove From Cart</div>
-                </div>
-            </div>
-
+  <div class="card">
+    <div class="row g-0">
+      <div
+        class="col-4 overflow-hidden d-flex justify-content-center align-items-center"
+      >
+        <img
+          src="../../assets/mobiles/iphone/1.jpg"
+          class="img-fluid rounded-start"
+          alt="Product Image"
+          OpenProductDetails
+          [productId]="product.id"
+        />
+      </div>
+      <div class="col-8">
+        <div class="card-body">
+          <h5 class="card-title title">{{ product.title }}</h5>
+          <h5 class="card-title text-success">
+            {{
+              utilityService.applyDiscount(
+                product.price,
+                product.offer.discount
+              ) | number : "1.2-2"
+            }}
+            <span class="text-primary">
+              after {{ product.offer.discount }} % discount
+            </span>
+          </h5>
+          <h6 class="card-subtitle text-danger text-decoration-line-through">
+            {{ product.price | number : "1.2-2" }}
+          </h6>
         </div>
+        <div class="card-footer text-muted d-grid gap-2">
+          <div class="btn btn-outline-danger" type="button">
+            Remove From Cart
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="cart-item-view" *ngIf="view === 'prevcartitem'">
-    <div class="card text-center">
-
-        <div class="overflow-hidden d-flex justify-content-center align-items-center">
-            <img src="../../assets/iphone.jpg" alt="" class="card-img-top" OpenProductDetails [productId]="1">
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title title"> Title </h5>
-        </div>
+  <div class="card text-center">
+    <div
+      class="overflow-hidden d-flex justify-content-center align-items-center"
+    >
+      <img
+        src="../../assets/iphone.jpg"
+        alt=""
+        class="card-img-top"
+        OpenProductDetails
+        [productId]="product.id"
+      />
     </div>
+
+    <div class="card-body">
+      <h5 class="card-title title">{{ product.title }}</h5>
+    </div>
+  </div>
 </div>
