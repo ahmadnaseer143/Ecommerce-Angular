@@ -1,10 +1,12 @@
 using ecommerce.Models;
 using ECommerce.API.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-
-
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ecommerce.Data
 {
@@ -218,6 +220,75 @@ namespace ecommerce.Data
         command.ExecuteNonQuery();
       }
       return true;
+    }
+
+    public string IsUserPresent(string email, string password)
+    {
+      User user = new User();
+      using (MySqlConnection connection = new(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+
+        connection.Open();
+        string query = "SELECT COUNT(*) FROM Users WHERE Email=@Email AND Password=@Password;";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@Email", email);
+        command.Parameters.AddWithValue("@Password", password);
+        int count = Convert.ToInt32(command.ExecuteScalar());
+        if (count == 0)
+        {
+          connection.Close();
+          return "";
+        }
+
+        query = "SELECT * FROM Users WHERE Email=@Email AND Password=@Password;";
+        command.CommandText = query;
+
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          user.Id = Convert.ToInt32(reader["UserId"]);
+          user.FirstName = reader["FirstName"].ToString();
+          user.LastName = reader["LastName"].ToString();
+          user.Email = reader["Email"].ToString();
+          user.Address = reader["Address"].ToString();
+          user.Mobile = reader["Mobile"].ToString();
+          user.Password = reader["Password"].ToString();
+          user.CreatedAt = reader["CreatedAt"].ToString();
+          user.ModifiedAt = reader["ModifiedAt"].ToString();
+        }
+
+        string key = "b9d786d25e4b3a532d6e214c6c8a2bcf";
+        string duration = "60";
+        var symmetrickey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var credentials = new SigningCredentials(symmetrickey, SecurityAlgorithms.HmacSha256);
+
+        // the data in the tokens will be in claims
+        var claims = new[]
+        {
+            new Claim("id", user.Id.ToString()),
+            new Claim("firstName", user.FirstName),
+            new Claim("lastName", user.LastName),
+            new Claim("address", user.Address),
+            new Claim("mobile", user.Mobile),
+            new Claim("email", user.Email),
+            new Claim("createdAt", user.CreatedAt),
+            new Claim("modifiedAt", user.ModifiedAt)
+        };
+
+        var jwtToken = new JwtSecurityToken(
+            issuer: "localhost",
+            audience: "localhost",
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(Convert.ToInt32(duration)),
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(jwtToken);
+      }
+      return "";
     }
 
   }

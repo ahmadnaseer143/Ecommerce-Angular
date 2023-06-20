@@ -45,4 +45,33 @@ export class NavigationService {
     let url = this.baseurl + 'RegisterUser';
     return this.http.post(url, user, { responseType: 'text' });
   }
+
+  loginUser(email: string, password: string) {
+    let url = this.baseurl + 'LoginUser';
+    return this.http.post(
+      url,
+      { Email: email, Password: password },
+      { responseType: 'text' }
+    );
+  }
+
+  // submitReview(userid: number, productid: number, review: string) {
+  //   let obj: any = {
+  //     User: {
+  //       Id: userid,
+  //     },
+  //     Product: {
+  //       Id: productid,
+  //     },
+  //     Value: review,
+  //   };
+
+  //   let url = this.baseurl + 'InsertReview';
+  //   return this.http.post(url, obj, { responseType: 'text' });
+  // }
+
+  // getAllReviewsOfProduct(productId: number) {
+  //   let url = this.baseurl + 'GetProductReviews/' + productId;
+  //   return this.http.get(url);
+  // }
 }

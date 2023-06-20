@@ -58,5 +58,13 @@ namespace ecommerce.Controllers
       else message = "Email already taken";
       return Ok(message);
     }
+
+    [HttpPost("LoginUser")]
+    public IActionResult LoginUser([FromBody] User user)
+    {
+      var token = dataAccess.IsUserPresent(user.Email, user.Password);
+      if (token == "") token = "invalid";
+      return Ok(token);
+    }
   }
 }
