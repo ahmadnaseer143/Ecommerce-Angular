@@ -9,6 +9,7 @@ import { Category, NavigationItem } from '../models/models';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { NavigationService } from '../services/navigation.service';
+import { UtilityService } from '../services/utility.service';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,10 @@ export class HeaderComponent {
   container!: ViewContainerRef;
   navigationList: NavigationItem[] = [];
 
-  constructor(private navigationService: NavigationService) {}
+  constructor(
+    private navigationService: NavigationService,
+    public utilityService: UtilityService
+  ) {}
 
   ngOnInit(): void {
     // Get Category List

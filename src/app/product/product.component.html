@@ -32,7 +32,13 @@
       </h6>
     </div>
     <div class="card-footer d-grid gap-2">
-      <button class="btn btn-outline-success" type="button">Add to cart</button>
+      <button
+        class="btn btn-outline-success"
+        [disabled]="!utilityService.isLoggedIn()"
+      >
+        Add to cart
+        <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>
+      </button>
     </div>
   </div>
 </div>
