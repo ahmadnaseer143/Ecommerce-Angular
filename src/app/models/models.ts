@@ -48,3 +48,11 @@ export interface User {
   createdAt: string;
   modifiedAt: string;
 }
+
+export interface Review {
+  id: number;
+  user: User;
+  product: Product;
+  value: string;
+  createdAt: string;
+}

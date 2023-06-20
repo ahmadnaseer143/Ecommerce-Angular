@@ -55,23 +55,23 @@ export class NavigationService {
     );
   }
 
-  // submitReview(userid: number, productid: number, review: string) {
-  //   let obj: any = {
-  //     User: {
-  //       Id: userid,
-  //     },
-  //     Product: {
-  //       Id: productid,
-  //     },
-  //     Value: review,
-  //   };
+  submitReview(userid: number, productid: number, review: string) {
+    let obj: any = {
+      User: {
+        Id: userid,
+      },
+      Product: {
+        Id: productid,
+      },
+      Value: review,
+    };
 
-  //   let url = this.baseurl + 'InsertReview';
-  //   return this.http.post(url, obj, { responseType: 'text' });
-  // }
+    let url = this.baseurl + 'InsertReview';
+    return this.http.post(url, obj, { responseType: 'text' });
+  }
 
-  // getAllReviewsOfProduct(productId: number) {
-  //   let url = this.baseurl + 'GetProductReviews/' + productId;
-  //   return this.http.get(url);
-  // }
+  getAllReviewsOfProduct(productId: number) {
+    let url = this.baseurl + 'GetProductReviews/' + productId;
+    return this.http.get(url);
+  }
 }

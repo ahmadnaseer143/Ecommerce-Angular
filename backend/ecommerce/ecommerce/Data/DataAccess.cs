@@ -291,5 +291,95 @@ namespace ecommerce.Data
       return "";
     }
 
+    public void InsertReview(Review review)
+    {
+      using MySqlConnection connection = new(dbConnection);
+      MySqlCommand command = new()
+      {
+        Connection = connection
+      };
+
+      string query = "INSERT INTO Reviews (UserId, ProductId, Review, CreatedAt) VALUES (@uid, @pid, @rv, @cat);";
+      command.CommandText = query;
+      command.Parameters.Add("@uid", MySqlDbType.Int32).Value = review.User.Id;
+      command.Parameters.Add("@pid", MySqlDbType.Int32).Value = review.Product.Id;
+      command.Parameters.Add("@rv", MySqlDbType.VarChar).Value = review.Value;
+      command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = review.CreatedAt;
+
+      connection.Open();
+      command.ExecuteNonQuery();
+    }
+
+    public User GetUser(int id)
+    {
+      var user = new User();
+      using (MySqlConnection connection = new(dbConnection))
+      {
+        MySqlCommand command = new()
+        {
+          Connection = connection
+        };
+
+        string query = "SELECT * FROM Users WHERE UserId = @id;";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@id", id);
+
+        connection.Open();
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          user.Id = (int)reader["UserId"];
+          user.FirstName = (string)reader["FirstName"];
+          user.LastName = (string)reader["LastName"];
+          user.Email = (string)reader["Email"];
+          user.Address = (string)reader["Address"];
+          user.Mobile = (string)reader["Mobile"];
+          user.Password = (string)reader["Password"];
+          user.CreatedAt = (string)reader["CreatedAt"];
+          user.ModifiedAt = (string)reader["ModifiedAt"];
+        }
+      }
+      return user;
+    }
+
+
+    public List<Review> GetProductReviews(int productId)
+    {
+      var reviews = new List<Review>();
+      using (MySqlConnection connection = new(dbConnection))
+      {
+        MySqlCommand command = new()
+        {
+          Connection = connection
+        };
+
+        string query = "SELECT * FROM Reviews WHERE ProductId = @productId;";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@productId", productId);
+
+        connection.Open();
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          var review = new Review()
+          {
+            Id = (int)reader["ReviewId"],
+            Value = (string)reader["Review"],
+            CreatedAt = (string)reader["CreatedAt"]
+          };
+
+          var userId = (int)reader["UserId"];
+          review.User = GetUser(userId);
+
+          var id = (int)reader["ProductId"];
+          review.Product = GetProduct(productId);
+
+          reviews.Add(review);
+        }
+      }
+      return reviews;
+    }
+
+
   }
 }

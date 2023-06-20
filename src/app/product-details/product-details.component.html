@@ -48,7 +48,7 @@
     <div class="col-8">
       <div class="card">
         <div class="card-header">
-          <h2>{{ product?.title | titlecase }}</h2>
+          <h2>{{ product.title | titlecase }}</h2>
         </div>
         <div class="card-body">
           <h1 class="card-title text-success">
@@ -122,13 +122,16 @@
           class="btn btn-outline-secondary mt-4 me-5"
           type="button"
           (click)="submitReview()"
+          *ngIf="utilityService.isLoggedIn()"
         >
           Save Review
         </button>
         <div>
-          <h6 class="text-danger mt-4">Login first, then enter the review</h6>
+          <h6 class="text-danger mt-4" *ngIf="!utilityService.isLoggedIn()">
+            Login first, then enter the review
+          </h6>
           <h6 class="text-danger" *ngIf="showError">Review cannot be empty!</h6>
-          <h6 class="text-danger" *ngIf="reviewSaved">
+          <h6 class="text-success" *ngIf="reviewSaved">
             Review Saved Successfully
           </h6>
         </div>
@@ -138,19 +141,22 @@
     <!-- Other Review -->
     <div class="col p-3">
       <h3>Other Reviews</h3>
-      <h6 *ngIf="1">No Reviews Yet!</h6>
-      <div class="card mt-3" *ngFor="let review of [1, 2, 3]">
+      <h6 *ngIf="otherReviews.length === 0">No Reviews Yet!</h6>
+      <div class="card mt-3" *ngFor="let review of otherReviews">
         <div class="card-header d-flex justify-content-between">
-          <div class="card-text">Naseer Ahmad</div>
+          <div class="card-text">
+            {{ review.user.firstName }} " "
+            {{ review.user.lastName }}
+          </div>
           <div class="card-text fst-italic">
             Reviewed On:
             <span class="fw-bold">
-              {{ "20 Oct 2022" | date : "dd-MMM-yyyy" }}
+              {{ review.createdAt | date : "dd-MMM-yyyy" }}
             </span>
           </div>
         </div>
         <div class="card-body">
-          <div class="card-text">Review</div>
+          <div class="card-text">{{ review.value }}</div>
         </div>
       </div>
     </div>
