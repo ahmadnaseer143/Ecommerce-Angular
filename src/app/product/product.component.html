@@ -35,6 +35,7 @@
       <button
         class="btn btn-outline-success"
         [disabled]="!utilityService.isLoggedIn()"
+        (click)="this.utilityService.addToCart(product)"
       >
         Add to cart
         <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>
@@ -68,8 +69,13 @@
             {{ product.description }}
           </p>
           <div class="card-footer d-grid gap-2">
-            <button class="btn btn-outline-success" type="button">
+            <button
+              class="btn btn-outline-success"
+              [disabled]="!utilityService.isLoggedIn()"
+              (click)="this.utilityService.addToCart(product)"
+            >
               Add to cart
+              <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>
             </button>
           </div>
         </div>

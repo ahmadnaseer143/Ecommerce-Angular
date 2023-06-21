@@ -1,5 +1,5 @@
 using ecommerce.Data;
-using ECommerce.API.Models;
+using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,5 +81,27 @@ namespace ecommerce.Controllers
       var result = dataAccess.GetProductReviews(productId);
       return Ok(result);
     }
+
+    [HttpPost("InsertCartItem/{userid}/{productid}")]
+    public IActionResult InsertCartItem(int userid, int productid)
+    {
+      var result = dataAccess.InsertCartItem(userid, productid);
+      return Ok(result ? "inserted" : "not inserted");
+    }
+
+    [HttpGet("GetActiveCartOfUser/{id}")]
+    public IActionResult GetActiveCartOfUser(int id)
+    {
+      var result = dataAccess.GetActiveCartOfUser(id);
+      return Ok(result);
+    }
+
+    [HttpGet("GetAllPreviousCartsOfUser/{id}")]
+    public IActionResult GetAllPreviousCartsOfUser(int id)
+    {
+      var result = dataAccess.GetAllPreviousCartsOfUser(id);
+      return Ok(result);
+    }
+
   }
 }

@@ -21,6 +21,7 @@ export class HeaderComponent {
   @ViewChild('container', { read: ViewContainerRef, static: true })
   container!: ViewContainerRef;
   navigationList: NavigationItem[] = [];
+  cartItems: number = 0;
 
   constructor(
     private navigationService: NavigationService,
@@ -45,6 +46,20 @@ export class HeaderComponent {
           });
         }
       }
+    });
+
+    // Cart
+    if (this.utilityService.isLoggedIn()) {
+      this.navigationService
+        .getActiveCartOfUser(this.utilityService.getUser().id)
+        .subscribe((res: any) => {
+          this.cartItems = res.cartItems.length;
+        });
+    }
+
+    this.utilityService.changeCart.subscribe((res: any) => {
+      if (parseInt(res) === 0) this.cartItems = 0;
+      else this.cartItems += parseInt(res);
     });
   }
 

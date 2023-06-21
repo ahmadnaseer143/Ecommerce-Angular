@@ -74,6 +74,7 @@
             <button
               class="btn btn-outline-success"
               [disabled]="!utilityService.isLoggedIn()"
+              (click)="this.utilityService.addToCart(product)"
             >
               Add to cart
               <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>

@@ -1,4 +1,4 @@
-namespace ECommerce.API.Models
+namespace ecommerce.Models
 {
   public class User
   {

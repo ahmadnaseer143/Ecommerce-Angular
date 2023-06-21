@@ -1,6 +1,4 @@
-using ecommerce.Models;
-
-namespace ECommerce.API.Models
+namespace ecommerce.Models
 {
   public class Review
   {
