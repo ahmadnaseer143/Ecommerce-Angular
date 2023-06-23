@@ -83,7 +83,7 @@ export interface Payment {
   user: User;
   paymentMethod: PaymentMethod;
   totalAmount: number;
-  shipingCharges: number;
+  shippingCharges: number;
   amountReduced: number;
   amountPaid: number;
   createdAt: string;

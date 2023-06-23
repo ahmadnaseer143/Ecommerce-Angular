@@ -28,7 +28,7 @@ export class CartComponent {
       reason: '',
     },
     totalAmount: 0,
-    shipingCharges: 0,
+    shippingCharges: 0,
     amountReduced: 0,
     amountPaid: 0,
     createdAt: '',

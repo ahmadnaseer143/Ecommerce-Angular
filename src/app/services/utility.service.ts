@@ -49,12 +49,10 @@ export class UtilityService {
   }
 
   addToCart(product: Product) {
-    console.log(product);
     let productid = product.id;
     let userid = this.getUser().id;
 
     this.navigationService.addToCart(userid, productid).subscribe((res) => {
-      console.log(res);
       if (res.toString() === 'inserted') this.changeCart.next(1);
     });
   }
@@ -80,10 +78,10 @@ export class UtilityService {
       );
     }
 
-    if (payment.amountPaid > 50000) payment.shipingCharges = 2000;
-    else if (payment.amountPaid > 20000) payment.shipingCharges = 1000;
-    else if (payment.amountPaid > 5000) payment.shipingCharges = 500;
-    else payment.shipingCharges = 200;
+    if (payment.amountPaid > 50000) payment.shippingCharges = 2000;
+    else if (payment.amountPaid > 20000) payment.shippingCharges = 1000;
+    else if (payment.amountPaid > 5000) payment.shippingCharges = 500;
+    else payment.shippingCharges = 200;
   }
 
   calculatePricePaid(cart: Cart) {

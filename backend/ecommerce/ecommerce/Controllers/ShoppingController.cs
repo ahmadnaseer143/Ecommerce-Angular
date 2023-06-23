@@ -103,5 +103,28 @@ namespace ecommerce.Controllers
       return Ok(result);
     }
 
+    [HttpGet("GetPaymentMethods")]
+    public IActionResult GetPaymentMethods()
+    {
+      var result = dataAccess.GetPaymentMethods();
+      return Ok(result);
+    }
+
+    [HttpPost("InsertPayment")]
+    public IActionResult InsertPayment(Payment payment)
+    {
+      payment.CreatedAt = DateTime.Now.ToString();
+      var id = dataAccess.InsertPayment(payment);
+      return Ok(id.ToString());
+    }
+
+    [HttpPost("InsertOrder")]
+    public IActionResult InsertOrder(Order order)
+    {
+      order.CreatedAt = DateTime.Now.ToString();
+      var id = dataAccess.InsertOrder(order);
+      return Ok(id.ToString());
+    }
+
   }
 }

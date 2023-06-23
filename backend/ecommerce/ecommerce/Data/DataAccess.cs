@@ -13,10 +13,12 @@ namespace ecommerce.Data
   {
     private readonly IConfiguration configuration;
     private readonly string dbConnection;
+    private readonly string dateformat;
     public DataAccess(IConfiguration configuration)
     {
       this.configuration = configuration;
       dbConnection = this.configuration.GetConnectionString("DB");
+      dateformat = this.configuration["Constants:DateFormat"];
     }
 
     public Offer GetOffer(int id)
@@ -644,5 +646,120 @@ namespace ecommerce.Data
       }
       return carts;
     }
+
+    List<PaymentMethod> IDataAccess.GetPaymentMethods()
+    {
+      var result = new List<PaymentMethod>();
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+
+        string query = "SELECT * FROM PaymentMethods;";
+        command.CommandText = query;
+
+        connection.Open();
+
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          PaymentMethod paymentMethod = new PaymentMethod()
+          {
+            Id = (int)reader["PaymentMethodId"],
+            Type = (string)reader["Type"],
+            Provider = (string)reader["Provider"],
+            Available = !Convert.IsDBNull(reader["Available"]) && ((string)reader["Available"]).Equals("Yes", StringComparison.OrdinalIgnoreCase),
+            Reason = reader.IsDBNull(reader.GetOrdinal("Reason")) ? null : (string)reader["Reason"]
+          };
+          result.Add(paymentMethod);
+        }
+      }
+      return result;
+    }
+
+
+    public int InsertPayment(Payment payment)
+    {
+      int value = 0;
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+
+        string query = @"INSERT INTO Payments (PaymentMethodId, UserId, TotalAmount, ShippingCharges, AmountReduced, AmountPaid, CreatedAt) 
+                        VALUES (@pmid, @uid, @ta, @sc, @ar, @ap, @cat);";
+
+        command.CommandText = query;
+        command.Parameters.Add("@pmid", MySqlDbType.Int32).Value = payment.PaymentMethod.Id;
+        command.Parameters.Add("@uid", MySqlDbType.Int32).Value = payment.User.Id;
+        command.Parameters.Add("@ta", MySqlDbType.VarChar).Value = payment.TotalAmount;
+        command.Parameters.Add("@sc", MySqlDbType.VarChar).Value = payment.shippingCharges;
+        command.Parameters.Add("@ar", MySqlDbType.VarChar).Value = payment.AmountReduced;
+        command.Parameters.Add("@ap", MySqlDbType.VarChar).Value = payment.AmountPaid;
+        command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = payment.CreatedAt;
+
+        connection.Open();
+        value = command.ExecuteNonQuery();
+
+        if (value > 0)
+        {
+          query = "SELECT Id FROM Payments ORDER BY Id DESC LIMIT 1;";
+          command.CommandText = query;
+          value = Convert.ToInt32(command.ExecuteScalar());
+        }
+        else
+        {
+          value = 0;
+        }
+      }
+      return value;
+    }
+
+
+    public int InsertOrder(Order order)
+    {
+      int value = 0;
+
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+
+        string query = "INSERT INTO Orders (UserId, CartId, PaymentId, CreatedAt) VALUES (@uid, @cid, @pid, @cat);";
+
+        command.CommandText = query;
+        command.Parameters.Add("@uid", MySqlDbType.Int32).Value = order.User.Id;
+        command.Parameters.Add("@cid", MySqlDbType.Int32).Value = order.Cart.Id;
+        command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = order.CreatedAt;
+        command.Parameters.Add("@pid", MySqlDbType.Int32).Value = order.Payment.Id;
+
+        connection.Open();
+        value = command.ExecuteNonQuery();
+
+        if (value > 0)
+        {
+          query = "UPDATE Carts SET Ordered='true', OrderedOn='" + DateTime.Now.ToString(dateformat) + "' WHERE CartId=" + order.Cart.Id + ";";
+          command.CommandText = query;
+          command.ExecuteNonQuery();
+
+          query = "SELECT Id FROM Orders ORDER BY Id DESC LIMIT 1;";
+          command.CommandText = query;
+          value = Convert.ToInt32(command.ExecuteScalar());
+        }
+        else
+        {
+          value = 0;
+        }
+      }
+
+      return value;
+    }
+
   }
 }
