@@ -697,7 +697,7 @@ namespace ecommerce.Data
         command.Parameters.Add("@pmid", MySqlDbType.Int32).Value = payment.PaymentMethod.Id;
         command.Parameters.Add("@uid", MySqlDbType.Int32).Value = payment.User.Id;
         command.Parameters.Add("@ta", MySqlDbType.VarChar).Value = payment.TotalAmount;
-        command.Parameters.Add("@sc", MySqlDbType.VarChar).Value = payment.shippingCharges;
+        command.Parameters.Add("@sc", MySqlDbType.VarChar).Value = payment.ShippingCharges;
         command.Parameters.Add("@ar", MySqlDbType.VarChar).Value = payment.AmountReduced;
         command.Parameters.Add("@ap", MySqlDbType.VarChar).Value = payment.AmountPaid;
         command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = payment.CreatedAt;

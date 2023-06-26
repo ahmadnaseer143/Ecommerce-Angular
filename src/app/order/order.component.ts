@@ -121,43 +121,46 @@ export class OrderComponent {
   }
 
   storeOrder() {
-    let payment: Payment;
     let pmid = 0;
     if (this.selectedPaymentMethod.value)
       pmid = parseInt(this.selectedPaymentMethod.value);
 
-    payment = {
+    const body = {
       id: 0,
       paymentMethod: {
-        id: 2,
-        type: '',
-        provider: '',
-        available: false,
-        reason: '',
+        id: pmid,
       },
-      user: this.utilityService.getUser(),
-      totalAmount: this.usersPaymentInfo.totalAmount,
-      shippingCharges: this.usersPaymentInfo.shippingCharges,
-      amountReduced: this.usersPaymentInfo.amountReduced,
-      amountPaid: this.usersPaymentInfo.amountPaid,
-      createdAt: '',
+      user: {
+        id: this.utilityService.getUser().id,
+      },
+      totalAmount: parseInt(this.usersPaymentInfo.totalAmount.toString()),
+      shippingCharges: parseInt(this.usersPaymentInfo.totalAmount.toString()),
+      amountReduced: parseInt(this.usersPaymentInfo.amountReduced.toString()),
+      amountPaid: parseInt(this.usersPaymentInfo.amountPaid.toString()),
     };
 
-    this.navigationService
-      .insertPayment(payment)
-      .subscribe((paymentResponse: any) => {
-        console.log(paymentResponse);
-        payment.id = parseInt(paymentResponse);
-        let order: Order = {
-          id: 0,
-          user: this.utilityService.getUser(),
-          cart: this.usersCart,
-          payment: payment,
-          createdAt: '',
+    this.navigationService.insertPayment(body).subscribe(
+      (response) => {
+        // console.log('Response:', response);
+        const order = {
+          user: {
+            id: this.utilityService.getUser().id,
+          },
+          cart: {
+            id: this.usersCart.id,
+          },
+          payment: {
+            id: response,
+          },
         };
         this.navigationService.insertOrder(order).subscribe((orderResponse) => {
+          // console.log('orderResponse:', orderResponse);
           this.utilityService.changeCart.next(0);
         });
-      });
+      },
+      (error) => {
+        console.error('Error:', error);
+      }
+    );
   }
 }

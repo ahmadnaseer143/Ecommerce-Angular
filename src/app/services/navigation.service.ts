@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+} from '@angular/common/http';
 import { map } from 'rxjs';
 import {
   Category,
@@ -101,17 +106,13 @@ export class NavigationService {
     return this.http.get<PaymentMethod[]>(url);
   }
 
-  insertPayment(payment: Payment) {
-    return this.http.post(
-      this.baseurl + 'InsertPayment',
-      { payment },
-      {
-        responseType: 'text',
-      }
-    );
+  insertPayment(body: any) {
+    const url = this.baseurl + 'InsertPayment';
+
+    return this.http.post(url, body);
   }
 
-  insertOrder(order: Order) {
+  insertOrder(order: any) {
     return this.http.post(this.baseurl + 'InsertOrder', order);
   }
 }
