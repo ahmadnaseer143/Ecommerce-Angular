@@ -47,7 +47,7 @@ namespace ecommerce.Data
       return offer;
     }
 
-    public List<ProductCategory> GetProductCategories()
+    public async Task<List<ProductCategory>> GetProductCategories()
     {
       var productCategories = new List<ProductCategory>();
       using(MySqlConnection connection = new(dbConnection))
@@ -59,17 +59,18 @@ namespace ecommerce.Data
         string query = "Select * from productcategories;";
         command.CommandText = query;
         connection.Open();
-        MySqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
+        using (MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync())
         {
-          var category = new ProductCategory()
+          while (reader.Read())
           {
-            Id = (int)reader["CategoryId"],
-            Category = (string)reader["Category"],
-            SubCategory = (string)reader["SubCategory"]
-          };
-          productCategories.Add(category);
+            var category = new ProductCategory()
+            {
+              Id = (int)reader["CategoryId"],
+              Category = (string)reader["Category"],
+              SubCategory = (string)reader["SubCategory"]
+            };
+            productCategories.Add(category);
+          }
         }
       }
 

@@ -21,9 +21,9 @@ namespace ecommerce.Controllers
 
     [HttpGet("GetCategoryList")]
 
-    public IActionResult GetCategoryList()
+    public async Task<IActionResult> GetCategoryList()
     {
-      var result = dataAccess.GetProductCategories();
+      var result = await dataAccess.GetProductCategories();
       return Ok(result);
     }
 
