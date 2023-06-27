@@ -24,6 +24,8 @@ namespace ecommerce.Data
     User GetUser(int id);
 
     bool InsertCartItem(int userId, int productId);
+
+    bool RemoveCartItem(int userId, int productId);
     Cart GetActiveCartOfUser(int userid);
     Cart GetCart(int cartid);
     List<Cart> GetAllPreviousCartsOfUser(int userid);

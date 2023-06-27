@@ -58,6 +58,7 @@ export class HeaderComponent {
     }
 
     this.utilityService.changeCart.subscribe((res: any) => {
+      console.log(res);
       if (parseInt(res) === 0) this.cartItems = 0;
       else this.cartItems += parseInt(res);
     });

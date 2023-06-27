@@ -57,6 +57,17 @@ export class UtilityService {
     });
   }
 
+  removeFromCart(product: Product): any {
+    let productid = product.id;
+    let userid = this.getUser().id;
+
+    this.navigationService
+      .removeFromCart(userid, productid)
+      .subscribe((res) => {
+        if (res.toString() === 'removed') this.changeCart.next(-1);
+      });
+  }
+
   calculatePayment(cart: Cart, payment: Payment) {
     payment.totalAmount = 0;
     payment.amountPaid = 0;

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../models/models';
 import { UtilityService } from '../services/utility.service';
 
@@ -29,10 +29,18 @@ export class ProductComponent {
     imageName: '',
   };
 
+  @Output() removeItem: EventEmitter<any> = new EventEmitter();
+
   constructor(public utilityService: UtilityService) {}
 
   ngOnInit() {
     // console.log('Received @Input() values:');
     // console.log(this.product);
+  }
+
+  onRemoveFromCart() {
+    console.log(this.product);
+    this.utilityService.removeFromCart(this.product);
+    this.removeItem.emit(this.product);
   }
 }

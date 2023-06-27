@@ -54,6 +54,7 @@
           <app-product
             [view]="'currcartitem'"
             [product]="cartItem.product"
+            (removeItem)="removeFromCart($event)"
           ></app-product>
         </div>
       </div>

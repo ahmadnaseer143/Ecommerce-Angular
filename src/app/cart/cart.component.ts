@@ -62,4 +62,14 @@ export class CartComponent {
         this.usersPreviousCarts = res;
       });
   }
+
+  removeFromCart(product: any) {
+    const cartItemIndex = this.usersCart.cartItems.findIndex(
+      (item: any) => item.product.id === product.id
+    );
+    if (cartItemIndex !== -1) {
+      this.usersCart.cartItems.splice(cartItemIndex, 1);
+    }
+    this.utilityService.calculatePayment(this.usersCart, this.usersPaymentInfo);
+  }
 }

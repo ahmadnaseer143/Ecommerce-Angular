@@ -89,6 +89,16 @@ namespace ecommerce.Controllers
       return Ok(result ? "inserted" : "not inserted");
     }
 
+    [HttpPost("RemoveCartItem/{userid}/{productid}")]
+    public IActionResult RemoveCartItem(int userid, int productid)
+    {
+      var result = dataAccess.RemoveCartItem(userid, productid);
+      return Ok(result ? "removed" : "not removed");
+    }
+
+
+
+
     [HttpGet("GetActiveCartOfUser/{id}")]
     public IActionResult GetActiveCartOfUser(int id)
     {

@@ -91,6 +91,11 @@ export class NavigationService {
     return this.http.post(url, null, { responseType: 'text' });
   }
 
+  removeFromCart(userid: number, productid: number) {
+    let url = this.baseurl + 'RemoveCartItem/' + userid + '/' + productid;
+    return this.http.post(url, null, { responseType: 'text' });
+  }
+
   getActiveCartOfUser(userid: number) {
     let url = this.baseurl + 'GetActiveCartOfUser/' + userid;
     return this.http.get(url);

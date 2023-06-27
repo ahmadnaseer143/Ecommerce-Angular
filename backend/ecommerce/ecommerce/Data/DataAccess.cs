@@ -414,6 +414,40 @@ namespace ecommerce.Data
       }
     }
 
+    public bool RemoveCartItem(int userId, int productId)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+
+        connection.Open();
+
+        string query = "SELECT CartId FROM Carts WHERE UserId = " + userId + " AND Ordered = 'false';";
+        command.CommandText = query;
+        int cartId = Convert.ToInt32(command.ExecuteScalar());
+
+        if (cartId != 0)
+        {
+          query = "DELETE FROM CartItems WHERE CartId = " + cartId + " AND ProductId = " + productId + ";";
+          command.CommandText = query;
+          int rowsAffected = command.ExecuteNonQuery();
+
+          if (rowsAffected > 0)
+          {
+            // Item successfully removed from the cart
+            return true;
+          }
+        }
+
+        // Either the cart or the item was not found
+        return false;
+      }
+    }
+
+
     Cart GetActiveCartOfUser(int userid)
     {
       var cart = new Cart();
