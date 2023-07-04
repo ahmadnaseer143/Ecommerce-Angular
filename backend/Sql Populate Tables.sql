@@ -1,6 +1,7 @@
 -- Populating Users table
-INSERT INTO Users (FirstName, LastName, Email, Address, Mobile, Password, CreatedAt, ModifiedAt)
-VALUES ('Naseer', 'Ahmad', 'nas@gmail.com', '123 Main St', '1234567890', '12345678', '2023-06-16', '2023-06-16');
+INSERT INTO Users (FirstName, LastName, Email, Address, Mobile, Password, role, CreatedAt, ModifiedAt)
+VALUES ('Naseer', 'Ahmad', 'nas@gmail.com', '123 Main St', '1234567890', '12345678', 'employee' '2023-06-16', '2023-06-16'),
+('Naseer', 'Ahmad', 'naseer@gmail.com', '123 Main St', '1234567890', '12345678', 'admin', '2023-06-16', '2023-06-16');
 
 -- Populating PaymentMethods table
 INSERT INTO PaymentMethods (Type, Provider, Available, Reason)

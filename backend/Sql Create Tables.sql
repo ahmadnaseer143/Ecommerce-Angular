@@ -8,6 +8,7 @@ CREATE TABLE Users (
     Address VARCHAR(100) NOT NULL,
     Mobile VARCHAR(15) NOT NULL,
     Password VARCHAR(50) NOT NULL,
+    role VARCHAR(255) NOT NULL,
     CreatedAt TEXT NOT NULL,
     ModifiedAt TEXT NOT NULL
 );
