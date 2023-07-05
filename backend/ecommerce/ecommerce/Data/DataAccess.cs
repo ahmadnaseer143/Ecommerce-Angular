@@ -151,6 +151,49 @@ namespace ecommerce.Data
       return products;
     }
 
+    public List<Product> GetAllProducts()
+    {
+      var products = new List<Product>();
+      using (MySqlConnection connection = new(dbConnection))
+      {
+        MySqlCommand command = new()
+        {
+          Connection = connection,
+        };
+
+        string query = "SELECT * FROM Products;";
+
+
+        command.CommandText = query;
+
+        connection.Open();
+
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          var product = new Product()
+          {
+            Id = (int)reader["ProductId"],
+            Title = (string)reader["Title"],
+            Description = (string)reader["Description"],
+            Price = Convert.ToDouble(reader["Price"]),
+            Quantity = (int)reader["Quantity"],
+            ImageName = (string)reader["ImageName"],
+
+          };
+
+          var categoryId = (int)reader["CategoryId"];
+          product.ProductCategory = GetProductCategory(categoryId);
+
+          var offerId = (int)reader["OfferId"];
+          product.Offer = GetOffer(offerId);
+
+          products.Add(product);
+        }
+      }
+      return products;
+    }
+
     public Product GetProduct(int id)
     {
       var product = new Product();

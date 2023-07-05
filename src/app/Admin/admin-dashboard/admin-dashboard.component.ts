@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Product } from 'src/app/models/models';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -7,80 +9,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
-  products: any = [
-    {
-      id: 1, title: "ABC", description: "hello",
-      productCategory: {
-        id: 1,
-        category: "string",
-        subCategory: "string",
-      },
-      offer: {
-        id: 1,
-        title: "string",
-        discount: 20,
-      },
-      price: 200, quantity: 2, imageName: "Hello.jpg"
-    },
-    {
-      id: 1, title: "ABC", description: "hello",
-      productCategory: {
-        id: 1,
-        category: "string",
-        subCategory: "string",
-      },
-      offer: {
-        id: 1,
-        title: "string",
-        discount: 20,
-      },
-      price: 200, quantity: 2, imageName: "Hello.jpg"
-    },
-    {
-      id: 1, title: "ABC", description: "hello",
-      productCategory: {
-        id: 1,
-        category: "string",
-        subCategory: "string",
-      },
-      offer: {
-        id: 1,
-        title: "string",
-        discount: 20,
-      },
-      price: 200, quantity: 2, imageName: "Hello.jpg"
-    },
-    {
-      id: 1, title: "ABC", description: "hello",
-      productCategory: {
-        id: 1,
-        category: "string",
-        subCategory: "string",
-      },
-      offer: {
-        id: 1,
-        title: "string",
-        discount: 20,
-      },
-      price: 200, quantity: 2, imageName: "Hello.jpg"
-    },
-    {
-      id: 1, title: "ABC", description: "hello",
-      productCategory: {
-        id: 1,
-        category: "string",
-        subCategory: "string",
-      },
-      offer: {
-        id: 1,
-        title: "string",
-        discount: 20,
-      },
-      price: 200, quantity: 2, imageName: "Hello.jpg"
-    },
-  ]
+  products: Product[] = []
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private navigationService: NavigationService) { }
+
+  ngOnInit() {
+    this.navigationService.getAllProducts().subscribe(products => {
+      this.products = products;
+    })
+  }
 
   editProduct(id: number) {
     // Implement edit functionality

@@ -11,6 +11,8 @@ namespace ecommerce.Data
 
     List<Product> GetProducts(string category, string subCategory, int count);
 
+    List<Product> GetAllProducts();
+
     Product GetProduct(int id);
 
     bool InsertUser(User user);

@@ -20,7 +20,7 @@ import {
 export class NavigationService {
   baseurl = 'https://localhost:44376/api/Shopping/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getCategoryList() {
     let url = this.baseurl + 'GetCategoryList';
@@ -45,6 +45,10 @@ export class NavigationService {
         .set('subCategory', subCategory)
         .set('count', count),
     });
+  }
+
+  getAllProducts() {
+    return this.http.get<any[]>(this.baseurl + 'GetAllProducts');
   }
 
   getProduct(id: number) {
