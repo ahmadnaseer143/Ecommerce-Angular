@@ -51,6 +51,18 @@ namespace ecommerce.Controllers
       return Ok(result);
     }
 
+    [HttpPut("UpdateProduct")]
+
+    public IActionResult UpdateProduct(Product product)
+    {
+      var result = dataAccess.UpdateProduct(product);
+      if(result != null)
+      {
+      return Ok(result);
+      }
+      return BadRequest();
+    }
+
 
     [HttpPost("RegisterUser")]
     public IActionResult RegisterUser([FromBody] User user)

@@ -15,6 +15,8 @@ namespace ecommerce.Data
 
     Product GetProduct(int id);
 
+    Product UpdateProduct(Product product);
+
     bool InsertUser(User user);
 
     string IsUserPresent(string email, string password);

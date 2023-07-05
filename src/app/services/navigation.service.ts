@@ -11,6 +11,7 @@ import {
   Order,
   Payment,
   PaymentMethod,
+  Product,
   User,
 } from '../models/models';
 
@@ -54,6 +55,11 @@ export class NavigationService {
   getProduct(id: number) {
     let url = this.baseurl + 'GetProduct/' + id;
     return this.http.get(url);
+  }
+
+  updateProduct(product: Product) {
+    let url = this.baseurl + "UpdateProduct";
+    return this.http.put(url, product);
   }
 
   registerUser(user: User) {

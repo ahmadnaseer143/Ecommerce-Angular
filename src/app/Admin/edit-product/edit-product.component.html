@@ -1,1 +1,94 @@
-<p>edit-product works!</p>
+<div class="container">
+    <h2 class="mb-4">Edit Product</h2>
+
+    <form [formGroup]="productForm" (ngSubmit)="updateProduct()" class="my-form">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" formControlName="title" class="form-control" required>
+                    <div *ngIf="productForm.controls['title'].invalid && productForm.controls['title'].touched"
+                        class="error text-danger">
+                        Title is required.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" formControlName="description" class="form-control" required></textarea>
+                    <div *ngIf="productForm.controls['description'].invalid && productForm.controls['description'].touched"
+                        class="error text-danger">
+                        Description is required.
+                    </div>
+                </div>
+
+                <div formGroupName="productCategory">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <input type="text" id="category" formControlName="category" class="form-control" required>
+                        <div *ngIf="productForm?.get('productCategory')?.get('category')?.invalid && productForm?.get('productCategory')?.get('category')?.touched"
+                            class="error text-danger">
+                            Category is required.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subCategory">Subcategory:</label>
+                        <input type="text" id="subCategory" formControlName="subCategory" class="form-control" required>
+                        <div *ngIf="productForm?.get('productCategory')?.get('subCategory')?.invalid && productForm?.get('productCategory')?.get('subCategory')?.touched"
+                            class="error text-danger">
+                            Subcategory is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div formGroupName="offer">
+                    <div class="form-group">
+                        <label for="discount">Discount:</label>
+                        <div class="input-group">
+                            <input type="number" id="discount" formControlName="discount" class="form-control" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div *ngIf="productForm?.get('offer')?.get('discount')?.invalid && productForm?.get('offer')?.get('discount')?.touched"
+                            class="error text-danger">
+                            Discount is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" formControlName="quantity" class="form-control" required>
+                    <div *ngIf="productForm.controls['quantity'].invalid && productForm.controls['quantity'].touched"
+                        class="error text-danger">
+                        Quantity is required.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" id="price" formControlName="price" class="form-control" required>
+                    </div>
+                    <div *ngIf="productForm.controls['price'].invalid && productForm.controls['price'].touched"
+                        class="error text-danger">
+                        Price is required.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageName">Image Name:</label>
+                    <input type="text" id="imageName" formControlName="imageName" class="form-control" required>
+                    <div *ngIf="productForm.controls['imageName'].invalid && productForm.controls['imageName'].touched"
+                        class="error text-danger">
+                        Image Name is required.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary my-4">Update Product</button>
+    </form>
+</div>

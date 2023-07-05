@@ -229,6 +229,45 @@ namespace ecommerce.Data
       return product;
     }
 
+    public Product UpdateProduct(Product product)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection,
+        };
+
+        string query = "UPDATE products SET Title = @Title, Description = @Description, Price = @Price, Quantity = @Quantity, ImageName = @ImageName, CategoryId = @CategoryId, OfferId = @OfferId WHERE ProductId = @ProductId;";
+        command.CommandText = query;
+
+        // Set the parameter values
+        command.Parameters.AddWithValue("@Title", product.Title);
+        command.Parameters.AddWithValue("@Description", product.Description);
+        command.Parameters.AddWithValue("@Price", product.Price);
+        command.Parameters.AddWithValue("@Quantity", product.Quantity);
+        command.Parameters.AddWithValue("@ImageName", product.ImageName);
+        command.Parameters.AddWithValue("@CategoryId", product.ProductCategory.Id);
+        command.Parameters.AddWithValue("@OfferId", product.Offer.Id);
+        command.Parameters.AddWithValue("@ProductId", product.Id);
+
+        connection.Open();
+
+        int rowsAffected = command.ExecuteNonQuery();
+
+        // Check if any rows were affected by the update
+        if (rowsAffected > 0)
+        {
+          // Product was updated successfully, return the updated product
+          return product;
+        }
+      }
+
+      // If no rows were affected or an error occurred, return null
+      return null;
+    }
+
+
     public bool InsertUser(User user)
     {
       using (MySqlConnection connection = new(dbConnection))
