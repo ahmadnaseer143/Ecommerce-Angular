@@ -39,5 +39,7 @@ namespace ecommerce.Data
     List<PaymentMethod> GetPaymentMethods();
     int InsertPayment(Payment payment);
     int InsertOrder(Order order);
+
+    bool InsertProduct(Product product);
   }
 }

@@ -163,5 +163,16 @@ namespace ecommerce.Controllers
       return Ok(id.ToString());
     }
 
+    [HttpPost("InsertProduct")]
+    public IActionResult InsertProduct(Product product)
+    {
+      var boolValue = dataAccess.InsertProduct(product);
+      if (boolValue==false) {
+        return BadRequest();
+      }
+
+      return Ok();
+    }
+
   }
 }

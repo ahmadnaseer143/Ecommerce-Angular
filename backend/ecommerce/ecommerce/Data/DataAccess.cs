@@ -910,5 +910,34 @@ namespace ecommerce.Data
       return value;
     }
 
+    public bool InsertProduct(Product product)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+        connection.Open();
+
+        string query = "INSERT INTO Products (Title, Description, CategoryId, OfferId, Price, Quantity, ImageName) " +
+                       "VALUES (@title, @description, @categoryId, @offerId, @price, @quantity, @imageName);";
+
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@title", product.Title);
+        command.Parameters.AddWithValue("@description", product.Description);
+        command.Parameters.AddWithValue("@categoryId", product.ProductCategory.Id);
+        command.Parameters.AddWithValue("@offerId", product.Offer.Id);
+        command.Parameters.AddWithValue("@price", product.Price);
+        command.Parameters.AddWithValue("@quantity", product.Quantity);
+        command.Parameters.AddWithValue("@imageName", product.ImageName);
+
+        int rowsAffected = command.ExecuteNonQuery();
+
+        return rowsAffected > 0;
+      }
+    }
+
+
   }
 }

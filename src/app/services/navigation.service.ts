@@ -134,4 +134,8 @@ export class NavigationService {
   getAllOffers() {
     return this.http.get(this.baseurl + "GetAllOffers");
   }
+
+  insertProduct(product: Product) {
+    return this.http.post(this.baseurl + "InsertProduct", product)
+  }
 }

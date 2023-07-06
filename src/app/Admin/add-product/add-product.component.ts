@@ -116,7 +116,11 @@ export class AddProductComponent {
 
     console.log(product);
 
-    // this.router.navigate(['admin'])
+    this.navigationService.insertProduct(product).subscribe(res => {
+      this.router.navigate(['admin'])
+    },
+      error => console.log("Error in inserting product in add product", error));
+
   }
 
 }
