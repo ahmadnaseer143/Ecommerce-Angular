@@ -5,11 +5,15 @@
 
   <div class="btn-toolbar" role="toolbar">
     <div class="btn-group btn-group-lg me-3" role="group">
-      <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/home">
+      <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/home" *ngIf="!utilityService.isAdmin()">
+        Home
+      </button>
+      <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/admin" *ngIf="utilityService.isAdmin()">
         Home
       </button>
       <div class="btn-group" role="group">
-        <button type="button" class="btn text-light mx-2 btn-hover dropdown-toggle" data-bs-toggle="dropdown">
+        <button type="button" class="btn text-light mx-2 btn-hover dropdown-toggle" data-bs-toggle="dropdown"
+          *ngIf="!utilityService.isAdmin()">
           Categories
         </button>
         <ul class="dropdown-menu fs-5">
@@ -41,16 +45,16 @@
         (click)="openModal('register')" *ngIf="!utilityService.isLoggedIn()">
         Register
       </button>
-      <button type="button" class="btn text-light mx-2 btn-hover" *ngIf="utilityService.isLoggedIn()">
+      <!-- <button type="button" class="btn text-light mx-2 btn-hover" *ngIf="utilityService.isLoggedIn()">
         Account
-      </button>
+      </button> -->
       <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/cart"
-        *ngIf="utilityService.isLoggedIn()">
+        *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()">
         Cart
         <span class="badge bg-warning text-dark">{{ cartItems }}</span>
       </button>
       <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/orders"
-        *ngIf="utilityService.isLoggedIn()">
+        *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()">
         Orders
       </button>
       <button type="button" class="btn text-light mx-2 btn-hover" (click)="utilityService.logoutUser()"

@@ -374,6 +374,7 @@ namespace ecommerce.Data
           user.Address = reader["Address"].ToString();
           user.Mobile = reader["Mobile"].ToString();
           user.Password = reader["Password"].ToString();
+          user.Role = reader["Role"].ToString();
           user.CreatedAt = reader["CreatedAt"].ToString();
           user.ModifiedAt = reader["ModifiedAt"].ToString();
         }
@@ -392,6 +393,7 @@ namespace ecommerce.Data
             new Claim("address", user.Address),
             new Claim("mobile", user.Mobile),
             new Claim("email", user.Email),
+            new Claim("role", user.Role),
             new Claim("createdAt", user.CreatedAt),
             new Claim("modifiedAt", user.ModifiedAt)
         };

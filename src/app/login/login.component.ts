@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { NavigationService } from '../services/navigation.service';
 import { UtilityService } from '../services/utility.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,8 +20,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private navigationService: NavigationService,
-    private utilityService: UtilityService
-  ) {}
+    private utilityService: UtilityService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,7 +44,12 @@ export class LoginComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.toString() !== 'invalid') {
           this.message = 'Logged In Successfully.';
+          const role = JSON.parse(atob(res.split('.')[1])).role;
+          localStorage.setItem('role', role);
           this.utilityService.setUser(res.toString());
+          if (role == 'admin') {
+            this.router.navigate(['admin'])
+          }
         } else {
           this.message = 'Invalid Credentials!';
         }
