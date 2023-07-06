@@ -41,7 +41,12 @@
                 <div formGroupName="productCategory">
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <input type="text" class="form-control" formControlName="category" required>
+                        <select class="form-control" formControlName="category" (change)="onCategoryChange()">
+                            <option value="">Select Category</option>
+                            <option *ngFor="let category of categoryList">{{ category.category }}
+                            </option>
+                        </select>
+                        <!-- <input type="text" class="form-control" formControlName="category" required> -->
                         <div class="text-danger"
                             *ngIf="productForm.get('productCategory')?.get('category')?.invalid && productForm.get('productCategory')?.get('category')?.touched">
                             Category is required
@@ -49,7 +54,11 @@
                     </div>
                     <div class="form-group">
                         <label for="subCategory">SubCategory:</label>
-                        <input type="text" class="form-control" formControlName="subCategory" required>
+                        <select class="form-control" formControlName="subCategory">
+                            <option value="">Select SubCategory</option>
+                            <option *ngFor="let subCategory of subCategoryList">{{subCategory}}</option>
+                        </select>
+                        <!-- <input type="text" class="form-control" formControlName="subCategory" required> -->
                         <div class="text-danger"
                             *ngIf="productForm.get('productCategory')?.get('subCategory')?.invalid && productForm.get('productCategory')?.get('subCategory')?.touched">
                             SubCategory is required
