@@ -174,5 +174,17 @@ namespace ecommerce.Controllers
       return Ok();
     }
 
+    [HttpDelete("DeleteProduct/{id}")]
+
+    public IActionResult DeleteProduct(int id)
+    {
+      var boolValue = dataAccess.DeleteProduct(id);
+      if (boolValue == false)
+      {
+        return NotFound();
+      }
+
+      return Ok(true);
+    }
   }
 }

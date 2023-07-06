@@ -14,18 +14,31 @@ export class AdminDashboardComponent {
   constructor(private router: Router, private navigationService: NavigationService) { }
 
   ngOnInit() {
+    this.getAllProducts();
+  }
+
+  getAllProducts() {
     this.navigationService.getAllProducts().subscribe(products => {
       this.products = products;
     })
   }
 
   editProduct(id: number) {
-    // Implement edit functionality
     this.router.navigate(["admin/editproduct", id]);
   }
 
-  deleteProduct(productId: number) {
-    // Implement delete functionality
+  deleteProduct(id: number) {
+    const decision = window.confirm("Are you sure you want to delete this product?");
+    if (decision) {
+      this.navigationService.deleteProduct(id).subscribe((res: any) => {
+        if (res) {
+          this.getAllProducts();
+        } else {
+          console.log("Product deletion unsuccessful");
+        }
+      },
+        error => console.log("Error in deleting product", error));
+    }
   }
 
   addProduct() {

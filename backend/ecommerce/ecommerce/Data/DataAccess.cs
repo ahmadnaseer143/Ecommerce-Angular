@@ -1,4 +1,5 @@
 using ecommerce.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
@@ -937,6 +938,30 @@ namespace ecommerce.Data
         return rowsAffected > 0;
       }
     }
+    public bool DeleteProduct(int id)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+        connection.Open();
+
+        string query = "DELETE FROM Products WHERE ProductId = @id;";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@id", id);
+
+        int rowsAffected = command.ExecuteNonQuery();
+
+        if (rowsAffected > 0)
+        {
+          return true;
+        }
+         return false;
+      }
+    }
+
 
 
   }

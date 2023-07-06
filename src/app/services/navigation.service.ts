@@ -138,4 +138,8 @@ export class NavigationService {
   insertProduct(product: Product) {
     return this.http.post(this.baseurl + "InsertProduct", product)
   }
+
+  deleteProduct(id: number) {
+    return this.http.delete(this.baseurl + "DeleteProduct/" + id);
+  }
 }
