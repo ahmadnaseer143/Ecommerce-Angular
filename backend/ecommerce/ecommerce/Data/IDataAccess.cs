@@ -9,6 +9,8 @@ namespace ecommerce.Data
 
     Offer GetOffer(int id);
 
+    List<Offer> GetAllOffers();
+
     List<Product> GetProducts(string category, string subCategory, int count);
 
     List<Product> GetAllProducts();

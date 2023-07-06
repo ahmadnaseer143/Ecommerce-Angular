@@ -47,6 +47,38 @@ namespace ecommerce.Data
       return offer;
     }
 
+    public List<Offer> GetAllOffers()
+    {
+      List<Offer> offers = new List<Offer>();
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection,
+        };
+
+        string query = "SELECT * FROM Offers;";
+        command.CommandText = query;
+
+        connection.Open();
+
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          Offer offer = new Offer()
+          {
+            Id = (int)reader["OfferId"],
+            Title = (string)reader["Title"],
+            Discount = (int)reader["Discount"]
+          };
+
+          offers.Add(offer);
+        }
+      }
+      return offers;
+    }
+
+
     public async Task<List<ProductCategory>> GetProductCategories()
     {
       var productCategories = new List<ProductCategory>();

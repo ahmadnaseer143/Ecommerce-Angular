@@ -58,7 +58,6 @@
                             <option value="">Select SubCategory</option>
                             <option *ngFor="let subCategory of subCategoryList">{{subCategory}}</option>
                         </select>
-                        <!-- <input type="text" class="form-control" formControlName="subCategory" required> -->
                         <div class="text-danger"
                             *ngIf="productForm.get('productCategory')?.get('subCategory')?.invalid && productForm.get('productCategory')?.get('subCategory')?.touched">
                             SubCategory is required
@@ -67,8 +66,12 @@
                 </div>
                 <div formGroupName="offer">
                     <div class="form-group">
-                        <label for="title">Offer Title:</label>
-                        <input type="text" class="form-control" formControlName="title" required>
+                        <label for="title">Offer:</label>
+                        <select class="form-control" formControlName="title" (change)="onOfferChange()">
+                            <option value="">Select Offer</option>
+                            <option *ngFor="let offer of offerList">{{offer.title}}</option>
+                        </select>
+                        <!-- <input type="text" class="form-control" formControlName="title" required> -->
                         <div class="text-danger"
                             *ngIf="productForm.get('offer')?.get('title')?.invalid && productForm.get('offer')?.get('title')?.touched">
                             Title is required

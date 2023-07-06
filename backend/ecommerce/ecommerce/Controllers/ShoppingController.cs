@@ -63,6 +63,14 @@ namespace ecommerce.Controllers
       return BadRequest();
     }
 
+    [HttpGet("GetAllOffers")]
+
+    public IActionResult GetAllOffers()
+    {
+      var result = dataAccess.GetAllOffers();
+      return Ok(result);
+    }
+
 
     [HttpPost("RegisterUser")]
     public IActionResult RegisterUser([FromBody] User user)

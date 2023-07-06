@@ -130,4 +130,8 @@ export class NavigationService {
   insertOrder(order: any) {
     return this.http.post(this.baseurl + 'InsertOrder', order);
   }
+
+  getAllOffers() {
+    return this.http.get(this.baseurl + "GetAllOffers");
+  }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Category, NavigationItem, Product } from 'src/app/models/models';
+import { Category, NavigationItem, Offer, Product } from 'src/app/models/models';
 import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class AddProductComponent {
   productForm !: FormGroup;
   categoryList: NavigationItem[] = [];
   subCategoryList: any = [];
+  offerList: Offer[] = [];
 
   constructor(private router: Router, private navigationService: NavigationService, private formBuilder: FormBuilder) { }
 
@@ -31,7 +32,7 @@ export class AddProductComponent {
       offer: this.formBuilder.group({
         id: [1, Validators.required],
         title: ['', Validators.required],
-        discount: [0, Validators.required]
+        discount: [{ value: 0, disabled: true }, Validators.required]
       }),
       quantity: [0, Validators.required],
       imageName: ['', Validators.required]
@@ -44,7 +45,11 @@ export class AddProductComponent {
   }
 
   loadOffers() {
-
+    this.navigationService.getAllOffers().subscribe((res: any) => {
+      this.offerList = res;
+      console.log(res);
+    },
+      error => console.log("Error in getting all offers in add product", error))
   }
 
   loadCategories() {
@@ -70,6 +75,19 @@ export class AddProductComponent {
       error => console.log("Error in Getting Category List in add product", error)
     );
   }
+
+  onOfferChange() {
+    const selectedOfferTitle = this.productForm.get('offer.title')?.value;
+
+    const selectedOffer = this.offerList.find(offer => offer.title === selectedOfferTitle);
+
+    if (selectedOffer) {
+      this.productForm.get('offer.discount')?.setValue(selectedOffer.discount);
+    } else {
+      this.productForm.get('offer.discount')?.setValue(0);
+    }
+  }
+
 
   onCategoryChange() {
     const selectedCategoryId = this.productForm.get('productCategory.category')?.value;
