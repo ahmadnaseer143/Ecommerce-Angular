@@ -1,1 +1,93 @@
-<p>add-product works!</p>
+<div class="container">
+    <h2 class="mb-4">Add Product</h2>
+    <form [formGroup]="productForm" (ngSubmit)="addProduct()" class="my-form">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" formControlName="title" required>
+                    <div class="text-danger"
+                        *ngIf="productForm.controls['title'].invalid && productForm.controls['title'].touched">
+                        Title is required
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" class="form-control" formControlName="description" required>
+                    <div class="text-danger"
+                        *ngIf="productForm.controls['description'].invalid && productForm.controls['description'].touched">
+                        Description is required
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" class="form-control" formControlName="price" required>
+                    <div class="text-danger"
+                        *ngIf="productForm.controls['price'].invalid && productForm.controls['price'].touched">
+                        Price is required
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" class="form-control" formControlName="quantity" required>
+                    <div class="text-danger"
+                        *ngIf="productForm.controls['quantity'].invalid && productForm.controls['quantity'].touched">
+                        Quantity is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div formGroupName="productCategory">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <input type="text" class="form-control" formControlName="category" required>
+                        <div class="text-danger"
+                            *ngIf="productForm.get('productCategory')?.get('category')?.invalid && productForm.get('productCategory')?.get('category')?.touched">
+                            Category is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subCategory">SubCategory:</label>
+                        <input type="text" class="form-control" formControlName="subCategory" required>
+                        <div class="text-danger"
+                            *ngIf="productForm.get('productCategory')?.get('subCategory')?.invalid && productForm.get('productCategory')?.get('subCategory')?.touched">
+                            SubCategory is required
+                        </div>
+                    </div>
+                </div>
+                <div formGroupName="offer">
+                    <div class="form-group">
+                        <label for="title">Offer Title:</label>
+                        <input type="text" class="form-control" formControlName="title" required>
+                        <div class="text-danger"
+                            *ngIf="productForm.get('offer')?.get('title')?.invalid && productForm.get('offer')?.get('title')?.touched">
+                            Title is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="discount">Discount:</label>
+                        <input type="number" class="form-control" formControlName="discount" required>
+                        <div class="text-danger"
+                            *ngIf="productForm.get('offer')?.get('discount')?.invalid && productForm.get('offer')?.get('discount')?.touched">
+                            Discount is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="imageName">Image:</label>
+                    <input type="text" class="form-control" formControlName="imageName" required>
+                    <div class="text-danger"
+                        *ngIf="productForm.controls['imageName'].invalid && productForm.controls['imageName'].touched">
+                        Image is required
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-primary">
+                Add Product
+            </button>
+        </div>
+    </form>
+</div>
