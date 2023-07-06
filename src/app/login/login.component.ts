@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
         if (res.toString() !== 'invalid') {
           this.message = 'Logged In Successfully.';
           const role = JSON.parse(atob(res.split('.')[1])).role;
-          localStorage.setItem('role', role);
           this.utilityService.setUser(res.toString());
           if (role == 'admin') {
             this.router.navigate(['admin'])

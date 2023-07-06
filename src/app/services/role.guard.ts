@@ -19,7 +19,6 @@ export class RoleGuard implements CanActivate {
 
       // Check if the user has the required role (e.g., 'admin')
       if (role === 'admin') {
-        console.log(role)
         return true;
       } else {
         alert("You dont have admin rights");

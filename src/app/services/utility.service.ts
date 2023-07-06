@@ -43,7 +43,8 @@ export class UtilityService {
   }
 
   isAdmin() {
-    return localStorage.getItem('role') == 'admin' ? true : false;
+    let token = this.jwt.decodeToken();
+    return token?.role == 'admin' ? true : false;
   }
 
   setUser(token: string) {
