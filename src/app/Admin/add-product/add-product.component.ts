@@ -25,14 +25,14 @@ export class AddProductComponent {
       description: ['', Validators.required],
       price: [0, Validators.required],
       productCategory: this.formBuilder.group({
-        id: [1, Validators.required],
+        id: [0, Validators.required],
         category: ['', Validators.required],
         subCategory: ['', Validators.required]
       }),
       offer: this.formBuilder.group({
         id: [1, Validators.required],
         title: ['', Validators.required],
-        discount: [{ value: 0, disabled: true }, Validators.required]
+        discount: [0, Validators.required]
       }),
       quantity: [0, Validators.required],
       imageName: ['', Validators.required]
@@ -47,7 +47,6 @@ export class AddProductComponent {
   loadOffers() {
     this.navigationService.getAllOffers().subscribe((res: any) => {
       this.offerList = res;
-      console.log(res);
     },
       error => console.log("Error in getting all offers in add product", error))
   }
@@ -65,6 +64,7 @@ export class AddProductComponent {
           }
           if (!present) {
             this.categoryList.push({
+              id: item.id,
               category: item.category,
               subCategories: [item.subCategory],
             });
@@ -82,8 +82,10 @@ export class AddProductComponent {
     const selectedOffer = this.offerList.find(offer => offer.title === selectedOfferTitle);
 
     if (selectedOffer) {
+      this.productForm.get('offer.id')?.setValue(selectedOffer.id);
       this.productForm.get('offer.discount')?.setValue(selectedOffer.discount);
     } else {
+      this.productForm.get('offer.id')?.setValue(0);
       this.productForm.get('offer.discount')?.setValue(0);
     }
   }
@@ -95,9 +97,10 @@ export class AddProductComponent {
     const selectedCategory = this.categoryList.find(category => category.category === selectedCategoryId);
 
     if (selectedCategory) {
-      // console.log(selectedCategory?.subCategories)
+      this.productForm.get('productCategory.id')?.setValue(selectedCategory.id);
       this.subCategoryList = selectedCategory?.subCategories;
     } else {
+      this.productForm.get('productCategory.id')?.setValue(0);
       this.subCategoryList = [];
     }
   }
@@ -113,7 +116,7 @@ export class AddProductComponent {
 
     console.log(product);
 
-    this.router.navigate(['admin'])
+    // this.router.navigate(['admin'])
   }
 
 }

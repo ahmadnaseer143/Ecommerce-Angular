@@ -79,7 +79,7 @@
                     </div>
                     <div class="form-group">
                         <label for="discount">Discount:</label>
-                        <input type="number" class="form-control" formControlName="discount" required>
+                        <input type="number" class="form-control" formControlName="discount" required readonly>
                         <div class="text-danger"
                             *ngIf="productForm.get('offer')?.get('discount')?.invalid && productForm.get('offer')?.get('discount')?.touched">
                             Discount is required

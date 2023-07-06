@@ -26,7 +26,7 @@ export class HeaderComponent {
   constructor(
     private navigationService: NavigationService,
     public utilityService: UtilityService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Get Category List
@@ -41,6 +41,7 @@ export class HeaderComponent {
         }
         if (!present) {
           this.navigationList.push({
+            id: item.id,
             category: item.category,
             subCategories: [item.subCategory],
           });
