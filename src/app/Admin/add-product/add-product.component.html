@@ -54,9 +54,9 @@
                     </div>
                     <div class="form-group">
                         <label for="subCategory">SubCategory:</label>
-                        <select class="form-control" formControlName="subCategory">
+                        <select class="form-control" formControlName="subCategory" (change)="onSubCategoryChange()">
                             <option value="">Select SubCategory</option>
-                            <option *ngFor="let subCategory of subCategoryList">{{subCategory}}</option>
+                            <option *ngFor="let subCategory of subCategoryList">{{subCategory.subCategory}}</option>
                         </select>
                         <div class="text-danger"
                             *ngIf="productForm.get('productCategory')?.get('subCategory')?.invalid && productForm.get('productCategory')?.get('subCategory')?.touched">

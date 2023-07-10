@@ -15,6 +15,13 @@ export interface NavigationItem {
   subCategories: string[];
 }
 
+export interface CategoryAndSubCategory {
+  id: number;
+  category: string;
+  subCategories: { id: number; subCategory: string }[];
+}
+
+
 export interface Offer {
   id: number;
   title: string;
