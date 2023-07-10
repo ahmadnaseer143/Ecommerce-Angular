@@ -12,12 +12,14 @@ import { AdminDashboardComponent } from './Admin/admin-dashboard/admin-dashboard
 import { AddProductComponent } from './Admin/add-product/add-product.component';
 import { EditProductComponent } from './Admin/edit-product/edit-product.component';
 import { RoleGuard } from './services/role.guard';
+import { OrdersComponent } from './Admin/orders/orders.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [RoleGuard] },
   { path: 'admin/addproduct', component: AddProductComponent, canActivate: [RoleGuard] },
   { path: 'admin/editproduct/:id', component: EditProductComponent, canActivate: [RoleGuard] },
+  { path: 'admin/orders', component: OrdersComponent, canActivate: [RoleGuard] },
   { path: 'products', component: ProductsComponent },
   { path: 'product-details', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent, canActivate: [AuthGuard] },

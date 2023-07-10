@@ -23,6 +23,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { AdminDashboardComponent } from './Admin/admin-dashboard/admin-dashboard.component';
 import { AddProductComponent } from './Admin/add-product/add-product.component';
 import { EditProductComponent } from './Admin/edit-product/edit-product.component';
+import { OrdersComponent } from './Admin/orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { EditProductComponent } from './Admin/edit-product/edit-product.componen
     AdminDashboardComponent,
     AddProductComponent,
     EditProductComponent,
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,26 @@
+<div class="mt-2 p-4 border my-rounded-corner">
+    <h3 class="w-25 border text-center py-2 mb-5 my-rounded-corner">
+        All Orders
+    </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Cart ID</th>
+                <th>Payment ID</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orders">
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.firstName }} {{ order.user.lastName }}</td>
+                <td>{{ order.cart.id }}</td>
+                <td>{{ order.payment.id }}</td>
+                <td>{{ order.createdAt }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

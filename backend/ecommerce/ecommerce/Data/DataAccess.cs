@@ -964,6 +964,65 @@ namespace ecommerce.Data
       }
     }
 
+    public List<Order> GetAllOrders()
+    {
+      List<Order> orders = new List<Order>();
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand
+        {
+          Connection = connection
+        };
+
+        string query = @"
+    SELECT o.Id, o.CreatedAt,
+        u.UserId AS UserId, u.FirstName, u.LastName, u.Email, u.Address, u.Mobile, u.Password, u.CreatedAt AS UserCreatedAt, u.ModifiedAt AS UserModifiedAt,
+        c.CartId AS CartId, c.Ordered, c.OrderedOn,
+        p.Id AS PaymentId, p.CreatedAt AS PaymentCreatedAt
+    FROM Orders o
+    JOIN Users u ON o.UserId = u.UserId
+    JOIN Carts c ON o.CartId = c.CartId
+    JOIN Payments p ON o.PaymentId = p.Id;";
+        command.CommandText = query;
+
+        connection.Open();
+        MySqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+          Order order = new Order
+          {
+            Id = (int)reader["Id"],
+            CreatedAt = (string)reader["CreatedAt"],
+            User = new User
+            {
+              Id = (int)reader["UserId"],
+              FirstName = (string)reader["FirstName"],
+              LastName = (string)reader["LastName"],
+              Email = (string)reader["Email"],
+              Address = (string)reader["Address"],
+              Mobile = (string)reader["Mobile"],
+              Password = (string)reader["Password"],
+              CreatedAt = (string)reader["UserCreatedAt"],
+              ModifiedAt = (string)reader["UserModifiedAt"]
+            },
+            Cart = new Cart
+            {
+              Id = (int)reader["CartId"],
+              Ordered = Convert.ToBoolean(reader["Ordered"]),
+              OrderedOn = (string)reader["OrderedOn"]
+            },
+            Payment = new Payment
+            {
+              Id = (int)reader["PaymentId"],
+              CreatedAt = (string)reader["PaymentCreatedAt"]
+            }
+          };
+
+          orders.Add(order);
+        }
+      }
+      return orders;
+    }
 
 
   }

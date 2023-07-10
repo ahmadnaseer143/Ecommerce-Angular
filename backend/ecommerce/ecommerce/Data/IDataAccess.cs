@@ -43,5 +43,7 @@ namespace ecommerce.Data
     bool InsertProduct(Product product);
 
     bool DeleteProduct(int id);
+
+    List<Order> GetAllOrders();
   }
 }

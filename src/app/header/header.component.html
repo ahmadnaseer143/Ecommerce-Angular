@@ -9,7 +9,7 @@
         Home
       </button>
       <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/admin" *ngIf="utilityService.isAdmin()">
-        Home
+        Products
       </button>
       <div class="btn-group" role="group">
         <button type="button" class="btn text-light mx-2 btn-hover dropdown-toggle" data-bs-toggle="dropdown"
@@ -55,6 +55,10 @@
       </button>
       <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/orders"
         *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()">
+        Orders
+      </button>
+      <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/admin/orders"
+        *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()">
         Orders
       </button>
       <button type="button" class="btn text-light mx-2 btn-hover" (click)="utilityService.logoutUser()"

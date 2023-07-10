@@ -186,5 +186,18 @@ namespace ecommerce.Controllers
 
       return Ok(true);
     }
+
+    [HttpGet("GetAllOrders")]
+    public IActionResult GetAllOrders()
+    {
+      var orders = dataAccess.GetAllOrders();
+      if (orders == null || orders.Count == 0)
+      {
+        return NotFound();
+      }
+
+      return Ok(orders);
+    }
+
   }
 }

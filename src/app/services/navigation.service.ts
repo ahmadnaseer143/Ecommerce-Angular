@@ -142,4 +142,8 @@ export class NavigationService {
   deleteProduct(id: number) {
     return this.http.delete(this.baseurl + "DeleteProduct/" + id);
   }
+
+  getAllOrders() {
+    return this.http.get(this.baseurl + 'GetAllOrders');
+  }
 }
