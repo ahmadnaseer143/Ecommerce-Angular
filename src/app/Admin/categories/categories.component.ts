@@ -66,4 +66,11 @@ export class CategoriesComponent {
   showForm() {
     this.showFormValue = !this.showFormValue;
   }
+
+  deleteCategory(category: Category) {
+    const decision = window.confirm("Are you sure you want to delete this category?");
+    if (decision) {
+      console.log("Deleting", category);
+    }
+  }
 }
