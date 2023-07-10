@@ -39,12 +39,13 @@ export class CategoriesComponent {
     if (this.categoryForm.invalid) return;
 
     if (this.edit) {
-      console.log("Edit Form");
-      console.log(this.categoryForm.value);
+      // console.log("Edit Form");
+      // console.log(this.categoryForm.value);
 
       this.navigationService.editCategory(this.categoryForm.value).subscribe((res: any) => {
         console.log("Edited");
         this.loadCategories();
+        this.resetForm();
       },
         error => console.log("Error in Editing Category", error)
       )
@@ -54,17 +55,21 @@ export class CategoriesComponent {
       this.navigationService.insertCategory(this.categoryForm.value).subscribe((res: any) => {
         console.log("inserted");
         this.loadCategories();
+        this.resetForm();
       },
         error => console.log("Error in Inserting Category", error)
       )
     }
-    this.resetForm();
   }
 
   resetForm() {
     this.edit = false;
     this.showFormValue = false;
-    this.categoryForm.reset();
+    this.categoryForm.reset({
+      id: 1,
+      category: '',
+      subCategory: ''
+    });
   }
 
   editCategory(category: Category) {
