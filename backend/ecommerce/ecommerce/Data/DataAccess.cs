@@ -139,7 +139,40 @@ namespace ecommerce.Data
       }
     }
 
+    public async Task<bool> DeleteProductCategory(int id)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand
+        {
+          Connection = connection
+        };
 
+        // Delete products associated with the category
+        string deleteProductsQuery = "DELETE FROM products WHERE CategoryId = @Id";
+        command.CommandText = deleteProductsQuery;
+        command.Parameters.AddWithValue("@Id", id);
+
+        try
+        {
+          connection.Open();
+          await command.ExecuteNonQueryAsync();
+
+          // Delete the product category
+          string deleteCategoryQuery = "DELETE FROM productcategories WHERE CategoryId = @Id";
+          command.CommandText = deleteCategoryQuery;
+          int rowsAffected = await command.ExecuteNonQueryAsync();
+
+          return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+          // Handling any potential exceptions
+          Console.WriteLine($"Error deleting product category: {ex.Message}");
+          return false;
+        }
+      }
+    }
 
 
     public ProductCategory GetProductCategory(int id)

@@ -7,6 +7,8 @@ namespace ecommerce.Data
     Task<List<ProductCategory>> GetProductCategories();
 
     Task<bool> InsertProductCategory(ProductCategory productCategory);
+
+    Task<bool> DeleteProductCategory(int id);
     ProductCategory GetProductCategory(int id);
 
     Offer GetOffer(int id);

@@ -5,7 +5,7 @@ import {
   HttpParams,
   HttpResponse,
 } from '@angular/common/http';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import {
   Category,
   Order,
@@ -41,6 +41,10 @@ export class NavigationService {
 
   insertCategory(category: Category) {
     return this.http.post(this.baseurl + "InsertCategory", category);
+  }
+
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete(this.baseurl + "DeleteCategory/" + id);
   }
 
   getProducts(category: string, subCategory: string, count: number) {

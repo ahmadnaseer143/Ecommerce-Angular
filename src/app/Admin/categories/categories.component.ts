@@ -76,7 +76,14 @@ export class CategoriesComponent {
   deleteCategory(category: Category) {
     const decision = window.confirm("Are you sure you want to delete SubCategory " + category.subCategory + " and its products?");
     if (decision) {
-      console.log("Deleting", category);
+      // console.log("Deleting", category);
+
+      this.navigationService.deleteCategory(category.id).subscribe((res: any) => {
+        console.log("Deleted");
+        this.loadCategories();
+      },
+        error => console.log("Error in Deleting Category", error)
+      )
     }
   }
 }

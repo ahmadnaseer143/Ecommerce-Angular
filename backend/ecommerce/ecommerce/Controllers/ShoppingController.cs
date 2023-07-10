@@ -41,6 +41,21 @@ namespace ecommerce.Controllers
       }
     }
 
+    [HttpDelete("DeleteCategory/{id}")]
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+      var boolValue = await dataAccess.DeleteProductCategory(id);
+      if (boolValue)
+      {
+        return Ok(true);
+      }
+      else
+      {
+        return NotFound();
+      }
+    }
+
+
 
     [HttpGet("GetProducts")]
 
