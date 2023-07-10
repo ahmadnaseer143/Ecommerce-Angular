@@ -39,6 +39,10 @@ export class NavigationService {
     );
   }
 
+  insertCategory(category: Category) {
+    return this.http.post(this.baseurl + "InsertCategory", category);
+  }
+
   getProducts(category: string, subCategory: string, count: number) {
     return this.http.get<any[]>(this.baseurl + 'GetProducts', {
       params: new HttpParams()

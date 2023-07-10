@@ -110,6 +110,36 @@ namespace ecommerce.Data
       return productCategories;
     }
 
+    public async Task<bool> InsertProductCategory(ProductCategory productCategory)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand
+        {
+          Connection = connection
+        };
+
+        string query = "INSERT INTO productcategories (Category, SubCategory) VALUES (@Category, @SubCategory)";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@Category", productCategory.Category);
+        command.Parameters.AddWithValue("@SubCategory", productCategory.SubCategory);
+
+        try
+        {
+          connection.Open();
+          int rowsAffected = await command.ExecuteNonQueryAsync();
+          return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+          // Handling any potential exceptions
+          Console.WriteLine($"Error inserting product category: {ex.Message}");
+          return false;
+        }
+      }
+    }
+
+
 
 
     public ProductCategory GetProductCategory(int id)
@@ -1023,7 +1053,6 @@ namespace ecommerce.Data
       }
       return orders;
     }
-
 
   }
 }

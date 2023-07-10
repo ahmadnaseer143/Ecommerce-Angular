@@ -27,6 +27,21 @@ namespace ecommerce.Controllers
       return Ok(result);
     }
 
+    [HttpPost("InsertCategory")]
+    public async Task<IActionResult> InsertCategory(ProductCategory productCategory)
+    {
+      var result = await dataAccess.InsertProductCategory(productCategory);
+      if (result)
+      {
+        return Ok(result);
+      }
+      else
+      {
+        return BadRequest("Failed to insert product category.");
+      }
+    }
+
+
     [HttpGet("GetProducts")]
 
     public IActionResult GetProducts(string category, string subCategory, int count)

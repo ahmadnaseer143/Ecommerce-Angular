@@ -44,6 +44,12 @@ export class CategoriesComponent {
     } else {
       console.log("Add Form");
       console.log(this.categoryForm.value);
+      this.navigationService.insertCategory(this.categoryForm.value).subscribe((res: any) => {
+        console.log("inserted");
+        this.loadCategories();
+      },
+        error => console.log("Error in Inserting Category", error)
+      )
     }
     this.resetForm();
   }
@@ -68,7 +74,7 @@ export class CategoriesComponent {
   }
 
   deleteCategory(category: Category) {
-    const decision = window.confirm("Are you sure you want to delete this category?");
+    const decision = window.confirm("Are you sure you want to delete SubCategory " + category.subCategory + " and its products?");
     if (decision) {
       console.log("Deleting", category);
     }

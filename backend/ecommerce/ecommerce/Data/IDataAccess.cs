@@ -5,6 +5,8 @@ namespace ecommerce.Data
   public interface IDataAccess
   {
     Task<List<ProductCategory>> GetProductCategories();
+
+    Task<bool> InsertProductCategory(ProductCategory productCategory);
     ProductCategory GetProductCategory(int id);
 
     Offer GetOffer(int id);
