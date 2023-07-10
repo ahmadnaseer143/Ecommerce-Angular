@@ -3,7 +3,7 @@
         <h3 class="text-center">
             Categories
         </h3>
-        <button class="btn btn-primary" (click)="showForm()">{{showFormValue? 'Hide' : 'Add Category'}}</button>
+        <button class="btn btn-primary" (click)="showForm()">{{showFormValue? 'Hide Form' : 'Add Category'}}</button>
     </div>
 
     <form *ngIf="showFormValue" class="mt-3" [formGroup]="categoryForm" (ngSubmit)="addCategory()">
@@ -23,7 +23,7 @@
                 SubCategory Name Is Required
             </div>
         </div>
-        <button type="submit" class="btn btn-success my-4">Add</button>
+        <button type="submit" class="btn btn-primary my-4">{{edit? 'Edit Category' : 'Add Category'}}</button>
     </form>
 
     <table class="table">
@@ -40,8 +40,8 @@
                 <td>{{category.category}}</td>
                 <td>{{category.subCategory}}</td>
                 <td>
-                    <button class="btn btn-primary mx-2">Edit</button>
-                    <button class="btn btn-danger ">Delete</button>
+                    <button class="btn btn-primary mx-2" (click)="editCategory(category)">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
                 </td>
             </tr>
         </tbody>
