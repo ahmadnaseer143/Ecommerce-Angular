@@ -24,6 +24,8 @@ import { AdminDashboardComponent } from './Admin/admin-dashboard/admin-dashboard
 import { AddProductComponent } from './Admin/add-product/add-product.component';
 import { EditProductComponent } from './Admin/edit-product/edit-product.component';
 import { OrdersComponent } from './Admin/orders/orders.component';
+import { CategoriesComponent } from './Admin/categories/categories.component';
+import { AddCategoriesComponent } from './Admin/add-categories/add-categories.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { OrdersComponent } from './Admin/orders/orders.component';
     AddProductComponent,
     EditProductComponent,
     OrdersComponent,
+    CategoriesComponent,
+    AddCategoriesComponent,
   ],
   imports: [
     BrowserModule,
