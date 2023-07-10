@@ -41,6 +41,21 @@ namespace ecommerce.Controllers
       }
     }
 
+    [HttpPut("EditCategory")]
+    public async Task<IActionResult> EditCategory(ProductCategory category)
+    {
+      bool isUpdated = await dataAccess.UpdateCategory(category);
+      if (isUpdated)
+      {
+        return Ok(isUpdated);
+      }
+      else
+      {
+        return BadRequest("Failed to update category.");
+      }
+    }
+
+
     [HttpDelete("DeleteCategory/{id}")]
     public async Task<IActionResult> DeleteCategory(int id)
     {

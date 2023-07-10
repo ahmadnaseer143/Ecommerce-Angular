@@ -41,9 +41,16 @@ export class CategoriesComponent {
     if (this.edit) {
       console.log("Edit Form");
       console.log(this.categoryForm.value);
+
+      this.navigationService.editCategory(this.categoryForm.value).subscribe((res: any) => {
+        console.log("Edited");
+        this.loadCategories();
+      },
+        error => console.log("Error in Editing Category", error)
+      )
     } else {
-      console.log("Add Form");
-      console.log(this.categoryForm.value);
+      // console.log("Add Form");
+      // console.log(this.categoryForm.value);
       this.navigationService.insertCategory(this.categoryForm.value).subscribe((res: any) => {
         console.log("inserted");
         this.loadCategories();
@@ -56,6 +63,7 @@ export class CategoriesComponent {
 
   resetForm() {
     this.edit = false;
+    this.showFormValue = false;
     this.categoryForm.reset();
   }
 

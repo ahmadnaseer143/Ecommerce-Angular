@@ -139,6 +139,37 @@ namespace ecommerce.Data
       }
     }
 
+    public async Task<bool> UpdateCategory(ProductCategory category)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand
+        {
+          Connection = connection
+        };
+
+        string query = "UPDATE productcategories SET Category = @Category, SubCategory = @SubCategory WHERE CategoryId = @CategoryId";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@CategoryId", category.Id);
+        command.Parameters.AddWithValue("@Category", category.Category);
+        command.Parameters.AddWithValue("@SubCategory", category.SubCategory);
+
+        try
+        {
+          connection.Open();
+          int rowsAffected = await command.ExecuteNonQueryAsync();
+          return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+          // Handling any potential exceptions
+          Console.WriteLine($"Error updating category: {ex.Message}");
+          return false;
+        }
+      }
+    }
+
+
     public async Task<bool> DeleteProductCategory(int id)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))

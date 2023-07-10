@@ -8,6 +8,7 @@ namespace ecommerce.Data
 
     Task<bool> InsertProductCategory(ProductCategory productCategory);
 
+    Task<bool> UpdateCategory(ProductCategory category);
     Task<bool> DeleteProductCategory(int id);
     ProductCategory GetProductCategory(int id);
 

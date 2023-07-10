@@ -43,6 +43,10 @@ export class NavigationService {
     return this.http.post(this.baseurl + "InsertCategory", category);
   }
 
+  editCategory(category: Category) {
+    return this.http.put(this.baseurl + "EditCategory", category);
+  }
+
   deleteCategory(id: number): Observable<any> {
     return this.http.delete(this.baseurl + "DeleteCategory/" + id);
   }
