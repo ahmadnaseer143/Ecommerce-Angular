@@ -212,11 +212,10 @@ namespace ecommerce.Controllers
     public IActionResult InsertProduct(Product product)
     {
       var boolValue = dataAccess.InsertProduct(product);
-      if (boolValue==false) {
-        return BadRequest();
+      if (boolValue > 0) {
+      return Ok(boolValue);
       }
-
-      return Ok();
+       return BadRequest();
     }
 
     [HttpDelete("DeleteProduct/{id}")]

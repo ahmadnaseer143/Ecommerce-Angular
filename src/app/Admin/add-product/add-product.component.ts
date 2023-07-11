@@ -15,7 +15,6 @@ export class AddProductComponent {
   categoryList: CategoryAndSubCategory[] = [];
   subCategoryList: any = [];
   offerList: Offer[] = [];
-  file !: File;
 
   constructor(private router: Router, private navigationService: NavigationService, private formBuilder: FormBuilder) { }
 
@@ -36,7 +35,7 @@ export class AddProductComponent {
         discount: [0, Validators.required]
       }),
       quantity: [0, Validators.required],
-      imageName: [null, Validators.required]
+      imageName: ['', Validators.required]
     })
 
     this.loadCategories();
@@ -134,13 +133,6 @@ export class AddProductComponent {
     }
   }
 
-  onImageChange(event: any) {
-    const file = event.target.files[0];
-    console.log(file);
-    this.file = file;
-  }
-
-
 
   addProduct() {
     if (this.productForm.invalid) {
@@ -149,9 +141,6 @@ export class AddProductComponent {
     }
 
     const product = { ...this.productForm.value } as Product;
-    const formData = new FormData();
-    formData.append('file', this.file);
-    product.imageName = formData.get('file') as string;
 
     console.log(product);
 

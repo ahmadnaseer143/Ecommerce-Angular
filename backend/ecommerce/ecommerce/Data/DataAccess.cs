@@ -1007,7 +1007,7 @@ namespace ecommerce.Data
       return value;
     }
 
-    public bool InsertProduct(Product product)
+    public int InsertProduct(Product product)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -1031,9 +1031,19 @@ namespace ecommerce.Data
 
         int rowsAffected = command.ExecuteNonQuery();
 
-        return rowsAffected > 0;
+        if (rowsAffected > 0)
+        {
+          command.CommandText = "SELECT LAST_INSERT_ID();";
+          int productId = Convert.ToInt32(command.ExecuteScalar());
+          return productId;
+        }
+        else
+        {
+          return -1;
+        }
       }
     }
+
     public bool DeleteProduct(int id)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))

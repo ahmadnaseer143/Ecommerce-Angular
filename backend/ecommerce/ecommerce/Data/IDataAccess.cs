@@ -45,7 +45,7 @@ namespace ecommerce.Data
     int InsertPayment(Payment payment);
     int InsertOrder(Order order);
 
-    bool InsertProduct(Product product);
+    int InsertProduct(Product product);
 
     bool DeleteProduct(int id);
 
