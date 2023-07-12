@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from 'src/app/models/models';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-customers',
@@ -10,8 +11,18 @@ export class CustomersComponent {
 
   customers: User[] = [];
 
-  constructor() { }
+  constructor(private navigationService: NavigationService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadCustomers();
+  }
+
+  loadCustomers() {
+    this.navigationService.getAllUsers().subscribe((res: any) => {
+      // console.log(res);
+      this.customers = res;
+    },
+      error => console.log("Error in getting all users", error))
+  }
 
 }

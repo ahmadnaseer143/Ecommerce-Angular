@@ -158,4 +158,8 @@ export class NavigationService {
   getAllOrders() {
     return this.http.get(this.baseurl + 'GetAllOrders');
   }
+
+  getAllUsers() {
+    return this.http.get(this.baseurl + 'GetAllUsers');
+  }
 }

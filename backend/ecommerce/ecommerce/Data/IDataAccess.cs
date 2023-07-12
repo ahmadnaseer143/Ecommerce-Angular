@@ -34,6 +34,8 @@ namespace ecommerce.Data
 
     User GetUser(int id);
 
+    Task<List<User>> GetAllUsers();
+
     bool InsertCartItem(int userId, int productId);
 
     bool RemoveCartItem(int userId, int productId);

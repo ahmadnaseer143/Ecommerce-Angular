@@ -131,12 +131,12 @@ namespace ecommerce.Controllers
       return Ok(message);
     }
 
-    [HttpPost("LoginUser")]
-    public IActionResult LoginUser([FromBody] User user)
+    [HttpGet("GetAllUsers")]
+    public async Task<IActionResult> GetAllUsers()
     {
-      var token = dataAccess.IsUserPresent(user.Email, user.Password);
-      if (token == "") token = "invalid";
-      return Ok(token);
+      var users = await dataAccess.GetAllUsers();
+
+      return Ok(users);
     }
 
     [HttpPost("InsertReview")]

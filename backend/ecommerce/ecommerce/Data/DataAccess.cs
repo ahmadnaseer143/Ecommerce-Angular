@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -432,6 +433,47 @@ namespace ecommerce.Data
       }
       return true;
     }
+
+    public async Task<List<User>> GetAllUsers()
+    {
+      var users = new List<User>();
+
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection,
+        };
+
+        string query = "SELECT * FROM Users WHERE role = 'employee';";
+
+        command.CommandText = query;
+
+        await connection.OpenAsync();
+
+        using (DbDataReader reader = await command.ExecuteReaderAsync())
+        {
+          while (await reader.ReadAsync())
+          {
+            var user = new User()
+            {
+              Id = Convert.ToInt32(reader["UserId"]),
+              FirstName = reader["FirstName"].ToString(),
+              LastName = reader["LastName"].ToString(),
+              Email = reader["Email"].ToString(),
+              Address = reader["Address"].ToString(),
+              Mobile = reader["Mobile"].ToString(),
+              Role = reader["Role"].ToString()
+            };
+
+            users.Add(user);
+          }
+        }
+      }
+
+      return users;
+    }
+
 
     public string IsUserPresent(string email, string password)
     {
