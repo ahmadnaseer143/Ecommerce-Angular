@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { User } from 'src/app/models/models';
 
 @Component({
   selector: 'app-customers',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./customers.component.css']
 })
 export class CustomersComponent {
+
+  customers: User[] = [];
+
+  constructor() { }
+
+  ngOnInit() { }
 
 }

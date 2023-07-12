@@ -1,1 +1,24 @@
-<p>customers works!</p>
+<div class="mt-2 p-4 border my-rounded-corner">
+    <h3 class="w-25 border text-center py-2 mb-5 my-rounded-corner">
+        All Customers
+    </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Mobile</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let customer of customers">
+                <td>{{ customer.firstName }} {{ customer.lastName }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.mobile }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
