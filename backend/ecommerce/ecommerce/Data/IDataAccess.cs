@@ -14,43 +14,43 @@ namespace ecommerce.Data
 
     Offer GetOffer(int id);
 
-    List<Offer> GetAllOffers();
+    Task<List<Offer>> GetAllOffers();
 
-    List<Product> GetProducts(string category, string subCategory, int count);
+    Task<List<Product>> GetProducts(string category, string subCategory, int count);
 
-    List<Product> GetAllProducts();
+    Task<List<Product>> GetAllProducts();
 
     Product GetProduct(int id);
 
-    Product UpdateProduct(Product product);
+    Task<Product> UpdateProduct(Product product);
 
-    bool InsertUser(User user);
+    Task<bool> InsertUser(User user);
 
-    string IsUserPresent(string email, string password);
+    Task<string> IsUserPresent(string email, string password);
 
-    void InsertReview(Review review);
+    Task InsertReview(Review review);
 
-    List<Review> GetProductReviews(int productId);
+    Task<List<Review>> GetProductReviews(int productId);
 
     User GetUser(int id);
 
     Task<List<User>> GetAllUsers();
 
-    bool InsertCartItem(int userId, int productId);
+    Task<bool> InsertCartItem(int userId, int productId);
 
-    bool RemoveCartItem(int userId, int productId);
-    Cart GetActiveCartOfUser(int userid);
+    Task<bool> RemoveCartItem(int userId, int productId);
+    Task<Cart> GetActiveCartOfUser(int userid);
     Cart GetCart(int cartid);
-    List<Cart> GetAllPreviousCartsOfUser(int userid);
+    Task<List<Cart>> GetAllPreviousCartsOfUser(int userid);
 
-    List<PaymentMethod> GetPaymentMethods();
-    int InsertPayment(Payment payment);
-    int InsertOrder(Order order);
+    Task<List<PaymentMethod>> GetPaymentMethods();
+    Task<int> InsertPayment(Payment payment);
+    Task<int> InsertOrder(Order order);
 
-    int InsertProduct(Product product);
+    Task<int> InsertProduct(Product product);
 
-    bool DeleteProduct(int id);
+    Task<bool> DeleteProduct(int id);
 
-    List<Order> GetAllOrders();
+    Task<List<Order>> GetAllOrders();
   }
 }

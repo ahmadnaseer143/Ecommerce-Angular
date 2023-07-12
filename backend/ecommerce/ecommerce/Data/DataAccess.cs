@@ -49,7 +49,7 @@ namespace ecommerce.Data
       return offer;
     }
 
-    public List<Offer> GetAllOffers()
+    public async Task<List<Offer>> GetAllOffers()
     {
       List<Offer> offers = new List<Offer>();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -62,10 +62,10 @@ namespace ecommerce.Data
         string query = "SELECT * FROM Offers;";
         command.CommandText = query;
 
-        connection.Open();
+        await connection.OpenAsync();
 
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           Offer offer = new Offer()
           {
@@ -92,7 +92,7 @@ namespace ecommerce.Data
         };
         string query = "Select * from productcategories;";
         command.CommandText = query;
-        connection.Open();
+        await connection.OpenAsync();
         using (MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync())
         {
           while (reader.Read())
@@ -127,7 +127,7 @@ namespace ecommerce.Data
 
         try
         {
-          connection.Open();
+          await connection.OpenAsync();
           int rowsAffected = await command.ExecuteNonQueryAsync();
           return rowsAffected > 0;
         }
@@ -157,7 +157,7 @@ namespace ecommerce.Data
 
         try
         {
-          connection.Open();
+          await connection.OpenAsync();
           int rowsAffected = await command.ExecuteNonQueryAsync();
           return rowsAffected > 0;
         }
@@ -187,7 +187,7 @@ namespace ecommerce.Data
 
         try
         {
-          connection.Open();
+          await connection.OpenAsync();
           await command.ExecuteNonQueryAsync();
 
           // Delete the product category
@@ -233,7 +233,7 @@ namespace ecommerce.Data
       return productCategory;
     }
 
-    public List<Product> GetProducts(string category, string subCategory, int count)
+    public async Task<List<Product>> GetProducts(string category, string subCategory, int count)
     {
       var products = new List<Product>();
       using (MySqlConnection connection = new(dbConnection))
@@ -251,10 +251,10 @@ namespace ecommerce.Data
         command.Parameters.AddWithValue("@c", category);
         command.Parameters.AddWithValue("@s", subCategory);
 
-        connection.Open();
+        await connection.OpenAsync();
 
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           var product = new Product()
           {
@@ -279,7 +279,7 @@ namespace ecommerce.Data
       return products;
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProducts()
     {
       var products = new List<Product>();
       using (MySqlConnection connection = new(dbConnection))
@@ -294,10 +294,10 @@ namespace ecommerce.Data
 
         command.CommandText = query;
 
-        connection.Open();
+        await connection.OpenAsync();
 
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           var product = new Product()
           {
@@ -357,7 +357,7 @@ namespace ecommerce.Data
       return product;
     }
 
-    public Product UpdateProduct(Product product)
+    public async Task<Product> UpdateProduct(Product product)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -379,7 +379,7 @@ namespace ecommerce.Data
         command.Parameters.AddWithValue("@OfferId", product.Offer.Id);
         command.Parameters.AddWithValue("@ProductId", product.Id);
 
-        connection.Open();
+        await connection.OpenAsync();
 
         int rowsAffected = command.ExecuteNonQuery();
 
@@ -396,7 +396,7 @@ namespace ecommerce.Data
     }
 
 
-    public bool InsertUser(User user)
+    public async Task<bool> InsertUser(User user)
     {
       using (MySqlConnection connection = new(dbConnection))
       {
@@ -404,7 +404,7 @@ namespace ecommerce.Data
         {
           Connection = connection
         };
-        connection.Open();
+        await connection.OpenAsync();
 
         string query = "SELECT COUNT(*) FROM Users WHERE Email=@em;";
         command.CommandText = query;
@@ -475,7 +475,7 @@ namespace ecommerce.Data
     }
 
 
-    public string IsUserPresent(string email, string password)
+    public async Task<string> IsUserPresent(string email, string password)
     {
       User user = new User();
       using (MySqlConnection connection = new(dbConnection))
@@ -485,7 +485,7 @@ namespace ecommerce.Data
           Connection = connection
         };
 
-        connection.Open();
+        await connection.OpenAsync();
         string query = "SELECT COUNT(*) FROM Users WHERE Email=@Email AND Password=@Password;";
         command.CommandText = query;
         command.Parameters.AddWithValue("@Email", email);
@@ -500,8 +500,8 @@ namespace ecommerce.Data
         query = "SELECT * FROM Users WHERE Email=@Email AND Password=@Password;";
         command.CommandText = query;
 
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           user.Id = Convert.ToInt32(reader["UserId"]);
           user.FirstName = reader["FirstName"].ToString();
@@ -546,7 +546,7 @@ namespace ecommerce.Data
       return "";
     }
 
-    public void InsertReview(Review review)
+    public async Task InsertReview(Review review)
     {
       using MySqlConnection connection = new(dbConnection);
       MySqlCommand command = new()
@@ -561,7 +561,7 @@ namespace ecommerce.Data
       command.Parameters.Add("@rv", MySqlDbType.VarChar).Value = review.Value;
       command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = review.CreatedAt;
 
-      connection.Open();
+      await connection.OpenAsync();
       command.ExecuteNonQuery();
     }
 
@@ -598,7 +598,7 @@ namespace ecommerce.Data
     }
 
 
-    public List<Review> GetProductReviews(int productId)
+    public async Task<List<Review>> GetProductReviews(int productId)
     {
       var reviews = new List<Review>();
       using (MySqlConnection connection = new(dbConnection))
@@ -612,9 +612,9 @@ namespace ecommerce.Data
         command.CommandText = query;
         command.Parameters.AddWithValue("@productId", productId);
 
-        connection.Open();
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        await connection.OpenAsync();
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           var review = new Review()
           {
@@ -635,7 +635,7 @@ namespace ecommerce.Data
       return reviews;
     }
 
-    public bool InsertCartItem(int userId, int productId)
+    public async Task<bool> InsertCartItem(int userId, int productId)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -644,7 +644,7 @@ namespace ecommerce.Data
           Connection = connection
         };
 
-        connection.Open();
+        await connection.OpenAsync();
         string query = "SELECT COUNT(*) FROM Carts WHERE UserId=" + userId + " AND Ordered='false';";
         command.CommandText = query;
         int count = Convert.ToInt32(command.ExecuteScalar());
@@ -667,7 +667,7 @@ namespace ecommerce.Data
       }
     }
 
-    public bool RemoveCartItem(int userId, int productId)
+    public async Task<bool> RemoveCartItem(int userId, int productId)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -676,7 +676,7 @@ namespace ecommerce.Data
           Connection = connection
         };
 
-        connection.Open();
+        await connection.OpenAsync();
 
         string query = "SELECT CartId FROM Carts WHERE UserId = " + userId + " AND Ordered = 'false';";
         command.CommandText = query;
@@ -701,7 +701,7 @@ namespace ecommerce.Data
     }
 
 
-    Cart GetActiveCartOfUser(int userid)
+    async Task<Cart> GetActiveCartOfUser(int userid)
     {
       var cart = new Cart();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -710,7 +710,7 @@ namespace ecommerce.Data
         {
           Connection = connection
         };
-        connection.Open();
+        await connection.OpenAsync();
 
         string query = "SELECT COUNT(*) From Carts WHERE UserId=" + userid + " AND Ordered='false';";
         command.CommandText = query;
@@ -750,7 +750,7 @@ namespace ecommerce.Data
       return cart;
     }
 
-    List<Cart> GetAllPreviousCartsOfUser(int userid)
+    async Task<List<Cart>> GetAllPreviousCartsOfUser(int userid)
     {
       var carts = new List<Cart>();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -761,7 +761,7 @@ namespace ecommerce.Data
         };
         string query = "SELECT CartId FROM Carts WHERE UserId=" + userid + " AND Ordered='true';";
         command.CommandText = query;
-        connection.Open();
+        await connection.OpenAsync();
         using (MySqlDataReader reader = command.ExecuteReader())
         {
           while (reader.Read())
@@ -774,6 +774,7 @@ namespace ecommerce.Data
       return carts;
     }
 
+    /*
     Cart GetCart(int cartid)
     {
       var cart = new Cart();
@@ -818,56 +819,9 @@ namespace ecommerce.Data
       return cart;
     }
 
-    Cart IDataAccess.GetActiveCartOfUser(int userid)
-    {
-      var cart = new Cart();
-      using (MySqlConnection connection = new MySqlConnection(dbConnection))
-      {
-        MySqlCommand command = new MySqlCommand()
-        {
-          Connection = connection
-        };
-        connection.Open();
+    */
 
-        string query = "SELECT COUNT(*) From Carts WHERE UserId=" + userid + " AND Ordered='false';";
-        command.CommandText = query;
-
-        int count = Convert.ToInt32(command.ExecuteScalar());
-        if (count == 0)
-        {
-          return cart;
-        }
-
-        query = "SELECT CartId From Carts WHERE UserId=" + userid + " AND Ordered='false';";
-        command.CommandText = query;
-
-        int cartid = Convert.ToInt32(command.ExecuteScalar());
-
-        query = "SELECT * FROM CartItems WHERE CartId=" + cartid + ";";
-        command.CommandText = query;
-
-        using (MySqlDataReader reader = command.ExecuteReader())
-        {
-          while (reader.Read())
-          {
-            CartItem item = new CartItem()
-            {
-              Id = (int)reader["CartItemId"],
-              Product = GetProduct((int)reader["ProductId"])
-            };
-            cart.CartItems.Add(item);
-          }
-        }
-
-        cart.Id = cartid;
-        cart.User = GetUser(userid);
-        cart.Ordered = false;
-        cart.OrderedOn = "";
-      }
-      return cart;
-    }
-
-    Cart IDataAccess.GetCart(int cartid)
+    public Cart GetCart(int cartid)
     {
       var cart = new Cart();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -911,7 +865,56 @@ namespace ecommerce.Data
       return cart;
     }
 
-    List<Cart> IDataAccess.GetAllPreviousCartsOfUser(int userid)
+    async Task<Cart> IDataAccess.GetActiveCartOfUser(int userid)
+    {
+      var cart = new Cart();
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection
+        };
+        await connection.OpenAsync();
+
+        string query = "SELECT COUNT(*) From Carts WHERE UserId=" + userid + " AND Ordered='false';";
+        command.CommandText = query;
+
+        int count = Convert.ToInt32(command.ExecuteScalar());
+        if (count == 0)
+        {
+          return cart;
+        }
+
+        query = "SELECT CartId From Carts WHERE UserId=" + userid + " AND Ordered='false';";
+        command.CommandText = query;
+
+        int cartid = Convert.ToInt32(command.ExecuteScalar());
+
+        query = "SELECT * FROM CartItems WHERE CartId=" + cartid + ";";
+        command.CommandText = query;
+
+        using (MySqlDataReader reader = command.ExecuteReader())
+        {
+          while (reader.Read())
+          {
+            CartItem item = new CartItem()
+            {
+              Id = (int)reader["CartItemId"],
+              Product = GetProduct((int)reader["ProductId"])
+            };
+            cart.CartItems.Add(item);
+          }
+        }
+
+        cart.Id = cartid;
+        cart.User = GetUser(userid);
+        cart.Ordered = false;
+        cart.OrderedOn = "";
+      }
+      return cart;
+    }
+
+    async Task<List<Cart>> IDataAccess.GetAllPreviousCartsOfUser(int userid)
     {
       var carts = new List<Cart>();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -922,7 +925,7 @@ namespace ecommerce.Data
         };
         string query = "SELECT CartId FROM Carts WHERE UserId=" + userid + " AND Ordered='true';";
         command.CommandText = query;
-        connection.Open();
+        await connection.OpenAsync();
         using (MySqlDataReader reader = command.ExecuteReader())
         {
           while (reader.Read())
@@ -935,7 +938,7 @@ namespace ecommerce.Data
       return carts;
     }
 
-    List<PaymentMethod> IDataAccess.GetPaymentMethods()
+    async Task<List<PaymentMethod>> IDataAccess.GetPaymentMethods()
     {
       var result = new List<PaymentMethod>();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -948,10 +951,10 @@ namespace ecommerce.Data
         string query = "SELECT * FROM PaymentMethods;";
         command.CommandText = query;
 
-        connection.Open();
+        await connection.OpenAsync();
 
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           PaymentMethod paymentMethod = new PaymentMethod()
           {
@@ -968,7 +971,7 @@ namespace ecommerce.Data
     }
 
 
-    public int InsertPayment(Payment payment)
+    public async Task<int> InsertPayment(Payment payment)
     {
       int value = 0;
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -990,7 +993,7 @@ namespace ecommerce.Data
         command.Parameters.Add("@ap", MySqlDbType.VarChar).Value = payment.AmountPaid;
         command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = payment.CreatedAt;
 
-        connection.Open();
+        await connection.OpenAsync();
         value = command.ExecuteNonQuery();
 
         if (value > 0)
@@ -1008,7 +1011,7 @@ namespace ecommerce.Data
     }
 
 
-    public int InsertOrder(Order order)
+    public async Task<int> InsertOrder(Order order)
     {
       int value = 0;
 
@@ -1027,7 +1030,7 @@ namespace ecommerce.Data
         command.Parameters.Add("@cat", MySqlDbType.VarChar).Value = order.CreatedAt;
         command.Parameters.Add("@pid", MySqlDbType.Int32).Value = order.Payment.Id;
 
-        connection.Open();
+        await connection.OpenAsync();
         value = command.ExecuteNonQuery();
 
         if (value > 0)
@@ -1049,7 +1052,7 @@ namespace ecommerce.Data
       return value;
     }
 
-    public int InsertProduct(Product product)
+    public async Task<int> InsertProduct(Product product)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -1057,7 +1060,7 @@ namespace ecommerce.Data
         {
           Connection = connection
         };
-        connection.Open();
+        await connection.OpenAsync();
 
         string query = "INSERT INTO Products (Title, Description, CategoryId, OfferId, Price, Quantity, ImageName) " +
                        "VALUES (@title, @description, @categoryId, @offerId, @price, @quantity, @imageName);";
@@ -1086,7 +1089,7 @@ namespace ecommerce.Data
       }
     }
 
-    public bool DeleteProduct(int id)
+    public async Task<bool> DeleteProduct(int id)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -1094,7 +1097,7 @@ namespace ecommerce.Data
         {
           Connection = connection
         };
-        connection.Open();
+        await connection.OpenAsync();
 
         string query = "DELETE FROM Products WHERE ProductId = @id;";
         command.CommandText = query;
@@ -1110,7 +1113,7 @@ namespace ecommerce.Data
       }
     }
 
-    public List<Order> GetAllOrders()
+    public async Task<List<Order>> GetAllOrders()
     {
       List<Order> orders = new List<Order>();
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
@@ -1131,9 +1134,9 @@ namespace ecommerce.Data
     JOIN Payments p ON o.PaymentId = p.Id;";
         command.CommandText = query;
 
-        connection.Open();
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
+        await connection.OpenAsync();
+        DbDataReader reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
           Order order = new Order
           {

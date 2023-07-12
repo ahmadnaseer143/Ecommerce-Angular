@@ -74,17 +74,17 @@ namespace ecommerce.Controllers
 
     [HttpGet("GetProducts")]
 
-    public IActionResult GetProducts(string category, string subCategory, int count)
+    public async Task<IActionResult> GetProducts(string category, string subCategory, int count)
     {
-      var result = dataAccess.GetProducts(category, subCategory, count);
+      var result = await dataAccess.GetProducts(category, subCategory, count);
       return Ok(result);
     }
 
     [HttpGet("GetAllProducts")]
 
-    public IActionResult GetAllProducts()
+    public async Task<IActionResult> GetAllProducts()
     {
-      var result = dataAccess.GetAllProducts();
+      var result = await dataAccess.GetAllProducts();
       return Ok(result);
     }
 
@@ -98,9 +98,9 @@ namespace ecommerce.Controllers
 
     [HttpPut("UpdateProduct")]
 
-    public IActionResult UpdateProduct(Product product)
+    public async Task<IActionResult> UpdateProduct(Product product)
     {
-      var result = dataAccess.UpdateProduct(product);
+      var result = await dataAccess.UpdateProduct(product);
       if(result != null)
       {
       return Ok(result);
@@ -110,25 +110,33 @@ namespace ecommerce.Controllers
 
     [HttpGet("GetAllOffers")]
 
-    public IActionResult GetAllOffers()
+    public async Task<IActionResult> GetAllOffers()
     {
-      var result = dataAccess.GetAllOffers();
+      var result = await dataAccess.GetAllOffers();
       return Ok(result);
     }
 
 
     [HttpPost("RegisterUser")]
-    public IActionResult RegisterUser([FromBody] User user)
+    public async Task<IActionResult> RegisterUser([FromBody] User user)
     {
       user.CreatedAt = DateTime.Now.ToString(DateFormat);
       user.ModifiedAt = DateTime.Now.ToString(DateFormat);
 
-      var result = dataAccess.InsertUser(user);
+      var result = await dataAccess.InsertUser(user);
 
       string? message;
       if (result) message = "Account Created";
       else message = "Email already taken";
       return Ok(message);
+    }
+
+    [HttpPost("LoginUser")]
+    public async Task<IActionResult> LoginUser([FromBody] User user)
+    {
+      var token = await dataAccess.IsUserPresent(user.Email, user.Password);
+      if (token == "") token = "invalid";
+      return Ok(token);
     }
 
     [HttpGet("GetAllUsers")]
@@ -140,7 +148,7 @@ namespace ecommerce.Controllers
     }
 
     [HttpPost("InsertReview")]
-    public IActionResult InsertReview([FromBody] Review review)
+    public async Task<IActionResult> InsertReview([FromBody] Review review)
     {
       review.CreatedAt = DateTime.Now.ToString(DateFormat);
       dataAccess.InsertReview(review);
@@ -148,23 +156,23 @@ namespace ecommerce.Controllers
     }
 
     [HttpGet("GetProductReviews/{productId}")]
-    public IActionResult GetProductReviews(int productId)
+    public async Task<IActionResult> GetProductReviews(int productId)
     {
-      var result = dataAccess.GetProductReviews(productId);
+      var result = await dataAccess.GetProductReviews(productId);
       return Ok(result);
     }
 
     [HttpPost("InsertCartItem/{userid}/{productid}")]
-    public IActionResult InsertCartItem(int userid, int productid)
+    public async Task<IActionResult> InsertCartItem(int userid, int productid)
     {
-      var result = dataAccess.InsertCartItem(userid, productid);
+      var result = await dataAccess.InsertCartItem(userid, productid);
       return Ok(result ? "inserted" : "not inserted");
     }
 
     [HttpPost("RemoveCartItem/{userid}/{productid}")]
-    public IActionResult RemoveCartItem(int userid, int productid)
+    public async Task<IActionResult> RemoveCartItem(int userid, int productid)
     {
-      var result = dataAccess.RemoveCartItem(userid, productid);
+      var result = await dataAccess.RemoveCartItem(userid, productid);
       return Ok(result ? "removed" : "not removed");
     }
 
@@ -172,46 +180,46 @@ namespace ecommerce.Controllers
 
 
     [HttpGet("GetActiveCartOfUser/{id}")]
-    public IActionResult GetActiveCartOfUser(int id)
+    public async Task<IActionResult> GetActiveCartOfUser(int id)
     {
-      var result = dataAccess.GetActiveCartOfUser(id);
+      var result = await dataAccess.GetActiveCartOfUser(id);
       return Ok(result);
     }
 
     [HttpGet("GetAllPreviousCartsOfUser/{id}")]
-    public IActionResult GetAllPreviousCartsOfUser(int id)
+    public async Task<IActionResult> GetAllPreviousCartsOfUser(int id)
     {
-      var result = dataAccess.GetAllPreviousCartsOfUser(id);
+      var result = await dataAccess.GetAllPreviousCartsOfUser(id);
       return Ok(result);
     }
 
     [HttpGet("GetPaymentMethods")]
-    public IActionResult GetPaymentMethods()
+    public async Task<IActionResult> GetPaymentMethods()
     {
-      var result = dataAccess.GetPaymentMethods();
+      var result = await dataAccess.GetPaymentMethods();
       return Ok(result);
     }
 
     [HttpPost("InsertPayment")]
-    public IActionResult InsertPayment(Payment payment)
+    public async Task<IActionResult> InsertPayment(Payment payment)
     {
       payment.CreatedAt = DateTime.Now.ToString();
-      var id = dataAccess.InsertPayment(payment);
+      var id = await dataAccess.InsertPayment(payment);
       return Ok(id.ToString());
     }
 
     [HttpPost("InsertOrder")]
-    public IActionResult InsertOrder(Order order)
+    public async Task<IActionResult> InsertOrder(Order order)
     {
       order.CreatedAt = DateTime.Now.ToString();
-      var id = dataAccess.InsertOrder(order);
+      var id = await dataAccess.InsertOrder(order);
       return Ok(id.ToString());
     }
 
     [HttpPost("InsertProduct")]
-    public IActionResult InsertProduct(Product product)
+    public async Task<IActionResult> InsertProduct(Product product)
     {
-      var boolValue = dataAccess.InsertProduct(product);
+      var boolValue = await dataAccess.InsertProduct(product);
       if (boolValue > 0) {
       return Ok(boolValue);
       }
@@ -220,9 +228,9 @@ namespace ecommerce.Controllers
 
     [HttpDelete("DeleteProduct/{id}")]
 
-    public IActionResult DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(int id)
     {
-      var boolValue = dataAccess.DeleteProduct(id);
+      var boolValue = await dataAccess.DeleteProduct(id);
       if (boolValue == false)
       {
         return NotFound();
@@ -232,9 +240,9 @@ namespace ecommerce.Controllers
     }
 
     [HttpGet("GetAllOrders")]
-    public IActionResult GetAllOrders()
+    public async Task<IActionResult> GetAllOrders()
     {
-      var orders = dataAccess.GetAllOrders();
+      var orders = await dataAccess.GetAllOrders();
       if (orders == null || orders.Count == 0)
       {
         return NotFound();
