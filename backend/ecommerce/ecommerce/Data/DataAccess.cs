@@ -397,7 +397,54 @@ namespace ecommerce.Data
         // Check if any rows were affected by the update
         if (rowsAffected > 0)
         {
-          // Product was updated successfully, return the updated product
+          // Check if there is an updated image file
+          if (!string.IsNullOrEmpty(product.ImageFile))
+          {
+            // Delete the previous image file
+            if (!string.IsNullOrEmpty(product.ImageName))
+            {
+              File.Delete(product.ImageName);
+            }
+
+            // Convert the Base64 string to a byte array
+            byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
+
+            // Generate a unique filename using the current timestamp
+            string timestamp = DateTime.Now.Ticks.ToString();
+            string fileName = $"{product.Id}.jpg";
+
+            // Define the base directory path and create it if it doesn't exist
+            var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
+            Directory.CreateDirectory(baseDirectory);
+
+            // Get the category and subcategory folder paths
+            var categoryFolder = Path.Combine(baseDirectory, product.ProductCategory.Category);
+            var subcategoryFolder = Path.Combine(categoryFolder, product.ProductCategory.SubCategory);
+
+            // Create category and subcategory folders if they don't exist
+            Directory.CreateDirectory(categoryFolder);
+            Directory.CreateDirectory(subcategoryFolder);
+
+            // Define the folder path for the productId
+            string productIdFolder = Path.Combine(subcategoryFolder, product.Id.ToString());
+            Directory.CreateDirectory(productIdFolder);
+
+            // Define the file path
+            string filePath = Path.Combine(productIdFolder, fileName);
+
+            // Save the byte array to a file
+            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+
+            // Update the product's ImageName attribute with the file path
+            product.ImageName = filePath;
+          }
+
+          // Update the image path in the database
+          command.CommandText = "UPDATE products SET ImageName = @ImageName WHERE ProductId = @ProductId;";
+          command.Parameters.Clear();
+          command.Parameters.AddWithValue("@ImageName", product.ImageName);
+          command.Parameters.AddWithValue("@ProductId", product.Id);
+          command.ExecuteNonQuery();
           return product;
         }
       }
