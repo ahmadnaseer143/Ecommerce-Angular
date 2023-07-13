@@ -35,7 +35,8 @@ export class AddProductComponent {
         discount: [0, Validators.required]
       }),
       quantity: [0, Validators.required],
-      imageName: ['', Validators.required]
+      imageName: ['', Validators.required],
+      imageFile: ['', Validators.required]
     })
 
     this.loadCategories();
@@ -133,6 +134,25 @@ export class AddProductComponent {
     }
   }
 
+  uploadImage(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      // console.log(file);
+
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        const fileContent = e.target.result;
+        // Extract the base64 string (remove the data URL prefix)
+        const base64String = fileContent.split(',')[1];
+
+        // Set the base64 string to form control
+        this.productForm.controls['imageFile'].setValue(base64String);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
 
   addProduct() {
     if (this.productForm.invalid) {
