@@ -86,6 +86,22 @@
                         Image Name is required.
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="imageFile">Image File:</label>
+                    <input type="file" id="imageFile" (change)="onFileChange($event)" class="form-control" required>
+                    <!-- <div *ngIf="productForm.controls['imageFile'].invalid && productForm.controls['imageFile'].touched"
+                        class="error text-danger">
+                        Image is required.
+                    </div> -->
+                </div>
+
+                <div class="form-group">
+                    <label for="imagePreview">Image Preview:</label>
+                    <div class="w-25">
+                        <img [src]="getImageDataUrl(selectedFile)" alt="Image Preview" class="img-thumbnail">
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -350,6 +350,14 @@ namespace ecommerce.Data
           product.Quantity = (int)reader["Quantity"];
           product.ImageName = (string)reader["ImageName"];
 
+          // Get the image file as base64 string
+          if (!string.IsNullOrEmpty(product.ImageName))
+          {
+            byte[] fileBytes = System.IO.File.ReadAllBytes(product.ImageName);
+            string base64String = Convert.ToBase64String(fileBytes);
+            product.ImageFile = base64String;
+          }
+
           var categoryId = (int)reader["CategoryId"];
           product.ProductCategory = GetProductCategory(categoryId);
 
@@ -1114,8 +1122,12 @@ namespace ecommerce.Data
             Directory.CreateDirectory(categoryFolder);
             Directory.CreateDirectory(subcategoryFolder);
 
+            // Define the folder path for the productId
+            string productIdFolder = Path.Combine(subcategoryFolder, productId.ToString());
+            Directory.CreateDirectory(productIdFolder);
+
             // Define the file path
-            string filePath = Path.Combine(subcategoryFolder, fileName);
+            string filePath = Path.Combine(productIdFolder, fileName);
 
             // Save the byte array to a file
             await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
@@ -1125,8 +1137,7 @@ namespace ecommerce.Data
           }
 
           // save the image path to imageName in mysql
-          // Update the product's ImageName attribute with the file path
-          command.CommandText = "UPDATE Products SET ImageName = @imageName WHERE Id = @productId";
+          command.CommandText = "UPDATE Products SET ImageName = @imageName WHERE ProductId = @productId";
           command.Parameters.Clear();
           command.Parameters.AddWithValue("@imageName", product.ImageName);
           command.Parameters.AddWithValue("@productId", productId);
