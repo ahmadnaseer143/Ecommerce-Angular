@@ -2,6 +2,7 @@ using ecommerce.Data;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace ecommerce.Controllers
 {
@@ -220,11 +221,15 @@ namespace ecommerce.Controllers
     public async Task<IActionResult> InsertProduct(Product product)
     {
       var boolValue = await dataAccess.InsertProduct(product);
-      if (boolValue > 0) {
-      return Ok(boolValue);
+
+      if (boolValue > 0)
+      {
+        return Ok(boolValue);
       }
-       return BadRequest();
+
+      return BadRequest();
     }
+
 
     [HttpDelete("DeleteProduct/{id}")]
 

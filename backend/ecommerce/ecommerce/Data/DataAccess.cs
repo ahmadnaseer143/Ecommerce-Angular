@@ -1,6 +1,7 @@
 using ecommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
@@ -16,9 +17,11 @@ namespace ecommerce.Data
     private readonly IConfiguration configuration;
     private readonly string dbConnection;
     private readonly string dateformat;
-    public DataAccess(IConfiguration configuration)
+    private readonly IWebHostEnvironment _hostEnvironment;
+    public DataAccess(IConfiguration configuration, IWebHostEnvironment hostEnvironment)
     {
       this.configuration = configuration;
+      _hostEnvironment = hostEnvironment;
       dbConnection = this.configuration.GetConnectionString("DB");
       dateformat = this.configuration["Constants:DateFormat"];
     }
@@ -1054,6 +1057,14 @@ namespace ecommerce.Data
 
     public async Task<int> InsertProduct(Product product)
     {
+      var productCategory = new ProductCategory();
+      productCategory = GetProductCategory(product.ProductCategory.Id);
+
+      if (productCategory == null)
+      {
+        return -1;
+      }
+
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
         MySqlCommand command = new MySqlCommand()
@@ -1080,6 +1091,46 @@ namespace ecommerce.Data
         {
           command.CommandText = "SELECT LAST_INSERT_ID();";
           int productId = Convert.ToInt32(command.ExecuteScalar());
+
+          //upload image from imageFile
+          if (!string.IsNullOrEmpty(product.ImageFile))
+          {
+            // Convert the Base64 string to a byte array
+            byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
+
+            // Generate a unique filename using the current timestamp
+            string timestamp = DateTime.Now.Ticks.ToString();
+            string fileName = $"{productId}.jpg";
+
+            // Define the base directory path and create it if it doesn't exist
+            var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
+            Directory.CreateDirectory(baseDirectory);
+
+            // Get the category and subcategory folder paths
+            var categoryFolder = Path.Combine(baseDirectory, productCategory.Category);
+            var subcategoryFolder = Path.Combine(categoryFolder, productCategory.SubCategory);
+
+            // Create category and subcategory folders if they don't exist
+            Directory.CreateDirectory(categoryFolder);
+            Directory.CreateDirectory(subcategoryFolder);
+
+            // Define the file path
+            string filePath = Path.Combine(subcategoryFolder, fileName);
+
+            // Save the byte array to a file
+            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+
+            // Update the product's ImageName attribute with the file path
+            product.ImageName = filePath;
+          }
+
+          // save the image path to imageName in mysql
+          // Update the product's ImageName attribute with the file path
+          command.CommandText = "UPDATE Products SET ImageName = @imageName WHERE Id = @productId";
+          command.Parameters.Clear();
+          command.Parameters.AddWithValue("@imageName", product.ImageName);
+          command.Parameters.AddWithValue("@productId", productId);
+          command.ExecuteNonQuery();
           return productId;
         }
         else

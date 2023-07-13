@@ -10,5 +10,8 @@ namespace ecommerce.Models
     public double Price { get; set; }
     public int Quantity { get; set; }
     public string ImageName { get; set; } = string.Empty;
+
+    public string ImageFile { get; set; } = string.Empty;
+
   }
 }
