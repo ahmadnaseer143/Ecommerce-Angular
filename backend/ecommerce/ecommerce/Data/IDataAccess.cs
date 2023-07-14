@@ -49,7 +49,7 @@ namespace ecommerce.Data
 
     Task<int> InsertProduct(Product product);
 
-    Task<bool> DeleteProduct(int id);
+    Task<bool> DeleteProduct(int id, string category, string subCategory);
 
     Task<List<Order>> GetAllOrders();
   }

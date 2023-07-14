@@ -409,8 +409,6 @@ namespace ecommerce.Data
             // Convert the Base64 string to a byte array
             byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
 
-            // Generate a unique filename using the current timestamp
-            string timestamp = DateTime.Now.Ticks.ToString();
             string fileName = $"{product.Id}.jpg";
 
             // Define the base directory path and create it if it doesn't exist
@@ -1198,7 +1196,7 @@ namespace ecommerce.Data
       }
     }
 
-    public async Task<bool> DeleteProduct(int id)
+    public async Task<bool> DeleteProduct(int id, string category, string subCategory)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -1216,9 +1214,25 @@ namespace ecommerce.Data
 
         if (rowsAffected > 0)
         {
+          // Define the base directory path
+          var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
+
+          // Get the category and subcategory folder paths
+          var categoryFolder = Path.Combine(baseDirectory, category);
+          var subcategoryFolder = Path.Combine(categoryFolder, subCategory);
+
+          // Define the folder path for the productId
+          string productIdFolder = Path.Combine(subcategoryFolder, id.ToString());
+
+          // Delete the folder if it exists
+          if (Directory.Exists(productIdFolder))
+          {
+            Directory.Delete(productIdFolder, true);
+          }
+
           return true;
         }
-         return false;
+        return false;
       }
     }
 

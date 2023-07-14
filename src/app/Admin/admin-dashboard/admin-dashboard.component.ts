@@ -27,10 +27,13 @@ export class AdminDashboardComponent {
     this.router.navigate(["admin/editproduct", id]);
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(product: Product) {
+    const id = product.id;
+    const category = product.productCategory.category;
+    const subCategory = product.productCategory.subCategory;
     const decision = window.confirm("Are you sure you want to delete this product?");
     if (decision) {
-      this.navigationService.deleteProduct(id).subscribe((res: any) => {
+      this.navigationService.deleteProduct(id, category, subCategory).subscribe((res: any) => {
         if (res) {
           this.getAllProducts();
         } else {

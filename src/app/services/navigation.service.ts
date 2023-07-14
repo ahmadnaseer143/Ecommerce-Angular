@@ -151,8 +151,9 @@ export class NavigationService {
     return this.http.post(this.baseurl + "InsertProduct", product)
   }
 
-  deleteProduct(id: number): Observable<any> {
-    return this.http.delete(this.baseurl + "DeleteProduct/" + id);
+  deleteProduct(id: number, category: string, subCategory: string): Observable<any> {
+    const url = `${this.baseurl}DeleteProduct/${id}?category=${category}&subCategory=${subCategory}`;
+    return this.http.delete(url);
   }
 
   getAllOrders(): Observable<any> {

@@ -233,9 +233,9 @@ namespace ecommerce.Controllers
 
     [HttpDelete("DeleteProduct/{id}")]
 
-    public async Task<IActionResult> DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(int id, string category, string subCategory)
     {
-      var boolValue = await dataAccess.DeleteProduct(id);
+      var boolValue = await dataAccess.DeleteProduct(id, category, subCategory);
       if (boolValue == false)
       {
         return NotFound();
