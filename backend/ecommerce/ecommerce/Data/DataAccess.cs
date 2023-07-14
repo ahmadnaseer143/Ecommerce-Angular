@@ -263,11 +263,10 @@ namespace ecommerce.Data
           {
             Id = (int)reader["ProductId"],
             Title = (string)reader["Title"],
-             Description = (string)reader["Description"],
+            Description = (string)reader["Description"],
             Price = Convert.ToDouble(reader["Price"]),
             Quantity = (int)reader["Quantity"],
             ImageName = (string)reader["ImageName"],
-
           };
 
           var categoryId = (int)reader["CategoryId"];
@@ -280,6 +279,32 @@ namespace ecommerce.Data
         }
       }
       return products;
+    }
+
+    public async Task<byte[]> GetProductImage(int productId)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand()
+        {
+          Connection = connection,
+          CommandText = "SELECT ImageName FROM Products WHERE ProductId = @productId"
+        };
+
+        command.Parameters.AddWithValue("@productId", productId);
+
+        await connection.OpenAsync();
+
+        object result = await command.ExecuteScalarAsync();
+        if (result != null && result != DBNull.Value)
+        {
+          string imagePath = result.ToString();
+          byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+          return imageBytes;
+        }
+      }
+
+      return null;
     }
 
     public async Task<List<Product>> GetAllProducts()

@@ -17,7 +17,7 @@ export class SuggestedProductComponent {
 
   products: Product[] = [];
 
-  constructor(private navigationService: NavigationService) {}
+  constructor(private navigationService: NavigationService) { }
 
   ngOnInit(): void {
     this.navigationService
@@ -27,6 +27,8 @@ export class SuggestedProductComponent {
         this.count
       )
       .subscribe((res: any[]) => {
+        // console.log("res")
+        // console.log(res)
         for (let product of res) {
           this.products.push(product);
         }

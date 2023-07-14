@@ -81,6 +81,22 @@ namespace ecommerce.Controllers
       return Ok(result);
     }
 
+    [HttpGet("GetImage/{productId}")]
+    public async Task<IActionResult> GetImage(int productId)
+    {
+      // Retrieve the image file path based on the productId
+      byte[] imageBytes = await dataAccess.GetProductImage(productId);
+
+      if (imageBytes == null || imageBytes.Length == 0)
+      {
+        return NotFound();
+      }
+
+      // Return the image file as the response with the appropriate content type
+      return File(imageBytes, "image/jpg");
+    }
+
+
     [HttpGet("GetAllProducts")]
 
     public async Task<IActionResult> GetAllProducts()

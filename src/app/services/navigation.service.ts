@@ -60,6 +60,11 @@ export class NavigationService {
     });
   }
 
+  getImage(id: number): Observable<Blob> {
+    const url = `${this.baseurl}GetImage/${id}`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
   getAllProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.baseurl + 'GetAllProducts');
   }

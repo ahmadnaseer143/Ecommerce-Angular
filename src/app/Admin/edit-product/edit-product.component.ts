@@ -47,7 +47,7 @@ export class EditProductComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       this.navigationService.getProduct(id).subscribe((res: any) => {
-        console.log(res);
+        // console.log(res);
         this.selectedFile = res?.imageFile;
         this.productForm.patchValue(res);
       },

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../models/models';
 import { UtilityService } from '../services/utility.service';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-product',
@@ -29,13 +30,21 @@ export class ProductComponent {
     imageName: '',
   };
 
+  imageSrc: string | undefined;
+
   @Output() removeItem: EventEmitter<any> = new EventEmitter();
 
-  constructor(public utilityService: UtilityService) {}
+  constructor(public utilityService: UtilityService, public navigationService: NavigationService) { }
 
   ngOnInit() {
-    // console.log('Received @Input() values:');
-    // console.log(this.product);
+    this.navigationService.getImage(this.product.id).subscribe(
+      (imageBlob: Blob) => {
+        this.imageSrc = URL.createObjectURL(imageBlob);
+      },
+      (error: any) => {
+        console.error('Failed to load product image:', error);
+      }
+    );
   }
 
   onRemoveFromCart() {

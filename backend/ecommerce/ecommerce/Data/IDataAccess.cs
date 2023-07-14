@@ -18,6 +18,8 @@ namespace ecommerce.Data
 
     Task<List<Product>> GetProducts(string category, string subCategory, int count);
 
+    Task<byte[]> GetProductImage(int productId);
+
     Task<List<Product>> GetAllProducts();
 
     Product GetProduct(int id);
