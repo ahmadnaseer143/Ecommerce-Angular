@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +9,10 @@ namespace ecommerce.Controllers
   [ApiController]
   public class PaymentsController : ControllerBase
   {
-    readonly IDataAccess dataAccess;
+    readonly IPaymentDataAccess dataAccess;
     private readonly string DateFormat;
 
-    public PaymentsController(IDataAccess dataAccess, IConfiguration configuration)
+    public PaymentsController(IPaymentDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
       DateFormat = configuration["Constants:DateFormat"];

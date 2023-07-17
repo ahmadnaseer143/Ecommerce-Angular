@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +9,10 @@ namespace ecommerce.Controllers
   [ApiController]
   public class OrdersController : ControllerBase
   {
-    readonly IDataAccess dataAccess;
+    readonly IOrderDataAccess dataAccess;
     private readonly string DateFormat;
 
-    public OrdersController(IDataAccess dataAccess, IConfiguration configuration)
+    public OrdersController(IOrderDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
       DateFormat = configuration["Constants:DateFormat"];
