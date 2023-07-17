@@ -20,70 +20,16 @@ namespace ecommerce.Data
     private readonly string dateformat;
     private readonly IWebHostEnvironment _hostEnvironment;
     private readonly ICategoryDataAccess iCategoryDataAccess;
-    public DataAccess(IConfiguration configuration, IWebHostEnvironment hostEnvironment, ICategoryDataAccess iCategoryDataAccess)
+    private readonly IOfferDataAccess iOfferDataAccess;
+    public DataAccess(IConfiguration configuration, IWebHostEnvironment hostEnvironment, ICategoryDataAccess iCategoryDataAccess, IOfferDataAccess iOfferDataAccess)
     {
       this.configuration = configuration;
       this.iCategoryDataAccess = iCategoryDataAccess;
+      this.iOfferDataAccess = iOfferDataAccess;
       _hostEnvironment = hostEnvironment;
       dbConnection = this.configuration.GetConnectionString("DB");
       dateformat = this.configuration["Constants:DateFormat"];
-    }
-
-    public Offer GetOffer(int id)
-    {
-      var offer = new Offer();
-      using(MySqlConnection connection = new(dbConnection))
-      {
-        MySqlCommand command = new()
-        {
-          Connection = connection,
-        };
-
-        string query = "select * from Offers where OfferId =" + id + ";";
-        command.CommandText = query;
-
-        connection.Open();
-
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-          offer.Id = (int)reader["OfferId"];
-          offer.Title = (string)reader["Title"];
-          offer.Discount = (int)reader["Discount"];
-        }
-      }
-      return offer;
-    }
-
-    public async Task<List<Offer>> GetAllOffers()
-    {
-      List<Offer> offers = new List<Offer>();
-      using (MySqlConnection connection = new MySqlConnection(dbConnection))
-      {
-        MySqlCommand command = new MySqlCommand()
-        {
-          Connection = connection,
-        };
-
-        string query = "SELECT * FROM Offers;";
-        command.CommandText = query;
-
-        await connection.OpenAsync();
-
-        DbDataReader reader = await command.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
-        {
-          Offer offer = new Offer()
-          {
-            Id = (int)reader["OfferId"],
-            Title = (string)reader["Title"],
-            Discount = (int)reader["Discount"]
-          };
-
-          offers.Add(offer);
-        }
-      }
-      return offers;
+      this.iOfferDataAccess = iOfferDataAccess;
     }
 
     public async Task<List<Product>> GetProducts(string category, string subCategory, int count)
@@ -123,7 +69,7 @@ namespace ecommerce.Data
           product.ProductCategory= iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
-          product.Offer = GetOffer(offerId);
+          product.Offer =iOfferDataAccess.GetOffer(offerId);
 
           products.Add(product);  
         }
@@ -192,7 +138,7 @@ namespace ecommerce.Data
           product.ProductCategory = iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
-          product.Offer = GetOffer(offerId);
+          product.Offer = iOfferDataAccess.GetOffer(offerId);
 
           products.Add(product);
         }
@@ -237,7 +183,7 @@ namespace ecommerce.Data
           product.ProductCategory = iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
-          product.Offer = GetOffer(offerId);
+          product.Offer = iOfferDataAccess.GetOffer(offerId);
         }
       }
       return product;

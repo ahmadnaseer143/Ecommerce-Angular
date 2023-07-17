@@ -4,10 +4,6 @@ namespace ecommerce.Data
 {
   public interface IDataAccess
   {
-    Offer GetOffer(int id);
-
-    Task<List<Offer>> GetAllOffers();
-
     Task<List<Product>> GetProducts(string category, string subCategory, int count);
 
     Task<byte[]> GetProductImage(int productId);

@@ -43,6 +43,7 @@ builder.Services.AddSwaggerGen();
 // add dependecy of DataAccess classes
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
 builder.Services.AddSingleton<ICategoryDataAccess, CategoryDataAccess>();
+builder.Services.AddSingleton<IOfferDataAccess, OfferDataAccess>();
 
 
 var app = builder.Build();

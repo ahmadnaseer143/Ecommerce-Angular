@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,14 +8,21 @@ namespace ecommerce.Controllers
   [ApiController]
   public class OffersController : ControllerBase
   {
-    readonly IDataAccess dataAccess;
+    readonly IOfferDataAccess dataAccess;
     private readonly string DateFormat;
 
-    public OffersController(IDataAccess dataAccess, IConfiguration configuration)
+    public OffersController(IOfferDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
       DateFormat = configuration["Constants:DateFormat"];
 
+    }
+
+    [HttpGet("GetOffer/{id}")]
+    public IActionResult GetOffer(int id)
+    {
+      var result = dataAccess.GetOffer(id);
+      return Ok(result);
     }
 
     [HttpGet("GetAllOffers")]
