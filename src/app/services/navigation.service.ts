@@ -19,12 +19,19 @@ import {
   providedIn: 'root',
 })
 export class NavigationService {
-  baseurl = 'https://localhost:44376/api/Shopping/';
+  baseurlCategory = 'https://localhost:44376/api/Categories/';
+  baseurlCarts = 'https://localhost:44376/api/Carts/';
+  baseurlOffers = 'https://localhost:44376/api/Offers/';
+  baseurlOrders = 'https://localhost:44376/api/Orders/';
+  baseurlPayments = 'https://localhost:44376/api/Payments/';
+  baseurlProducts = 'https://localhost:44376/api/Products/';
+  baseurlReviews = 'https://localhost:44376/api/Reviews/';
+  baseurlUsers = 'https://localhost:44376/api/Users/';
 
   constructor(private http: HttpClient) { }
 
   getCategoryList(): Observable<Category[]> {
-    let url = this.baseurl + 'GetCategoryList';
+    let url = this.baseurlCategory + 'GetCategoryList';
     return this.http.get<any[]>(url).pipe(
       map((categories) =>
         categories.map((category) => {
@@ -40,19 +47,19 @@ export class NavigationService {
   }
 
   insertCategory(category: Category): Observable<any> {
-    return this.http.post(this.baseurl + "InsertCategory", category);
+    return this.http.post(this.baseurlCategory + "InsertCategory", category);
   }
 
   editCategory(category: Category): Observable<any> {
-    return this.http.put(this.baseurl + "EditCategory", category);
+    return this.http.put(this.baseurlCategory + "EditCategory", category);
   }
 
   deleteCategory(id: number): Observable<any> {
-    return this.http.delete(this.baseurl + "DeleteCategory/" + id);
+    return this.http.delete(this.baseurlCategory + "DeleteCategory/" + id);
   }
 
   getProducts(category: string, subCategory: string, count: number): Observable<any[]> {
-    return this.http.get<any[]>(this.baseurl + 'GetProducts', {
+    return this.http.get<any[]>(this.baseurlProducts + 'GetProducts', {
       params: new HttpParams()
         .set('category', category)
         .set('subCategory', subCategory)
@@ -61,36 +68,49 @@ export class NavigationService {
   }
 
   getImage(id: number): Observable<Blob> {
-    const url = `${this.baseurl}GetImage/${id}`;
+    const url = `${this.baseurlProducts}GetImage/${id}`;
     return this.http.get(url, { responseType: 'blob' });
   }
 
   getAllProducts(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseurl + 'GetAllProducts');
+    return this.http.get<any[]>(this.baseurlProducts + 'GetAllProducts');
   }
 
   getProduct(id: number): Observable<any> {
-    let url = this.baseurl + 'GetProduct/' + id;
+    let url = this.baseurlProducts + 'GetProduct/' + id;
     return this.http.get(url);
   }
 
   updateProduct(product: Product): Observable<any> {
-    let url = this.baseurl + "UpdateProduct";
+    let url = this.baseurlProducts + "UpdateProduct";
     return this.http.put(url, product);
   }
 
+  insertProduct(product: Product): Observable<any> {
+    return this.http.post(this.baseurlProducts + "InsertProduct", product)
+  }
+
+  deleteProduct(id: number, category: string, subCategory: string): Observable<any> {
+    const url = `${this.baseurlProducts}DeleteProduct/${id}?category=${category}&subCategory=${subCategory}`;
+    return this.http.delete(url);
+  }
+
   registerUser(user: User): Observable<any> {
-    let url = this.baseurl + 'RegisterUser';
+    let url = this.baseurlUsers + 'RegisterUser';
     return this.http.post(url, user, { responseType: 'text' });
   }
 
   loginUser(email: string, password: string): Observable<any> {
-    let url = this.baseurl + 'LoginUser';
+    let url = this.baseurlUsers + 'LoginUser';
     return this.http.post(
       url,
       { Email: email, Password: password },
       { responseType: 'text' }
     );
+  }
+
+  getAllUsers(): Observable<any> {
+    return this.http.get(this.baseurlUsers + 'GetAllUsers');
   }
 
   submitReview(userid: number, productid: number, review: string): Observable<any> {
@@ -104,68 +124,55 @@ export class NavigationService {
       Value: review,
     };
 
-    let url = this.baseurl + 'InsertReview';
+    let url = this.baseurlReviews + 'InsertReview';
     return this.http.post(url, obj, { responseType: 'text' });
   }
 
   getAllReviewsOfProduct(productId: number): Observable<any> {
-    let url = this.baseurl + 'GetProductReviews/' + productId;
+    let url = this.baseurlReviews + 'GetProductReviews/' + productId;
     return this.http.get(url);
   }
 
   addToCart(userid: number, productid: number): Observable<any> {
-    let url = this.baseurl + 'InsertCartItem/' + userid + '/' + productid;
+    let url = this.baseurlCarts + 'InsertCartItem/' + userid + '/' + productid;
     return this.http.post(url, null, { responseType: 'text' });
   }
 
   removeFromCart(userid: number, productid: number): Observable<any> {
-    let url = this.baseurl + 'RemoveCartItem/' + userid + '/' + productid;
+    let url = this.baseurlCarts + 'RemoveCartItem/' + userid + '/' + productid;
     return this.http.post(url, null, { responseType: 'text' });
   }
 
   getActiveCartOfUser(userid: number): Observable<any> {
-    let url = this.baseurl + 'GetActiveCartOfUser/' + userid;
+    let url = this.baseurlCarts + 'GetActiveCartOfUser/' + userid;
     return this.http.get(url);
   }
 
   getAllPreviousCarts(userid: number): Observable<any> {
-    let url = this.baseurl + 'GetAllPreviousCartsOfUser/' + userid;
+    let url = this.baseurlCarts + 'GetAllPreviousCartsOfUser/' + userid;
     return this.http.get(url);
   }
 
   getPaymentMethods(): Observable<any[]> {
-    let url = this.baseurl + 'GetPaymentMethods';
+    let url = this.baseurlPayments + 'GetPaymentMethods';
     return this.http.get<PaymentMethod[]>(url);
   }
 
   insertPayment(body: any): Observable<any> {
-    const url = this.baseurl + 'InsertPayment';
+    const url = this.baseurlPayments + 'InsertPayment';
 
     return this.http.post(url, body);
   }
 
   insertOrder(order: any): Observable<any> {
-    return this.http.post(this.baseurl + 'InsertOrder', order);
-  }
-
-  getAllOffers(): Observable<any> {
-    return this.http.get(this.baseurl + "GetAllOffers");
-  }
-
-  insertProduct(product: Product): Observable<any> {
-    return this.http.post(this.baseurl + "InsertProduct", product)
-  }
-
-  deleteProduct(id: number, category: string, subCategory: string): Observable<any> {
-    const url = `${this.baseurl}DeleteProduct/${id}?category=${category}&subCategory=${subCategory}`;
-    return this.http.delete(url);
+    return this.http.post(this.baseurlOrders + 'InsertOrder', order);
   }
 
   getAllOrders(): Observable<any> {
-    return this.http.get(this.baseurl + 'GetAllOrders');
+    return this.http.get(this.baseurlOrders + 'GetAllOrders');
   }
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(this.baseurl + 'GetAllUsers');
+  getAllOffers(): Observable<any> {
+    return this.http.get(this.baseurlOffers + "GetAllOffers");
   }
 }
