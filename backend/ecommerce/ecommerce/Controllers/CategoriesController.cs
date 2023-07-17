@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +10,11 @@ namespace ecommerce.Controllers
   public class CategoriesController : ControllerBase
   {
 
-    readonly IDataAccess dataAccess;
-    private readonly string DateFormat;
+    readonly ICategoryDataAccess dataAccess;
 
-    public CategoriesController(IDataAccess dataAccess, IConfiguration configuration)
+    public CategoriesController(ICategoryDataAccess dataAccess)
     {
       this.dataAccess = dataAccess;
-      DateFormat = configuration["Constants:DateFormat"];
     }
 
     [HttpGet("GetCategoryList")]

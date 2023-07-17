@@ -1,3 +1,4 @@
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +19,11 @@ namespace ecommerce.Data
     private readonly string dbConnection;
     private readonly string dateformat;
     private readonly IWebHostEnvironment _hostEnvironment;
-    public DataAccess(IConfiguration configuration, IWebHostEnvironment hostEnvironment)
+    private readonly ICategoryDataAccess iCategoryDataAccess;
+    public DataAccess(IConfiguration configuration, IWebHostEnvironment hostEnvironment, ICategoryDataAccess iCategoryDataAccess)
     {
       this.configuration = configuration;
+      this.iCategoryDataAccess = iCategoryDataAccess;
       _hostEnvironment = hostEnvironment;
       dbConnection = this.configuration.GetConnectionString("DB");
       dateformat = this.configuration["Constants:DateFormat"];
@@ -83,159 +86,6 @@ namespace ecommerce.Data
       return offers;
     }
 
-
-    public async Task<List<ProductCategory>> GetProductCategories()
-    {
-      var productCategories = new List<ProductCategory>();
-      using(MySqlConnection connection = new(dbConnection))
-      {
-        MySqlCommand command = new()
-        {
-          Connection = connection,
-        };
-        string query = "Select * from productcategories;";
-        command.CommandText = query;
-        await connection.OpenAsync();
-        using (MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync())
-        {
-          while (reader.Read())
-          {
-            var category = new ProductCategory()
-            {
-              Id = (int)reader["CategoryId"],
-              Category = (string)reader["Category"],
-              SubCategory = (string)reader["SubCategory"]
-            };
-            productCategories.Add(category);
-          }
-        }
-      }
-
-      return productCategories;
-    }
-
-    public async Task<bool> InsertProductCategory(ProductCategory productCategory)
-    {
-      using (MySqlConnection connection = new MySqlConnection(dbConnection))
-      {
-        MySqlCommand command = new MySqlCommand
-        {
-          Connection = connection
-        };
-
-        string query = "INSERT INTO productcategories (Category, SubCategory) VALUES (@Category, @SubCategory)";
-        command.CommandText = query;
-        command.Parameters.AddWithValue("@Category", productCategory.Category);
-        command.Parameters.AddWithValue("@SubCategory", productCategory.SubCategory);
-
-        try
-        {
-          await connection.OpenAsync();
-          int rowsAffected = await command.ExecuteNonQueryAsync();
-          return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-          // Handling any potential exceptions
-          Console.WriteLine($"Error inserting product category: {ex.Message}");
-          return false;
-        }
-      }
-    }
-
-    public async Task<bool> UpdateCategory(ProductCategory category)
-    {
-      using (MySqlConnection connection = new MySqlConnection(dbConnection))
-      {
-        MySqlCommand command = new MySqlCommand
-        {
-          Connection = connection
-        };
-
-        string query = "UPDATE productcategories SET Category = @Category, SubCategory = @SubCategory WHERE CategoryId = @CategoryId";
-        command.CommandText = query;
-        command.Parameters.AddWithValue("@CategoryId", category.Id);
-        command.Parameters.AddWithValue("@Category", category.Category);
-        command.Parameters.AddWithValue("@SubCategory", category.SubCategory);
-
-        try
-        {
-          await connection.OpenAsync();
-          int rowsAffected = await command.ExecuteNonQueryAsync();
-          return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-          // Handling any potential exceptions
-          Console.WriteLine($"Error updating category: {ex.Message}");
-          return false;
-        }
-      }
-    }
-
-
-    public async Task<bool> DeleteProductCategory(int id)
-    {
-      using (MySqlConnection connection = new MySqlConnection(dbConnection))
-      {
-        MySqlCommand command = new MySqlCommand
-        {
-          Connection = connection
-        };
-
-        // Delete products associated with the category
-        string deleteProductsQuery = "DELETE FROM products WHERE CategoryId = @Id";
-        command.CommandText = deleteProductsQuery;
-        command.Parameters.AddWithValue("@Id", id);
-
-        try
-        {
-          await connection.OpenAsync();
-          await command.ExecuteNonQueryAsync();
-
-          // Delete the product category
-          string deleteCategoryQuery = "DELETE FROM productcategories WHERE CategoryId = @Id";
-          command.CommandText = deleteCategoryQuery;
-          int rowsAffected = await command.ExecuteNonQueryAsync();
-
-          return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-          // Handling any potential exceptions
-          Console.WriteLine($"Error deleting product category: {ex.Message}");
-          return false;
-        }
-      }
-    }
-
-
-    public ProductCategory GetProductCategory(int id)
-    {
-      var productCategory = new ProductCategory();
-      using (MySqlConnection connection = new(dbConnection))
-      {
-        MySqlCommand command = new()
-        {
-          Connection = connection,
-        };
-
-        string query = "select * from productCategories where CategoryId =" + id + ";";
-        command.CommandText = query;
-
-        connection.Open();
-
-        MySqlDataReader reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-          productCategory.Id = (int)reader["CategoryId"];
-          productCategory.Category = (string)reader["Category"];
-          productCategory.SubCategory = (string)reader["SubCategory"];
-        }
-      }
-      return productCategory;
-    }
-
     public async Task<List<Product>> GetProducts(string category, string subCategory, int count)
     {
       var products = new List<Product>();
@@ -270,7 +120,7 @@ namespace ecommerce.Data
           };
 
           var categoryId = (int)reader["CategoryId"];
-          product.ProductCategory= GetProductCategory(categoryId);
+          product.ProductCategory= iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
           product.Offer = GetOffer(offerId);
@@ -339,7 +189,7 @@ namespace ecommerce.Data
           };
 
           var categoryId = (int)reader["CategoryId"];
-          product.ProductCategory = GetProductCategory(categoryId);
+          product.ProductCategory = iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
           product.Offer = GetOffer(offerId);
@@ -384,7 +234,7 @@ namespace ecommerce.Data
           }
 
           var categoryId = (int)reader["CategoryId"];
-          product.ProductCategory = GetProductCategory(categoryId);
+          product.ProductCategory = iCategoryDataAccess.GetProductCategory(categoryId);
 
           var offerId = (int)reader["OfferId"];
           product.Offer = GetOffer(offerId);
@@ -1136,7 +986,7 @@ namespace ecommerce.Data
     public async Task<int> InsertProduct(Product product)
     {
       var productCategory = new ProductCategory();
-      productCategory = GetProductCategory(product.ProductCategory.Id);
+      productCategory = iCategoryDataAccess.GetProductCategory(product.ProductCategory.Id);
 
       if (productCategory == null)
       {

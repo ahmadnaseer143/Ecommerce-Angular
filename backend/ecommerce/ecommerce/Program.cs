@@ -1,4 +1,5 @@
 using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -39,8 +40,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// add dependecy of DataAccess
+// add dependecy of DataAccess classes
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
+builder.Services.AddSingleton<ICategoryDataAccess, CategoryDataAccess>();
 
 
 var app = builder.Build();
