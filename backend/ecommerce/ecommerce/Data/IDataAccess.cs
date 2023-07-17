@@ -17,14 +17,6 @@ namespace ecommerce.Data
     Task InsertReview(Review review);
 
     Task<List<Review>> GetProductReviews(int productId);
-
-    Task<bool> InsertCartItem(int userId, int productId);
-
-    Task<bool> RemoveCartItem(int userId, int productId);
-    Task<Cart> GetActiveCartOfUser(int userid);
-    Cart GetCart(int cartid);
-    Task<List<Cart>> GetAllPreviousCartsOfUser(int userid);
-
     Task<List<PaymentMethod>> GetPaymentMethods();
     Task<int> InsertPayment(Payment payment);
     Task<int> InsertOrder(Order order);
