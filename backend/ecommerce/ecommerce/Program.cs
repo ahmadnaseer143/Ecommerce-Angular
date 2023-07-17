@@ -44,6 +44,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDataAccess, DataAccess>();
 builder.Services.AddSingleton<ICategoryDataAccess, CategoryDataAccess>();
 builder.Services.AddSingleton<IOfferDataAccess, OfferDataAccess>();
+builder.Services.AddSingleton<IUserDataAccess, UserDataAccess>();
 
 
 var app = builder.Build();

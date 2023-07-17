@@ -14,17 +14,9 @@ namespace ecommerce.Data
 
     Task<Product> UpdateProduct(Product product);
 
-    Task<bool> InsertUser(User user);
-
-    Task<string> IsUserPresent(string email, string password);
-
     Task InsertReview(Review review);
 
     Task<List<Review>> GetProductReviews(int productId);
-
-    User GetUser(int id);
-
-    Task<List<User>> GetAllUsers();
 
     Task<bool> InsertCartItem(int userId, int productId);
 
