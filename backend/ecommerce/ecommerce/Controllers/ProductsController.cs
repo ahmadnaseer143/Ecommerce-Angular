@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +9,11 @@ namespace ecommerce.Controllers
   [ApiController]
   public class ProductsController : ControllerBase
   {
-    readonly IDataAccess dataAccess;
-    private readonly string DateFormat;
+    readonly IProductDataAccess dataAccess;
 
-    public ProductsController(IDataAccess dataAccess, IConfiguration configuration)
+    public ProductsController(IProductDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
-      DateFormat = configuration["Constants:DateFormat"];
     }
 
     [HttpGet("GetProducts")]

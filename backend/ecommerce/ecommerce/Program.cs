@@ -46,6 +46,8 @@ builder.Services.AddSingleton<ICategoryDataAccess, CategoryDataAccess>();
 builder.Services.AddSingleton<IOfferDataAccess, OfferDataAccess>();
 builder.Services.AddSingleton<IUserDataAccess, UserDataAccess>();
 builder.Services.AddSingleton<ICartDataAccess, CartDataAccess>();
+builder.Services.AddSingleton<IProductDataAccess, ProductDataAccess>();
+builder.Services.AddSingleton<IReviewDataAccess, ReviewDataAccess>();
 
 
 var app = builder.Build();

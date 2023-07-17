@@ -1,4 +1,4 @@
-using ecommerce.Data;
+using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +9,10 @@ namespace ecommerce.Controllers
   [ApiController]
   public class ReviewsController : ControllerBase
   {
-    readonly IDataAccess dataAccess;
+    readonly IReviewDataAccess dataAccess;
     private readonly string DateFormat;
 
-    public ReviewsController(IDataAccess dataAccess, IConfiguration configuration)
+    public ReviewsController(IReviewDataAccess dataAccess, IConfiguration configuration)
     {
       this.dataAccess = dataAccess;
       DateFormat = configuration["Constants:DateFormat"];

@@ -10,13 +10,13 @@ namespace ecommerce.Data
     private readonly IConfiguration configuration;
     private readonly string dbConnection;
     private readonly IUserDataAccess iUserDataAccess;
-    private readonly IDataAccess iDataAccess;
-    public CartDataAccess(IConfiguration configuration, IUserDataAccess iUserDataAccess, IDataAccess iDataAccess)
+    private readonly IProductDataAccess iProductDataAccess;
+    public CartDataAccess(IConfiguration configuration, IUserDataAccess iUserDataAccess, IProductDataAccess iProductDataAccess)
     {
       this.configuration = configuration;
       dbConnection = this.configuration.GetConnectionString("DB");
       this.iUserDataAccess = iUserDataAccess;
-      this.iDataAccess = iDataAccess;
+      this.iProductDataAccess = iProductDataAccess;
     }
 
     public async Task<bool> InsertCartItem(int userId, int productId)
@@ -120,7 +120,7 @@ namespace ecommerce.Data
             CartItem item = new CartItem()
             {
               Id = (int)reader["CartItemId"],
-              Product = iDataAccess.GetProduct((int)reader["ProductId"])
+              Product = iProductDataAccess.GetProduct((int)reader["ProductId"])
             };
             cart.CartItems.Add(item);
           }
@@ -179,7 +179,7 @@ namespace ecommerce.Data
             CartItem item = new CartItem()
             {
               Id = (int)reader["CartItemId"],
-              Product = iDataAccess.GetProduct((int)reader["ProductId"])
+              Product = iProductDataAccess.GetProduct((int)reader["ProductId"])
             };
             cart.CartItems.Add(item);
           }
