@@ -8,5 +8,6 @@ namespace ecommerce.Data.Interfaces
     Offer GetOffer(int id);
 
     Task<List<Offer>> GetAllOffers();
+    Task<bool> InsertOffer(Offer offer);
   }
 }

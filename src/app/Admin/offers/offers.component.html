@@ -33,10 +33,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let offer of [1,1,1,1]">
-                <td>hello</td>
-                <td>hello</td>
-                <td>hello</td>
+            <tr *ngFor="let offer of offerList">
+                <td>{{offer.id}}</td>
+                <td>{{offer.title}}</td>
+                <td>{{offer.discount}}</td>
             </tr>
         </tbody>
     </table>

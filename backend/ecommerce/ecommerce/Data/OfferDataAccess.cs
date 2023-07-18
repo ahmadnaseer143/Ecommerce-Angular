@@ -71,5 +71,34 @@ namespace ecommerce.Data
       }
       return offers;
     }
+
+    public async Task<bool> InsertOffer(Offer offer)
+    {
+      using (MySqlConnection connection = new MySqlConnection(dbConnection))
+      {
+        MySqlCommand command = new MySqlCommand
+        {
+          Connection = connection
+        };
+
+        string query = "INSERT INTO Offers (Title, Discount) VALUES (@Title, @Discount)";
+        command.CommandText = query;
+        command.Parameters.AddWithValue("@Title", offer.Title);
+        command.Parameters.AddWithValue("@Discount", offer.Discount);
+
+        try
+        {
+          await connection.OpenAsync();
+          int rowsAffected = await command.ExecuteNonQueryAsync();
+          return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine($"Error inserting offer: {ex.Message}");
+          return false;
+        }
+      }
+    }
+
   }
 }

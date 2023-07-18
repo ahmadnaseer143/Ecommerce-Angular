@@ -1,4 +1,5 @@
 using ecommerce.Data.Interfaces;
+using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,5 +33,20 @@ namespace ecommerce.Controllers
       var result = await dataAccess.GetAllOffers();
       return Ok(result);
     }
+
+    [HttpPost("InsertOffer")]
+    public async Task<IActionResult> InsertOffer(Offer offer)
+    {
+      var result = await dataAccess.InsertOffer(offer);
+      if (result)
+      {
+        return Ok(result);
+      }
+      else
+      {
+        return BadRequest("Failed to insert offer.");
+      }
+    }
+
   }
 }

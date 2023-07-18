@@ -175,4 +175,8 @@ export class NavigationService {
   getAllOffers(): Observable<any> {
     return this.http.get(this.baseurlOffers + "GetAllOffers");
   }
+
+  insertOffer(offer: any): Observable<any> {
+    return this.http.post(this.baseurlOffers + 'InsertOffer', offer);
+  }
 }
