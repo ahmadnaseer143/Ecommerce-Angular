@@ -61,6 +61,10 @@
         Cart
         <span class="badge bg-warning text-dark">{{ cartItems }}</span>
       </button>
+      <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/admin/offers"
+        *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()">
+        Offers
+      </button>
       <button type="button" class="btn text-light mx-2 btn-hover" routerLink="/orders"
         *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()">
         Orders

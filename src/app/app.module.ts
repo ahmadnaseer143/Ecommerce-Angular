@@ -27,6 +27,7 @@ import { OrdersComponent } from './Admin/orders/orders.component';
 import { CategoriesComponent } from './Admin/categories/categories.component';
 import { AddCategoriesComponent } from './Admin/add-categories/add-categories.component';
 import { CustomersComponent } from './Admin/customers/customers.component';
+import { OffersComponent } from './Admin/offers/offers.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { CustomersComponent } from './Admin/customers/customers.component';
     CategoriesComponent,
     AddCategoriesComponent,
     CustomersComponent,
+    OffersComponent,
   ],
   imports: [
     BrowserModule,

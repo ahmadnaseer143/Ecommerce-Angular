@@ -15,6 +15,7 @@ import { RoleGuard } from './services/role.guard';
 import { OrdersComponent } from './Admin/orders/orders.component';
 import { CategoriesComponent } from './Admin/categories/categories.component';
 import { CustomersComponent } from './Admin/customers/customers.component';
+import { OffersComponent } from './Admin/offers/offers.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'admin/addproduct', component: AddProductComponent, canActivate: [RoleGuard] },
   { path: 'admin/editproduct/:id', component: EditProductComponent, canActivate: [RoleGuard] },
   { path: 'admin/orders', component: OrdersComponent, canActivate: [RoleGuard] },
+  { path: 'admin/offers', component: OffersComponent, canActivate: [RoleGuard] },
   { path: 'admin/categories', component: CategoriesComponent, canActivate: [RoleGuard] },
   { path: 'admin/customers', component: CustomersComponent, canActivate: [RoleGuard] },
   { path: 'products', component: ProductsComponent },
