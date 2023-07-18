@@ -28,6 +28,8 @@ import { CategoriesComponent } from './Admin/categories/categories.component';
 import { AddCategoriesComponent } from './Admin/add-categories/add-categories.component';
 import { CustomersComponent } from './Admin/customers/customers.component';
 import { OffersComponent } from './Admin/offers/offers.component';
+import { NgxStripeModule } from 'ngx-stripe';
+import { environment } from 'src/environment/environment';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import { OffersComponent } from './Admin/offers/offers.component';
         allowedDomains: ['localhost:4200'],
       },
     }),
+    NgxStripeModule.forRoot(environment.stripe.publicKey)
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -5,6 +5,7 @@ import { UtilityService } from '../services/utility.service';
 import { Router } from '@angular/router';
 import { Cart, Order, Payment, PaymentMethod } from '../models/models';
 import { timer } from 'rxjs';
+import { environment } from 'src/environment/environment';
 
 @Component({
   selector: 'app-order',
@@ -12,6 +13,7 @@ import { timer } from 'rxjs';
   styleUrls: ['./order.component.css'],
 })
 export class OrderComponent {
+  paymentHandler: any = null;
   selectedPaymentMethodName = '';
   selectedPaymentMethod = new FormControl('0');
 
@@ -52,7 +54,7 @@ export class OrderComponent {
     private navigationService: NavigationService,
     public utilityService: UtilityService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Get Payment Methods
@@ -76,6 +78,29 @@ export class OrderComponent {
     // Set address and phone number
     this.address = this.utilityService.getUser().address;
     this.mobileNumber = this.utilityService.getUser().mobile;
+
+    // stripe
+    this.invokeStripe();
+  }
+
+  invokeStripe() {
+    if (!window.document.getElementById('stripe-script')) {
+      const script = window.document.createElement('script');
+      script.id = 'stripe-script';
+      script.type = 'text/javascript';
+      script.src = 'https://checkout.stripe.com/checkout.js';
+      script.onload = () => {
+        this.paymentHandler = (<any>window).StripeCheckout.configure({
+          key: environment.stripe.publicKey,
+          locale: 'auto',
+          token: function (stripeToken: any) {
+            console.log(stripeToken);
+            alert('Payment has been successfull!');
+          },
+        });
+      };
+      window.document.body.appendChild(script);
+    }
   }
 
   getPaymentMethod(id: string) {
@@ -84,41 +109,47 @@ export class OrderComponent {
   }
 
   placeOrder() {
-    this.displaySpinner = true;
-    let isPaymentSuccessfull = this.payMoney();
+    // Open the Stripe checkout popup
+    this.paymentHandler.open({
+      name: 'Nas Ecommerce',
+      description: '',
+      amount: parseInt(this.usersPaymentInfo.amountPaid.toString()) * 100,
+      token: (stripeToken: any) => {
+        // This callback will be executed when the user completes the payment in the Stripe popup
+        console.log(stripeToken); // You can use the token to process the payment on the server if needed
+        this.displaySpinner = true; // Show the spinner while processing the order
 
-    if (!isPaymentSuccessfull) {
-      this.displaySpinner = false;
-      this.message = 'Something went wrong! Payment did not happen!';
-      this.classname = 'text-danger';
-      return;
-    }
-
-    let step = 0;
-    let count = timer(0, 3000).subscribe((res) => {
-      ++step;
-      if (step === 1) {
-        this.message = 'Processing Payment';
-        this.classname = 'text-success';
-      }
-      if (step === 2) {
-        this.message = 'Payment Successfull, Order is being placed.';
+        // Call the storeOrder method to store the order and complete the purchase process
         this.storeOrder();
-      }
-      if (step === 3) {
-        this.message = 'Your Order has been placed';
-        this.displaySpinner = false;
-      }
-      if (step === 4) {
         this.router.navigateByUrl('/home');
-        count.unsubscribe();
-      }
+      },
     });
+
+    // let step = 0;
+    // let count = timer(0, 3000).subscribe((res) => {
+    //   ++step;
+    //   if (step === 1) {
+    //     this.message = 'Processing Payment';
+    //     this.classname = 'text-success';
+    //   }
+    //   if (step === 2) {
+    //     this.message = 'Payment Successfull, Order is being placed.';
+    //     this.storeOrder();
+    //   }
+    //   if (step === 3) {
+    //     this.message = 'Your Order has been placed';
+    //     this.displaySpinner = false;
+    //   }
+    //   if (step === 4) {
+    //     this.router.navigateByUrl('/home');
+    //     count.unsubscribe();
+    //   }
+    // });
   }
 
-  payMoney() {
-    return true;
-  }
+  // payMoney() {
+  //   return true;
+  // }
 
   storeOrder() {
     let pmid = 0;
