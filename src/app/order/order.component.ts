@@ -119,37 +119,48 @@ export class OrderComponent {
         console.log(stripeToken); // You can use the token to process the payment on the server if needed
         this.displaySpinner = true; // Show the spinner while processing the order
 
-        // Call the storeOrder method to store the order and complete the purchase process
-        this.storeOrder();
-        this.router.navigateByUrl('/home');
+        // Send the Stripe token to the backend for payment processing
+        this.processPaymentOnBackend(stripeToken);
       },
     });
-
-    // let step = 0;
-    // let count = timer(0, 3000).subscribe((res) => {
-    //   ++step;
-    //   if (step === 1) {
-    //     this.message = 'Processing Payment';
-    //     this.classname = 'text-success';
-    //   }
-    //   if (step === 2) {
-    //     this.message = 'Payment Successfull, Order is being placed.';
-    //     this.storeOrder();
-    //   }
-    //   if (step === 3) {
-    //     this.message = 'Your Order has been placed';
-    //     this.displaySpinner = false;
-    //   }
-    //   if (step === 4) {
-    //     this.router.navigateByUrl('/home');
-    //     count.unsubscribe();
-    //   }
-    // });
   }
 
-  // payMoney() {
-  //   return true;
-  // }
+
+  processPaymentOnBackend(stripeToken: any) {
+    // Make an HTTP POST request to your backend server
+    const paymentData = {
+      StripeToken: stripeToken.id,
+      Amount: parseInt(this.usersPaymentInfo.amountPaid.toString()) * 100, // Convert amount to cents
+      Description: 'Payment for Order',
+      CustomerName: this.utilityService.getUser().firstName + this.utilityService.getUser().lastName,
+      CustomerAddress: this.address,
+    };
+
+    this.navigationService.processStripePayment(paymentData).subscribe(
+      (response: any) => {
+        if (response.success) {
+          // Payment was successful, proceed with storing the order
+          this.storeOrder();
+          this.message = 'Payment has been successful!';
+          this.classname = 'text-success';
+          this.router.navigateByUrl('/home');
+        } else {
+          // Payment failed
+          this.message = 'Something went wrong! Payment did not happen!';
+          this.classname = 'text-danger';
+        }
+        this.displaySpinner = false;
+      },
+      (error: any) => {
+        console.error('Error:', error);
+        this.message = 'Something went wrong! Payment did not happen!';
+        this.classname = 'text-danger';
+        this.displaySpinner = false;
+      }
+    );
+  }
+
+
 
   storeOrder() {
     let pmid = 0;

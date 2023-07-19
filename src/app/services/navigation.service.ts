@@ -164,6 +164,10 @@ export class NavigationService {
     return this.http.post(url, body);
   }
 
+  processStripePayment(data: any): Observable<any> {
+    return this.http.post(this.baseurlPayments + 'ProcessStripePayment', data);
+  }
+
   insertOrder(order: any): Observable<any> {
     return this.http.post(this.baseurlOrders + 'InsertOrder', order);
   }
