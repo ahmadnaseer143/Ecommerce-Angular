@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SuggestedProduct } from '../models/models';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-home',
@@ -7,39 +8,20 @@ import { SuggestedProduct } from '../models/models';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  suggestedProducts: SuggestedProduct[] = [
-    {
-      bannerImage: 'Banner/Banner_Mobile.png',
-      category: {
-        id: 0,
-        category: 'Electronics',
-        subCategory: 'Mobiles',
-      },
-    },
-    {
-      bannerImage: 'Banner/Banner_Laptop.png',
-      category: {
-        id: 1,
-        category: 'Electronics',
-        subCategory: 'Laptops',
-      },
-    },
-    {
-      bannerImage: 'Banner/Banner_Chair.png',
-      category: {
-        id: 2,
-        category: 'Furniture',
-        subCategory: 'Chairs',
-      },
-    },
-    {
-      bannerImage: 'Banner/Banner_Table.png',
-      category: {
-        id: 3,
-        category: 'Furniture',
-        subCategory: 'Tables',
-      },
-    },
-  ];
+  suggestedProducts: SuggestedProduct[] = [];
+
+  constructor(private navigationService: NavigationService) { }
+
+  ngOnInit() {
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    // get all categories and their images
+    this.navigationService.getCategoryList().subscribe((res: any) => {
+      console.log(res);
+      this.suggestedProducts = res;
+    }, error => console.log("Error in getting categroies list", error))
+  }
 
 }

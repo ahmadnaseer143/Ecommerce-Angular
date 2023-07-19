@@ -11,5 +11,7 @@ namespace ecommerce.Data.Interfaces
     Task<bool> UpdateCategory(ProductCategory category);
     Task<bool> DeleteProductCategory(int id);
     ProductCategory GetProductCategory(int id);
+
+    Task<byte[]> GetBannerImage(string name);
   }
 }

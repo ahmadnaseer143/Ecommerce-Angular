@@ -8,6 +8,7 @@ import {
 import { Observable, map } from 'rxjs';
 import {
   Category,
+  CategoryWithImage,
   Order,
   Payment,
   PaymentMethod,
@@ -45,6 +46,25 @@ export class NavigationService {
       )
     );
   }
+
+  // getCategoriesWithImage(): Observable<CategoryWithImage[]> {
+  //   let url = this.baseurlCategory + 'GetCategoryList';
+  //   return this.http.get<any[]>(url).pipe(
+  //     map((categories) =>
+  //       categories.map((category) => {
+  //         let mappedCategory: CategoryWithImage = {
+  //           bannerImage: category.bannerImage,
+  //           category: {
+  //             id: category.id,
+  //             category: category.category,
+  //             subCategory: category.subCategory,
+  //           }
+  //         };
+  //         return mappedCategory;
+  //       })
+  //     )
+  //   );
+  // }
 
   insertCategory(category: Category): Observable<any> {
     return this.http.post(this.baseurlCategory + "InsertCategory", category);

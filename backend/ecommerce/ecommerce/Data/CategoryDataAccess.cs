@@ -165,5 +165,42 @@ namespace ecommerce.Data
       }
       return productCategory;
     }
+
+    public async Task<byte[]> GetBannerImage(string name)
+    {
+      // List of supported image file extensions in order of preference.
+      List<string> supportedExtensions = new List<string> { ".png", ".jpeg", ".jpg", ".gif" };
+
+      foreach (string extension in supportedExtensions)
+      {
+        string imagePath = Path.Combine("Resources", "Banner", name + extension);
+
+        // Check if the image file exists with the current extension.
+        if (File.Exists(imagePath))
+        {
+          try
+          {
+            // Read the image file asynchronously into a byte array.
+            using (FileStream fileStream = new(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
+            {
+              byte[] imageData = new byte[fileStream.Length];
+              await fileStream.ReadAsync(imageData, 0, (int)fileStream.Length);
+              return imageData;
+            }
+          }
+          catch (Exception ex)
+          {
+            // Handling any potential exceptions
+            Console.WriteLine($"Error reading image file: {ex.Message}");
+            break; // Stop processing if an error occurs.
+          }
+        }
+      }
+
+      // If no image file with supported extensions is found, log the message and return null.
+      Console.WriteLine($"Image file not found with any supported extension for: {name}");
+      return null;
+    }
+
   }
 }

@@ -25,6 +25,22 @@ namespace ecommerce.Controllers
       return Ok(result);
     }
 
+    [HttpGet("GetBannerImage")]
+    public async Task<IActionResult> GetBannerImage(string name)
+    {
+      try
+      {
+        var result = await dataAccess.GetBannerImage(name);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        // Log the exception or handle it appropriately
+        Console.WriteLine($"Error while retrieving the image: {ex.Message}");
+        return StatusCode(500, "Internal Server Error");
+      }
+    }
+
     [HttpPost("InsertCategory")]
     public async Task<IActionResult> InsertCategory(ProductCategory productCategory)
     {
