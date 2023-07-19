@@ -23,7 +23,8 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-center">
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        <pagination-controls (pageChange)="p = $event" [autoHide]="true" [responsive]="true" previousLabel=""
+            nextLabel=""></pagination-controls>
     </div>
 
 </div>
