@@ -12,6 +12,8 @@ export class OffersComponent {
   offerForm !: FormGroup;
   showFormValue: Boolean = false;
   offerList: Offer[] = [];
+  itemsPerPage: number = 8;
+  p: number = 1;
 
   constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) { }
 

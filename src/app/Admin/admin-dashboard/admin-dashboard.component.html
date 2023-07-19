@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let product of products">
+            <tr *ngFor="let product of products | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td>{{ product.id }}</td>
                 <td>{{ product.title }}</td>
                 <td>{{ product.description }}</td>
@@ -36,4 +36,8 @@
             </tr>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <pagination-controls (pageChange)="p = $event" [autoHide]="true" [responsive]="true" previousLabel=""
+            nextLabel=""></pagination-controls>
+    </div>
 </div>

@@ -35,7 +35,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let category of categories">
+            <tr *ngFor="let category of categories | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td>{{category.id}}</td>
                 <td>{{category.category}}</td>
                 <td>{{category.subCategory}}</td>
@@ -46,4 +46,8 @@
             </tr>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <pagination-controls (pageChange)="p = $event" [autoHide]="true" [responsive]="true" previousLabel=""
+            nextLabel=""></pagination-controls>
+    </div>
 </div>

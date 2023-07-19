@@ -9,7 +9,9 @@ import { NavigationService } from 'src/app/services/navigation.service';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
-  products: Product[] = []
+  products: Product[] = [];
+  itemsPerPage: number = 6;
+  p: number = 1;
 
   constructor(private router: Router, private navigationService: NavigationService) { }
 

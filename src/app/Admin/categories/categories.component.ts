@@ -14,6 +14,8 @@ export class CategoriesComponent {
   categoryForm !: FormGroup;
   showFormValue: boolean = false;
   edit: boolean = false;
+  itemsPerPage: number = 6;
+  p: number = 1;
 
   constructor(private navigationService: NavigationService, private formBuilder: FormBuilder) { }
 
