@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let order of orders">
+            <tr *ngFor="let order of orders | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                 <td>{{ order.id }}</td>
                 <td>{{ order.user.firstName }} {{ order.user.lastName }}</td>
                 <td>{{ order.cart.id }}</td>
@@ -22,5 +22,8 @@
             </tr>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
 
 </div>

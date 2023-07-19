@@ -10,6 +10,9 @@ import { NavigationService } from 'src/app/services/navigation.service';
 export class OrdersComponent {
 
   orders: Order[] = [];
+  itemsPerPage: number = 8;
+  p: number = 1;
+
   constructor(private navigationService: NavigationService) { }
 
   ngOnInit() {

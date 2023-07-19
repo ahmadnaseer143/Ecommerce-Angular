@@ -30,6 +30,7 @@ import { CustomersComponent } from './Admin/customers/customers.component';
 import { OffersComponent } from './Admin/offers/offers.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from 'src/environment/environment';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { environment } from 'src/environment/environment';
         allowedDomains: ['localhost:4200'],
       },
     }),
-    NgxStripeModule.forRoot(environment.stripe.publicKey)
+    NgxStripeModule.forRoot(environment.stripe.publicKey),
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent],
