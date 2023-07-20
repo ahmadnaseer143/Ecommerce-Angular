@@ -42,9 +42,14 @@ namespace ecommerce.Controllers
     }
 
     [HttpPost("InsertCategory")]
-    public async Task<IActionResult> InsertCategory(ProductCategory productCategory)
+    public async Task<IActionResult> InsertCategory([FromForm] ProductCategory productCategory, IFormFile photoFile)
     {
-      var result = await dataAccess.InsertProductCategory(productCategory);
+      if (photoFile == null || photoFile.Length == 0)
+      {
+        return BadRequest("No photo file found.");
+      }
+
+      var result = await dataAccess.InsertProductCategory(productCategory, photoFile);
       if (result)
       {
         return Ok(result);

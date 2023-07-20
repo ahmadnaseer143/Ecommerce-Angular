@@ -44,7 +44,7 @@ namespace ecommerce.Data
       return productCategories;
     }
 
-    public async Task<bool> InsertProductCategory(ProductCategory productCategory)
+    public async Task<bool> InsertProductCategory(ProductCategory productCategory, IFormFile photoFile)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -61,6 +61,15 @@ namespace ecommerce.Data
         try
         {
           await connection.OpenAsync();
+
+          // Save the photo file to the "Resources/Banner" folder using the subCategory name as the filename
+          string fileName = productCategory.SubCategory + Path.GetExtension(photoFile.FileName);
+          string imagePath = Path.Combine("Resources", "Banner", fileName);
+          using (var stream = new FileStream(imagePath, FileMode.Create))
+          {
+            await photoFile.CopyToAsync(stream);
+          }
+
           int rowsAffected = await command.ExecuteNonQueryAsync();
           return rowsAffected > 0;
         }
