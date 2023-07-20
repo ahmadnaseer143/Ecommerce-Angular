@@ -180,13 +180,8 @@ namespace ecommerce.Data
         {
           try
           {
-            // Read the image file asynchronously into a byte array.
-            using (FileStream fileStream = new(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
-            {
-              byte[] imageData = new byte[fileStream.Length];
-              await fileStream.ReadAsync(imageData, 0, (int)fileStream.Length);
-              return imageData;
-            }
+            byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            return imageBytes;
           }
           catch (Exception ex)
           {

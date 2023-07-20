@@ -4,13 +4,6 @@ export interface Category {
   subCategory: string;
 }
 
-
-export interface CategoryWithImage {
-  bannerImage: string;
-  category: Category;
-}
-
-
 export interface SuggestedProduct {
   bannerImage: string;
   category: Category;

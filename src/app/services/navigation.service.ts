@@ -8,7 +8,6 @@ import {
 import { Observable, map } from 'rxjs';
 import {
   Category,
-  CategoryWithImage,
   Order,
   Payment,
   PaymentMethod,
@@ -45,6 +44,11 @@ export class NavigationService {
         })
       )
     );
+  }
+
+  getBanner(subCategory: string): Observable<Blob> {
+    const url = `${this.baseurlCategory}GetBannerImage?name=${subCategory}`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 
   // getCategoriesWithImage(): Observable<CategoryWithImage[]> {

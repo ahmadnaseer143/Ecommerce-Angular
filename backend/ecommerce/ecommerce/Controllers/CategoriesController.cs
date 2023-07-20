@@ -2,6 +2,7 @@ using ecommerce.Data.Interfaces;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 
 namespace ecommerce.Controllers
 {
@@ -28,17 +29,16 @@ namespace ecommerce.Controllers
     [HttpGet("GetBannerImage")]
     public async Task<IActionResult> GetBannerImage(string name)
     {
-      try
+      // Retrieve the image file path based on the productId
+      byte[] imageBytes = await dataAccess.GetBannerImage(name);
+
+      if (imageBytes == null || imageBytes.Length == 0)
       {
-        var result = await dataAccess.GetBannerImage(name);
-        return Ok(result);
+        return NotFound();
       }
-      catch (Exception ex)
-      {
-        // Log the exception or handle it appropriately
-        Console.WriteLine($"Error while retrieving the image: {ex.Message}");
-        return StatusCode(500, "Internal Server Error");
-      }
+
+      // Return the image file as the response with the appropriate content type
+      return File(imageBytes, "image/png");
     }
 
     [HttpPost("InsertCategory")]

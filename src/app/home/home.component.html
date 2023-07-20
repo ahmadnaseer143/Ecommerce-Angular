@@ -1,11 +1,14 @@
 <div class="my-container mx-auto border border-dark">
     <div class="mb-4 my-shadow my-rounded-corner overflow-hidden" *ngFor="let product of suggestedProducts">
         <div class="product-banner position-relative">
-            <button class="btn btn-outline-light btn-lg ">Shop Now</button>
-            <img src="" class="w-100" alt="">
+            <a [routerLink]="['/products']"
+                [queryParams]="{ category: product.category, subcategory: product.subCategory }">
+                <button class="btn btn-outline-light btn-lg">Shop Now</button>
+            </a>
+            <img [src]="product.image" class="w-100" alt="">
         </div>
         <div class="product-list py-5">
-            <app-suggested-product [category]="product.category"></app-suggested-product>
+            <app-suggested-product [category]="product"></app-suggested-product>
         </div>
     </div>
 </div>
