@@ -82,7 +82,7 @@ namespace ecommerce.Data
       }
     }
 
-    public async Task<bool> UpdateCategory(ProductCategory category)
+    public async Task<bool> UpdateCategory(ProductCategory category, IFormFile photoFile)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -101,6 +101,19 @@ namespace ecommerce.Data
         {
           await connection.OpenAsync();
           int rowsAffected = await command.ExecuteNonQueryAsync();
+
+          // If the SubCategory is updated and a new photo is provided, update the image file
+          if (rowsAffected > 0 && !string.IsNullOrEmpty(category.SubCategory) && photoFile != null)
+          {
+            // Save the photo file to the "Resources/Banner" folder using the updated subCategory name as the filename
+            string fileName = category.SubCategory + Path.GetExtension(photoFile.FileName);
+            string imagePath = Path.Combine("Resources", "Banner", fileName);
+            using (var stream = new FileStream(imagePath, FileMode.Create))
+            {
+              await photoFile.CopyToAsync(stream);
+            }
+          }
+
           return rowsAffected > 0;
         }
         catch (Exception ex)
@@ -111,6 +124,7 @@ namespace ecommerce.Data
         }
       }
     }
+
 
 
     public async Task<bool> DeleteProductCategory(int id)
