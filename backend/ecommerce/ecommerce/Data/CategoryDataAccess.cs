@@ -100,12 +100,19 @@ namespace ecommerce.Data
         try
         {
           await connection.OpenAsync();
+
+          // Retrieve the previous SubCategory associated with the CategoryId
+          string previousSubCategory = GetPreviousSubCategory(connection, category.Id);
+
           int rowsAffected = await command.ExecuteNonQueryAsync();
 
           // If the SubCategory is updated and a new photo is provided, update the image file
           if (rowsAffected > 0 && !string.IsNullOrEmpty(category.SubCategory) && photoFile != null)
           {
-            // Save the photo file to the "Resources/Banner" folder using the updated subCategory name as the filename
+            // Delete the old image associated with the previous SubCategory
+            DeleteImage(previousSubCategory);
+
+            // Save the new photo file to the "Resources/Banner" folder using the updated SubCategory name as the filename
             string fileName = category.SubCategory + Path.GetExtension(photoFile.FileName);
             string imagePath = Path.Combine("Resources", "Banner", fileName);
             using (var stream = new FileStream(imagePath, FileMode.Create))
@@ -124,6 +131,48 @@ namespace ecommerce.Data
         }
       }
     }
+
+    private string GetPreviousSubCategory(MySqlConnection connection, int categoryId)
+    {
+      string previousSubCategory = string.Empty;
+      MySqlCommand command = new MySqlCommand
+      {
+        Connection = connection
+      };
+
+      string query = "SELECT SubCategory FROM productcategories WHERE CategoryId = @CategoryId";
+      command.CommandText = query;
+      command.Parameters.AddWithValue("@CategoryId", categoryId);
+
+      using (MySqlDataReader reader = command.ExecuteReader())
+      {
+        if (reader.Read())
+        {
+          previousSubCategory = reader["SubCategory"].ToString();
+        }
+      }
+
+      return previousSubCategory;
+    }
+
+    private void DeleteImage(string subCategory)
+    {
+      // Ensure the subCategory is not empty or null
+      if (!string.IsNullOrEmpty(subCategory))
+      {
+        // Combine the subCategory name with all supported image extensions to look for the file
+        List<string> supportedExtensions = new List<string> { ".png", ".jpeg", ".jpg", ".gif" };
+        foreach (string extension in supportedExtensions)
+        {
+          string imagePath = Path.Combine("Resources", "Banner", subCategory + extension);
+          if (File.Exists(imagePath))
+          {
+            File.Delete(imagePath);
+          }
+        }
+      }
+    }
+
 
 
 
