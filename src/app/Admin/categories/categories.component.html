@@ -23,6 +23,13 @@
                 SubCategory Name Is Required
             </div>
         </div>
+        <div class="form-group">
+            <label for="photoFile">Upload Photo:</label>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" id="photoFile" required>
+            <div class="text-danger" *ngIf="photoFileError">
+                {{ photoFileError }}
+            </div>
+        </div>
         <button type="submit" class="btn btn-primary my-4">{{edit? 'Edit Category' : 'Add Category'}}</button>
     </form>
 

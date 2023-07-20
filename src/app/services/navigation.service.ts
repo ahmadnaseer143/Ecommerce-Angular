@@ -51,8 +51,14 @@ export class NavigationService {
     return this.http.get(url, { responseType: 'blob' });
   }
 
-  insertCategory(category: Category): Observable<any> {
-    return this.http.post(this.baseurlCategory + "InsertCategory", category);
+  insertCategory(category: Category, photoFile: File): Observable<any> {
+    // Creating a FormData object to send both the category data and the photo file
+    const formData = new FormData();
+    formData.append('category', category.category);
+    formData.append('subCategory', category.subCategory);
+    formData.append('photoFile', photoFile);
+
+    return this.http.post(this.baseurlCategory + 'InsertCategory', formData);
   }
 
   editCategory(category: Category): Observable<any> {

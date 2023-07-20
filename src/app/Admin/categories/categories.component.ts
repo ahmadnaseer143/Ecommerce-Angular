@@ -16,6 +16,8 @@ export class CategoriesComponent {
   edit: boolean = false;
   itemsPerPage: number = 6;
   p: number = 1;
+  photoFileError: string | null = null;
+  photoFile !: File;
 
   constructor(private navigationService: NavigationService, private formBuilder: FormBuilder) { }
 
@@ -36,6 +38,23 @@ export class CategoriesComponent {
     })
   }
 
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Clear any previous error message
+      this.photoFileError = null;
+
+      // Check file type (accept only image files)
+      if (!file.type.startsWith('image/')) {
+        this.photoFileError = 'Please select a valid image file.';
+        return;
+      }
+
+      // Set the selected file in the categoryForm
+      this.photoFile = file;
+    }
+  }
+
   addCategory() {
     this.categoryForm.markAllAsTouched();
     if (this.categoryForm.invalid) return;
@@ -54,7 +73,7 @@ export class CategoriesComponent {
     } else {
       // console.log("Add Form");
       // console.log(this.categoryForm.value);
-      this.navigationService.insertCategory(this.categoryForm.value).subscribe((res: any) => {
+      this.navigationService.insertCategory(this.categoryForm.value, this.photoFile).subscribe((res: any) => {
         console.log("inserted");
         this.loadCategories();
         this.resetForm();
