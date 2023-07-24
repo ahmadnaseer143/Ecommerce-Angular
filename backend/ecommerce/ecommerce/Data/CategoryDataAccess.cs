@@ -185,6 +185,9 @@ namespace ecommerce.Data
           Connection = connection
         };
 
+        // Retrieve the subCategory associated with the category to be deleted
+        string subCategoryToDelete = GetSubCategoryToDelete(connection, id);
+
         // Delete products associated with the category
         string deleteProductsQuery = "DELETE FROM products WHERE CategoryId = @Id";
         command.CommandText = deleteProductsQuery;
@@ -200,6 +203,12 @@ namespace ecommerce.Data
           command.CommandText = deleteCategoryQuery;
           int rowsAffected = await command.ExecuteNonQueryAsync();
 
+          // Delete the corresponding image if the category deletion was successful
+          if (rowsAffected > 0)
+          {
+            DeleteImage(subCategoryToDelete);
+          }
+
           return rowsAffected > 0;
         }
         catch (Exception ex)
@@ -210,6 +219,37 @@ namespace ecommerce.Data
         }
       }
     }
+
+    private string GetSubCategoryToDelete(MySqlConnection connection, int categoryId)
+    {
+      string subCategory = string.Empty;
+      MySqlCommand command = new MySqlCommand
+      {
+        Connection = connection
+      };
+
+      string query = "SELECT SubCategory FROM productcategories WHERE CategoryId = @CategoryId";
+      command.CommandText = query;
+      command.Parameters.AddWithValue("@CategoryId", categoryId);
+
+      // Open the database connection before executing the SQL command
+      connection.Open();
+
+      using (MySqlDataReader reader = command.ExecuteReader())
+      {
+        if (reader.Read())
+        {
+          subCategory = reader["SubCategory"].ToString();
+        }
+      }
+
+      // Close the database connection after retrieving the subCategory
+      connection.Close();
+
+      return subCategory;
+    }
+
+
 
 
     public ProductCategory GetProductCategory(int id)
