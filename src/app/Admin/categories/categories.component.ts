@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/models';
 import { NavigationService } from 'src/app/services/navigation.service';
@@ -19,7 +19,7 @@ export class CategoriesComponent {
   photoFileError: string | null = null;
   photoFile !: File;
 
-  constructor(private navigationService: NavigationService, private formBuilder: FormBuilder) { }
+  constructor(private navigationService: NavigationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.categoryForm = this.formBuilder.group({
@@ -51,6 +51,7 @@ export class CategoriesComponent {
       }
 
       // Set the selected file in the categoryForm
+      console.log(file);
       this.photoFile = file;
     }
   }
@@ -61,15 +62,16 @@ export class CategoriesComponent {
 
     if (this.edit) {
       // console.log("Edit Form");
-      // console.log(this.categoryForm.value);
+      // console.log(this.categoryForm.value)
 
-      this.navigationService.editCategory(this.categoryForm.value).subscribe((res: any) => {
+      this.navigationService.editCategory(this.categoryForm.value, this.photoFile).subscribe((res: any) => {
         console.log("Edited");
         this.loadCategories();
         this.resetForm();
       },
         error => console.log("Error in Editing Category", error)
       )
+
     } else {
       // console.log("Add Form");
       // console.log(this.categoryForm.value);
@@ -100,7 +102,33 @@ export class CategoriesComponent {
       id: category.id,
       category: category.category,
       subCategory: category.subCategory,
-    })
+    });
+
+    this.getBannerImage(category.subCategory);
+  }
+
+  getBannerImage(subCategory: string) {
+    this.navigationService.getBanner(subCategory).subscribe(
+      (imageBlob: Blob) => {
+        const fileOptions: FilePropertyBag = {
+          type: imageBlob.type,
+          lastModified: Date.now(),
+        };
+        this.photoFile = new File([imageBlob], subCategory, fileOptions);
+
+        // Manually trigger change detection to update the view with the new photoFile URL
+        this.changeDetectorRef.detectChanges();
+      },
+      (error) => console.log(`Error loading image for ${subCategory}:`, error)
+    );
+  }
+
+  getPhotoFileURL(): string | null {
+    // Check if the photoFile exists and return its URL
+    if (this.photoFile) {
+      return URL.createObjectURL(this.photoFile);
+    }
+    return null;
   }
 
   showForm() {
