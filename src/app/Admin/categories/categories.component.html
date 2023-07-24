@@ -29,7 +29,7 @@
             <div class="text-danger" *ngIf="photoFileError">
                 {{ photoFileError }}
             </div>
-
+            <img *ngIf="photoFile" [src]="getPhotoFileURL()" class="preview-image" alt="">
         </div>
         <button type="submit" class="btn btn-primary my-4">{{edit? 'Edit Category' : 'Add Category'}}</button>
     </form>
