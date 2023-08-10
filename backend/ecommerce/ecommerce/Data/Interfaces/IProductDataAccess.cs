@@ -12,7 +12,7 @@ namespace ecommerce.Data.Interfaces
 
     Product GetProduct(int id);
 
-    Task<Product> UpdateProduct(Product product);
+    Task<int> UpdateProduct(Product product);
 
     Task<int> InsertProduct(Product product);
 

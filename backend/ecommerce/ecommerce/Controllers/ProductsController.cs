@@ -61,7 +61,7 @@ namespace ecommerce.Controllers
     public async Task<IActionResult> UpdateProduct(Product product)
     {
       var result = await dataAccess.UpdateProduct(product);
-      if (result != null)
+      if (result==1)
       {
         return Ok(result);
       }

@@ -160,14 +160,15 @@ namespace ecommerce.Data
           product.Price = Convert.ToDouble(reader["Price"]);
           product.Quantity = (int)reader["Quantity"];
           product.ImageName = (string)reader["ImageName"];
+          product.ImageFile = (string)reader["ImageData"];
 
           // Get the image file as base64 string
-          if (!string.IsNullOrEmpty(product.ImageName))
-          {
-            byte[] fileBytes = System.IO.File.ReadAllBytes(product.ImageName);
-            string base64String = Convert.ToBase64String(fileBytes);
-            product.ImageFile = base64String;
-          }
+          //if (!string.IsNullOrEmpty(product.ImageName))
+          //{
+          //  byte[] fileBytes = System.IO.File.ReadAllBytes(product.ImageName);
+          //  string base64String = Convert.ToBase64String(fileBytes);
+          //  product.ImageFile = base64String;
+          //}
 
           var categoryId = (int)reader["CategoryId"];
           product.ProductCategory = iCategoryDataAccess.GetProductCategory(categoryId);
@@ -179,7 +180,7 @@ namespace ecommerce.Data
       return product;
     }
 
-    public async Task<Product> UpdateProduct(Product product)
+    public async Task<int> UpdateProduct(Product product)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -188,7 +189,7 @@ namespace ecommerce.Data
           Connection = connection,
         };
 
-        string query = "UPDATE products SET Title = @Title, Description = @Description, Price = @Price, Quantity = @Quantity, ImageName = @ImageName, CategoryId = @CategoryId, OfferId = @OfferId WHERE ProductId = @ProductId;";
+        string query = "UPDATE products SET Title = @Title, Description = @Description, Price = @Price, Quantity = @Quantity, ImageName = @ImageName,ImageData = @ImageFile, CategoryId = @CategoryId, OfferId = @OfferId WHERE ProductId = @ProductId;";
         command.CommandText = query;
 
         // Set the parameter values
@@ -197,6 +198,7 @@ namespace ecommerce.Data
         command.Parameters.AddWithValue("@Price", product.Price);
         command.Parameters.AddWithValue("@Quantity", product.Quantity);
         command.Parameters.AddWithValue("@ImageName", product.ImageName);
+        command.Parameters.AddWithValue("@ImageFile", product.ImageFile);
         command.Parameters.AddWithValue("@CategoryId", product.ProductCategory.Id);
         command.Parameters.AddWithValue("@OfferId", product.Offer.Id);
         command.Parameters.AddWithValue("@ProductId", product.Id);
@@ -204,62 +206,64 @@ namespace ecommerce.Data
         await connection.OpenAsync();
 
         int rowsAffected = command.ExecuteNonQuery();
-
-        // Check if any rows were affected by the update
-        if (rowsAffected > 0)
-        {
-          // Check if there is an updated image file
-          if (!string.IsNullOrEmpty(product.ImageFile))
-          {
-            // Delete the previous image file
-            if (!string.IsNullOrEmpty(product.ImageName))
-            {
-              File.Delete(product.ImageName);
-            }
-
-            // Convert the Base64 string to a byte array
-            byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
-
-            string fileName = $"{product.Id}.jpg";
-
-            // Define the base directory path and create it if it doesn't exist
-            var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
-            Directory.CreateDirectory(baseDirectory);
-
-            // Get the category and subcategory folder paths
-            var categoryFolder = Path.Combine(baseDirectory, product.ProductCategory.Category);
-            var subcategoryFolder = Path.Combine(categoryFolder, product.ProductCategory.SubCategory);
-
-            // Create category and subcategory folders if they don't exist
-            Directory.CreateDirectory(categoryFolder);
-            Directory.CreateDirectory(subcategoryFolder);
-
-            // Define the folder path for the productId
-            string productIdFolder = Path.Combine(subcategoryFolder, product.Id.ToString());
-            Directory.CreateDirectory(productIdFolder);
-
-            // Define the file path
-            string filePath = Path.Combine(productIdFolder, fileName);
-
-            // Save the byte array to a file
-            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
-
-            // Update the product's ImageName attribute with the file path
-            product.ImageName = filePath;
-          }
-
-          // Update the image path in the database
-          command.CommandText = "UPDATE products SET ImageName = @ImageName WHERE ProductId = @ProductId;";
-          command.Parameters.Clear();
-          command.Parameters.AddWithValue("@ImageName", product.ImageName);
-          command.Parameters.AddWithValue("@ProductId", product.Id);
-          command.ExecuteNonQuery();
-          return product;
-        }
+        return rowsAffected;
       }
 
-      // If no rows were affected or an error occurred, return null
-      return null;
+        // Check if any rows were affected by the update
+      //  if (rowsAffected > 0)
+      //  {
+      //    // Check if there is an updated image file
+      //    if (!string.IsNullOrEmpty(product.ImageFile))
+      //    {
+      //      // Delete the previous image file
+      //      if (!string.IsNullOrEmpty(product.ImageName))
+      //      {
+      //        File.Delete(product.ImageName);
+      //      }
+
+      //      // Convert the Base64 string to a byte array
+      //      byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
+
+      //      string fileName = $"{product.Id}.jpg";
+
+      //      // Define the base directory path and create it if it doesn't exist
+      //      var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
+      //      Directory.CreateDirectory(baseDirectory);
+
+      //      // Get the category and subcategory folder paths
+      //      var categoryFolder = Path.Combine(baseDirectory, product.ProductCategory.Category);
+      //      var subcategoryFolder = Path.Combine(categoryFolder, product.ProductCategory.SubCategory);
+
+      //      // Create category and subcategory folders if they don't exist
+      //      Directory.CreateDirectory(categoryFolder);
+      //      Directory.CreateDirectory(subcategoryFolder);
+
+      //      // Define the folder path for the productId
+      //      string productIdFolder = Path.Combine(subcategoryFolder, product.Id.ToString());
+      //      Directory.CreateDirectory(productIdFolder);
+
+      //      // Define the file path
+      //      string filePath = Path.Combine(productIdFolder, fileName);
+
+      //      // Save the byte array to a file
+      //      await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+
+      //      // Update the product's ImageName attribute with the file path
+      //      product.ImageName = filePath;
+      //    }
+
+      //    // Update the image path in the database
+      //    command.CommandText = "UPDATE products SET ImageName = @ImageName WHERE ProductId = @ProductId;";
+      //    command.Parameters.Clear();
+      //    command.Parameters.AddWithValue("@ImageName", product.ImageName);
+      //    command.Parameters.AddWithValue("@ProductId", product.Id);
+      //    command.ExecuteNonQuery();
+      //    return product;
+      //  }
+      //}
+
+      //// If no rows were affected or an error occurred, return null
+      //return null;
     }
 
     public async Task<int> InsertProduct(Product product)
