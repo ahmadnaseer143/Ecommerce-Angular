@@ -280,8 +280,8 @@ namespace ecommerce.Data
         };
         await connection.OpenAsync();
 
-        string query = "INSERT INTO Products (Title, Description, CategoryId, OfferId, Price, Quantity, ImageName) " +
-                       "VALUES (@title, @description, @categoryId, @offerId, @price, @quantity, @imageName);";
+        string query = "INSERT INTO Products (Title, Description, CategoryId, OfferId, Price, Quantity, ImageName, ImageData) " +
+                       "VALUES (@title, @description, @categoryId, @offerId, @price, @quantity, @imageName, @imageFile);";
 
         command.CommandText = query;
         command.Parameters.AddWithValue("@title", product.Title);
@@ -291,62 +291,64 @@ namespace ecommerce.Data
         command.Parameters.AddWithValue("@price", product.Price);
         command.Parameters.AddWithValue("@quantity", product.Quantity);
         command.Parameters.AddWithValue("@imageName", product.ImageName);
+        command.Parameters.AddWithValue("@imageFile", product.ImageFile);
 
         int rowsAffected = command.ExecuteNonQuery();
+        return rowsAffected;
 
-        if (rowsAffected > 0)
-        {
-          command.CommandText = "SELECT LAST_INSERT_ID();";
-          int productId = Convert.ToInt32(command.ExecuteScalar());
+        //if (rowsAffected > 0)
+        //{
+        //  command.CommandText = "SELECT LAST_INSERT_ID();";
+        //  int productId = Convert.ToInt32(command.ExecuteScalar());
 
-          //upload image from imageFile
-          if (!string.IsNullOrEmpty(product.ImageFile))
-          {
-            // Convert the Base64 string to a byte array
-            byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
+        //  //upload image from imageFile
+        //  if (!string.IsNullOrEmpty(product.ImageFile))
+        //  {
+        //    // Convert the Base64 string to a byte array
+        //    byte[] fileBytes = Convert.FromBase64String(product.ImageFile);
 
-            // Generate a unique filename using the current timestamp
-            string timestamp = DateTime.Now.Ticks.ToString();
-            string fileName = $"{productId}.jpg";
+        //    // Generate a unique filename using the current timestamp
+        //    string timestamp = DateTime.Now.Ticks.ToString();
+        //    string fileName = $"{productId}.jpg";
 
-            // Define the base directory path and create it if it doesn't exist
-            var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
-            Directory.CreateDirectory(baseDirectory);
+        //    // Define the base directory path and create it if it doesn't exist
+        //    var baseDirectory = Path.Combine(_hostEnvironment.WebRootPath ?? string.Empty, "Resources", "Images");
+        //    Directory.CreateDirectory(baseDirectory);
 
-            // Get the category and subcategory folder paths
-            var categoryFolder = Path.Combine(baseDirectory, productCategory.Category);
-            var subcategoryFolder = Path.Combine(categoryFolder, productCategory.SubCategory);
+        //    // Get the category and subcategory folder paths
+        //    var categoryFolder = Path.Combine(baseDirectory, productCategory.Category);
+        //    var subcategoryFolder = Path.Combine(categoryFolder, productCategory.SubCategory);
 
-            // Create category and subcategory folders if they don't exist
-            Directory.CreateDirectory(categoryFolder);
-            Directory.CreateDirectory(subcategoryFolder);
+        //    // Create category and subcategory folders if they don't exist
+        //    Directory.CreateDirectory(categoryFolder);
+        //    Directory.CreateDirectory(subcategoryFolder);
 
-            // Define the folder path for the productId
-            string productIdFolder = Path.Combine(subcategoryFolder, productId.ToString());
-            Directory.CreateDirectory(productIdFolder);
+        //    // Define the folder path for the productId
+        //    string productIdFolder = Path.Combine(subcategoryFolder, productId.ToString());
+        //    Directory.CreateDirectory(productIdFolder);
 
-            // Define the file path
-            string filePath = Path.Combine(productIdFolder, fileName);
+        //    // Define the file path
+        //    string filePath = Path.Combine(productIdFolder, fileName);
 
-            // Save the byte array to a file
-            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+        //    // Save the byte array to a file
+        //    await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
 
-            // Update the product's ImageName attribute with the file path
-            product.ImageName = filePath;
-          }
+        //    // Update the product's ImageName attribute with the file path
+        //    product.ImageName = filePath;
+        //  }
 
-          // save the image path to imageName in mysql
-          command.CommandText = "UPDATE Products SET ImageName = @imageName WHERE ProductId = @productId";
-          command.Parameters.Clear();
-          command.Parameters.AddWithValue("@imageName", product.ImageName);
-          command.Parameters.AddWithValue("@productId", productId);
-          command.ExecuteNonQuery();
-          return productId;
-        }
-        else
-        {
-          return -1;
-        }
+        //  // save the image path to imageName in mysql
+        //  command.CommandText = "UPDATE Products SET ImageName = @imageName WHERE ProductId = @productId";
+        //  command.Parameters.Clear();
+        //  command.Parameters.AddWithValue("@imageName", product.ImageName);
+        //  command.Parameters.AddWithValue("@productId", productId);
+        //  command.ExecuteNonQuery();
+        //  return productId;
+        //}
+        //else
+        //{
+        //  return -1;
+        //}
       }
     }
 
