@@ -31,6 +31,8 @@ import { OffersComponent } from './Admin/offers/offers.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from 'src/environment/environment';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 @NgModule({
   declarations: [
@@ -73,7 +75,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
       },
     }),
     NgxStripeModule.forRoot(environment.stripe.publicKey),
-    NgxPaginationModule
+    NgxPaginationModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent],

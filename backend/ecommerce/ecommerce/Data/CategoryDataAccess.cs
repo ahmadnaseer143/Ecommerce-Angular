@@ -34,7 +34,8 @@ namespace ecommerce.Data
             {
               Id = (int)reader["CategoryId"],
               Category = (string)reader["Category"],
-              SubCategory = (string)reader["SubCategory"]
+              SubCategory = (string)reader["SubCategory"],
+              PhotoUrl = (string)reader["PhotoUrl"],
             };
             productCategories.Add(category);
           }
@@ -57,7 +58,7 @@ namespace ecommerce.Data
         command.CommandText = query;
         command.Parameters.AddWithValue("@Category", productCategory.Category);
         command.Parameters.AddWithValue("@SubCategory", productCategory.SubCategory);
-        command.Parameters.AddWithValue("@PhotoUrl", productCategory.PhotoUrl); // Assuming PhotoUrl is a property in your ProductCategory class.
+        command.Parameters.AddWithValue("@PhotoUrl", productCategory.PhotoUrl);
 
         try
         {

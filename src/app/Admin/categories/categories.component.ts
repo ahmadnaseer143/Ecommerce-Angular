@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/models';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+
 
 @Component({
   selector: 'app-categories',
@@ -19,13 +21,14 @@ export class CategoriesComponent {
   photoFileError: string | null = null;
   photoFile !: File;
 
-  constructor(private navigationService: NavigationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private navigationService: NavigationService, private formBuilder: FormBuilder, private changeDetectorRef: ChangeDetectorRef, private fireStorage: AngularFireStorage) { }
 
   ngOnInit() {
     this.categoryForm = this.formBuilder.group({
       id: [1, Validators.required],
       category: ['', Validators.required],
       subCategory: ['', Validators.required],
+      photoUrl: [''],
     });
 
     this.loadCategories();
@@ -56,12 +59,15 @@ export class CategoriesComponent {
     }
   }
 
-  addCategory() {
+  async addCategory() {
     this.categoryForm.markAllAsTouched();
-    if (this.categoryForm.invalid) return;
+    if (this.categoryForm.invalid) {
+      console.log("hello");
+      return;
+    }
 
     if (this.edit) {
-      // console.log("Edit Form");
+      console.log("Edit Form");
       // console.log(this.categoryForm.value)
 
       this.navigationService.editCategory(this.categoryForm.value, this.photoFile).subscribe((res: any) => {
@@ -73,9 +79,15 @@ export class CategoriesComponent {
       )
 
     } else {
-      // console.log("Add Form");
+      console.log("Add Form");
       // console.log(this.categoryForm.value);
-      this.navigationService.insertCategory(this.categoryForm.value, this.photoFile).subscribe((res: any) => {
+      const path = `categories/${this.photoFile.name}`;
+      const uploadTask = await this.fireStorage.upload(path, this.photoFile);
+      const url = await uploadTask.ref.getDownloadURL();
+      console.log(url)
+      const updatedFormValue = { ...this.categoryForm.value, photoUrl: url };
+      console.log(updatedFormValue);
+      this.navigationService.insertCategory(updatedFormValue).subscribe((res: any) => {
         console.log("inserted");
         this.loadCategories();
         this.resetForm();
@@ -102,9 +114,11 @@ export class CategoriesComponent {
       id: category.id,
       category: category.category,
       subCategory: category.subCategory,
+      photoUrl: category.photoUrl
     });
+    console.log(category.photoUrl)
 
-    this.getBannerImage(category.subCategory);
+    // this.getBannerImage(category.subCategory);
   }
 
   getBannerImage(subCategory: string) {
@@ -123,29 +137,59 @@ export class CategoriesComponent {
     );
   }
 
-  getPhotoFileURL(): string | null {
+  getPhotoFileURL(): any {
     // Check if the photoFile exists and return its URL
+    // if (this.photoFile) {
+    //   return URL.createObjectURL(this.photoFile);
+    // }
+    // return null;
     if (this.photoFile) {
       return URL.createObjectURL(this.photoFile);
     }
+    const temp = this.categoryForm.get('photoUrl')?.value;
+    if (temp) {
+      return temp;
+    }
     return null;
   }
-
   showForm() {
+
     this.showFormValue = !this.showFormValue;
   }
 
   deleteCategory(category: Category) {
     const decision = window.confirm("Are you sure you want to delete SubCategory " + category.subCategory + " and its products?");
     if (decision) {
-      // console.log("Deleting", category);
-
-      this.navigationService.deleteCategory(category.id).subscribe((res: any) => {
-        console.log("Deleted");
-        this.loadCategories();
-      },
-        error => console.log("Error in Deleting Category", error)
-      )
+      // Delete the image from Firebase Storage
+      if (category.photoUrl) {
+        this.fireStorage.storage.refFromURL(category.photoUrl).delete()
+          .then(() => {
+            console.log("Image deleted from Firebase Storage");
+            // Proceed to delete the category from your service
+            this.navigationService.deleteCategory(category.id).subscribe((res: any) => {
+              console.log("Deleted");
+              this.loadCategories();
+            },
+              error => console.log("Error in Deleting Category", error));
+          })
+          .catch(error => {
+            console.log("Error deleting image from Firebase Storage:", error);
+            // Proceed to delete the category even if there's an error deleting the image
+            this.navigationService.deleteCategory(category.id).subscribe((res: any) => {
+              console.log("Deleted");
+              this.loadCategories();
+            },
+              error => console.log("Error in Deleting Category", error));
+          });
+      } else {
+        // If no photoUrl, proceed to delete the category
+        this.navigationService.deleteCategory(category.id).subscribe((res: any) => {
+          console.log("Deleted");
+          this.loadCategories();
+        },
+          error => console.log("Error in Deleting Category", error));
+      }
     }
   }
+
 }

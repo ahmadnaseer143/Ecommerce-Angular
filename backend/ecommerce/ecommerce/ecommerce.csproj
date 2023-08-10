@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Banner\" />
+    <Folder Include="Resources\Images\" />
   </ItemGroup>
 
 </Project>

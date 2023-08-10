@@ -42,7 +42,7 @@ namespace ecommerce.Controllers
     }
 
     [HttpPost("InsertCategory")]
-    public async Task<IActionResult> InsertCategory([FromForm] ProductCategory productCategory)
+    public async Task<IActionResult> InsertCategory(ProductCategory productCategory)
     {
       var result = await dataAccess.InsertProductCategory(productCategory);
 

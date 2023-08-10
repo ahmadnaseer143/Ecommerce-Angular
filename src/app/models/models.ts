@@ -2,6 +2,7 @@ export interface Category {
   id: number;
   category: string;
   subCategory: string;
+  photoUrl?: string;
 }
 
 export interface SuggestedProduct {
