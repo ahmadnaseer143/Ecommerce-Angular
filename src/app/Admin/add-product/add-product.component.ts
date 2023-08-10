@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Category, CategoryAndSubCategory, Offer, Product } from 'src/app/models/models';
@@ -15,8 +16,9 @@ export class AddProductComponent {
   categoryList: CategoryAndSubCategory[] = [];
   subCategoryList: any = [];
   offerList: Offer[] = [];
+  photoFile !: File;
 
-  constructor(private router: Router, private navigationService: NavigationService, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private navigationService: NavigationService, private formBuilder: FormBuilder, private fireStorage: AngularFireStorage) { }
 
   ngOnInit() {
     this.productForm = this.formBuilder.group({
@@ -36,7 +38,7 @@ export class AddProductComponent {
       }),
       quantity: [0, Validators.required],
       imageName: ['', Validators.required],
-      imageFile: ['', Validators.required]
+      imageFile: ['']
     })
 
     this.loadCategories();
@@ -135,34 +137,46 @@ export class AddProductComponent {
   }
 
   uploadImage(event: any) {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      // console.log(file);
-
-      const reader = new FileReader();
-
-      reader.onload = (e: any) => {
-        const fileContent = e.target.result;
-        // Extract the base64 string (remove the data URL prefix)
-        const base64String = fileContent.split(',')[1];
-
-        // Set the base64 string to form control
-        this.productForm.controls['imageFile'].setValue(base64String);
-      };
-
-      reader.readAsDataURL(file);
+    const file: File = event.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        return;
+      }
+      this.photoFile = file;
     }
+
+    // if (event.target.files && event.target.files.length > 0) {
+    //   const file = event.target.files[0];
+    //   // console.log(file);
+
+    //   const reader = new FileReader();
+
+    //   reader.onload = (e: any) => {
+    //     const fileContent = e.target.result;
+    //     // Extract the base64 string (remove the data URL prefix)
+    //     const base64String = fileContent.split(',')[1];
+
+    //     // Set the base64 string to form control
+    //     this.productForm.controls['imageFile'].setValue(base64String);
+    //   };
+
+    //   reader.readAsDataURL(file);
+    // }
   }
 
-  addProduct() {
+  async addProduct() {
     if (this.productForm.invalid) {
       alert("Validation Error");
       return;
     }
 
-    const product = { ...this.productForm.value } as Product;
+    const path = `products/${this.photoFile.name}`;
+    const uploadTask = await this.fireStorage.upload(path, this.photoFile);
+    const url = await uploadTask.ref.getDownloadURL();
 
-    console.log(product);
+    const product = { ...this.productForm.value, imageFile: url } as Product;
+
+    // console.log(product);
 
     this.navigationService.insertProduct(product).subscribe(res => {
       this.router.navigate(['admin'])
