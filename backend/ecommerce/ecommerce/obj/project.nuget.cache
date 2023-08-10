@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Onv1hdcFWfrpLuetsu5lt/s++r1dr41V4errtJ1YWevz50yQE99OZ1RDXkY/MpEKXTTMR78hJyVaH1g/eiZMvA==",
+  "dgSpecHash": "E9AS0Bby8x4i0M7Oh2zb5YaknTD2AFsb0tNWIr12CaxAo6THRgivSM6IR4BoWVidnK5Ebo1jput7iKxYMLEHcg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
+  "projectFilePath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Naseer.Ahmad2\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
     "C:\\Users\\Naseer.Ahmad2\\.nuget\\packages\\k4os.compression.lz4\\1.3.5\\k4os.compression.lz4.1.3.5.nupkg.sha512",

@@ -6,7 +6,7 @@ namespace ecommerce.Data.Interfaces
   {
     Task<List<ProductCategory>> GetProductCategories();
 
-    Task<bool> InsertProductCategory(ProductCategory productCategory, IFormFile photoFile);
+    Task<string> InsertProductCategory(ProductCategory productCategory);
 
     Task<bool> UpdateCategory(ProductCategory category, IFormFile photoFile);
     Task<bool> DeleteProductCategory(int id);

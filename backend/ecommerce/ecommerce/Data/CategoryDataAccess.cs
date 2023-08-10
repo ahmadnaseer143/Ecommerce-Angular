@@ -44,7 +44,7 @@ namespace ecommerce.Data
       return productCategories;
     }
 
-    public async Task<bool> InsertProductCategory(ProductCategory productCategory, IFormFile photoFile)
+    public async Task<string> InsertProductCategory(ProductCategory productCategory)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -53,34 +53,69 @@ namespace ecommerce.Data
           Connection = connection
         };
 
-        string query = "INSERT INTO productcategories (Category, SubCategory) VALUES (@Category, @SubCategory)";
+        string query = "INSERT INTO productcategories (Category, SubCategory, PhotoUrl) VALUES (@Category, @SubCategory, @PhotoUrl)";
         command.CommandText = query;
         command.Parameters.AddWithValue("@Category", productCategory.Category);
         command.Parameters.AddWithValue("@SubCategory", productCategory.SubCategory);
+        command.Parameters.AddWithValue("@PhotoUrl", productCategory.PhotoUrl); // Assuming PhotoUrl is a property in your ProductCategory class.
 
         try
         {
           await connection.OpenAsync();
 
-          // Save the photo file to the "Resources/Banner" folder using the subCategory name as the filename
-          string fileName = productCategory.SubCategory + Path.GetExtension(photoFile.FileName);
-          string imagePath = Path.Combine("Resources", "Banner", fileName);
-          using (var stream = new FileStream(imagePath, FileMode.Create))
-          {
-            await photoFile.CopyToAsync(stream);
-          }
-
           int rowsAffected = await command.ExecuteNonQueryAsync();
-          return rowsAffected > 0;
+          if (rowsAffected > 0)
+          {
+            return "ok";
+          }
         }
         catch (Exception ex)
         {
-          // Handling any potential exceptions
-          Console.WriteLine($"Error inserting product category: {ex.Message}");
-          return false;
+          return ex.Message;
         }
       }
+
+      return "Failed to insert product category."; // Return a default error message if the insertion failed for some reason.
     }
+
+
+    //public async Task<bool> InsertProductCategory(ProductCategory productCategory, IFormFile photoFile)
+    //{
+    //  using (MySqlConnection connection = new MySqlConnection(dbConnection))
+    //  {
+    //    MySqlCommand command = new MySqlCommand
+    //    {
+    //      Connection = connection
+    //    };
+
+    //    string query = "INSERT INTO productcategories (Category, SubCategory) VALUES (@Category, @SubCategory)";
+    //    command.CommandText = query;
+    //    command.Parameters.AddWithValue("@Category", productCategory.Category);
+    //    command.Parameters.AddWithValue("@SubCategory", productCategory.SubCategory);
+
+    //    try
+    //    {
+    //      await connection.OpenAsync();
+
+    //      // Save the photo file to the "Resources/Banner" folder using the subCategory name as the filename
+    //      string fileName = productCategory.SubCategory + Path.GetExtension(photoFile.FileName);
+    //      string imagePath = Path.Combine("Resources", "Banner", fileName);
+    //      using (var stream = new FileStream(imagePath, FileMode.Create))
+    //      {
+    //        await photoFile.CopyToAsync(stream);
+    //      }
+
+    //      int rowsAffected = await command.ExecuteNonQueryAsync();
+    //      return rowsAffected > 0;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //      // Handling any potential exceptions
+    //      Console.WriteLine($"Error inserting product category: {ex.Message}");
+    //      return false;
+    //    }
+    //  }
+    //}
 
     public async Task<bool> UpdateCategory(ProductCategory category, IFormFile photoFile)
     {

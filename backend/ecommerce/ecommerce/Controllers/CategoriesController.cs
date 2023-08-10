@@ -42,23 +42,39 @@ namespace ecommerce.Controllers
     }
 
     [HttpPost("InsertCategory")]
-    public async Task<IActionResult> InsertCategory([FromForm] ProductCategory productCategory, IFormFile photoFile)
+    public async Task<IActionResult> InsertCategory([FromForm] ProductCategory productCategory)
     {
-      if (photoFile == null || photoFile.Length == 0)
-      {
-        return BadRequest("No photo file found.");
-      }
+      var result = await dataAccess.InsertProductCategory(productCategory);
 
-      var result = await dataAccess.InsertProductCategory(productCategory, photoFile);
-      if (result)
+      if (result == "ok")
       {
         return Ok(result);
       }
       else
       {
-        return BadRequest("Failed to insert product category.");
+        return BadRequest(new { error = "Failed to insert product category.", msg = result });
       }
     }
+
+
+    //[HttpPost("InsertCategory")]
+    //public async Task<IActionResult> InsertCategory([FromForm] ProductCategory productCategory, IFormFile photoFile)
+    //{
+    //  if (photoFile == null || photoFile.Length == 0)
+    //  {
+    //    return BadRequest("No photo file found.");
+    //  }
+
+    //  var result = await dataAccess.InsertProductCategory(productCategory, photoFile);
+    //  if (result)
+    //  {
+    //    return Ok(result);
+    //  }
+    //  else
+    //  {
+    //    return BadRequest("Failed to insert product category.");
+    //  }
+    //}
 
     [HttpPut("EditCategory")]
     public async Task<IActionResult> EditCategory([FromForm] EditCategoryRequest editCategoryRequest)

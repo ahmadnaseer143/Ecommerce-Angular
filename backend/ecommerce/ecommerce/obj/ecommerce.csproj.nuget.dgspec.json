@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj": {}
+    "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj": {
+    "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
+        "projectUniqueName": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
         "projectName": "ecommerce",
-        "projectPath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
+        "projectPath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\ecommerce.csproj",
         "packagesPath": "C:\\Users\\Naseer.Ahmad2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\obj\\",
+        "outputPath": "C:\\Users\\Naseer.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Naseer.Ahmad2\\AppData\\Roaming\\NuGet\\NuGet.Config",
