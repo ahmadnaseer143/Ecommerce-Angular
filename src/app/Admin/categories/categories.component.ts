@@ -59,36 +59,59 @@ export class CategoriesComponent {
     }
   }
 
+  async deleteImage(imageUrl: string) {
+    if (imageUrl) {
+      const storageRef = this.fireStorage.refFromURL(imageUrl);
+      try {
+        await storageRef.delete();
+        console.log('Image deleted successfully');
+      } catch (error) {
+        console.error('Error deleting image:', error);
+      }
+    }
+  }
+
   async addCategory() {
     this.categoryForm.markAllAsTouched();
-    if (this.categoryForm.invalid) {
-      console.log("hello");
-      return;
-    }
+    if (this.categoryForm.invalid) return;
 
     if (this.edit) {
       console.log("Edit Form");
       // console.log(this.categoryForm.value)
 
-      this.navigationService.editCategory(this.categoryForm.value, this.photoFile).subscribe((res: any) => {
-        console.log("Edited");
-        this.loadCategories();
-        this.resetForm();
-      },
-        error => console.log("Error in Editing Category", error)
-      )
+      if (this.photoFile) {
+        const originalImageUrl = this.categoryForm.value.photoUrl;
+        await this.deleteImage(originalImageUrl);
+
+        const path = `categories/${this.photoFile.name}`;
+        const uploadTask = await this.fireStorage.upload(path, this.photoFile);
+        const url = await uploadTask.ref.getDownloadURL();
+        const updatedFormValue = { ...this.categoryForm.value, photoUrl: url };
+        this.navigationService.editCategory(updatedFormValue).subscribe((res: any) => {
+          console.log("Edited With Image");
+          this.loadCategories();
+          this.resetForm();
+        },
+          error => console.log("Error in Editing Category", error)
+        )
+      } else {
+        this.navigationService.editCategory(this.categoryForm.value).subscribe((res: any) => {
+          console.log("Edited Without image");
+          this.loadCategories();
+          this.resetForm();
+        },
+          error => console.log("Error in Editing Category", error)
+        )
+      }
+
 
     } else {
-      console.log("Add Form");
       // console.log(this.categoryForm.value);
       const path = `categories/${this.photoFile.name}`;
       const uploadTask = await this.fireStorage.upload(path, this.photoFile);
       const url = await uploadTask.ref.getDownloadURL();
-      console.log(url)
       const updatedFormValue = { ...this.categoryForm.value, photoUrl: url };
-      console.log(updatedFormValue);
       this.navigationService.insertCategory(updatedFormValue).subscribe((res: any) => {
-        console.log("inserted");
         this.loadCategories();
         this.resetForm();
       },
@@ -103,7 +126,8 @@ export class CategoriesComponent {
     this.categoryForm.reset({
       id: 1,
       category: '',
-      subCategory: ''
+      subCategory: '',
+      photoUrl: ''
     });
   }
 
@@ -121,28 +145,23 @@ export class CategoriesComponent {
     // this.getBannerImage(category.subCategory);
   }
 
-  getBannerImage(subCategory: string) {
-    this.navigationService.getBanner(subCategory).subscribe(
-      (imageBlob: Blob) => {
-        const fileOptions: FilePropertyBag = {
-          type: imageBlob.type,
-          lastModified: Date.now(),
-        };
-        this.photoFile = new File([imageBlob], subCategory, fileOptions);
+  // getBannerImage(subCategory: string) {
+  //   this.navigationService.getBanner(subCategory).subscribe(
+  //     (imageBlob: Blob) => {
+  //       const fileOptions: FilePropertyBag = {
+  //         type: imageBlob.type,
+  //         lastModified: Date.now(),
+  //       };
+  //       this.photoFile = new File([imageBlob], subCategory, fileOptions);
 
-        // Manually trigger change detection to update the view with the new photoFile URL
-        this.changeDetectorRef.detectChanges();
-      },
-      (error) => console.log(`Error loading image for ${subCategory}:`, error)
-    );
-  }
+  //       // Manually trigger change detection to update the view with the new photoFile URL
+  //       this.changeDetectorRef.detectChanges();
+  //     },
+  //     (error) => console.log(`Error loading image for ${subCategory}:`, error)
+  //   );
+  // }
 
   getPhotoFileURL(): any {
-    // Check if the photoFile exists and return its URL
-    // if (this.photoFile) {
-    //   return URL.createObjectURL(this.photoFile);
-    // }
-    // return null;
     if (this.photoFile) {
       return URL.createObjectURL(this.photoFile);
     }

@@ -118,7 +118,7 @@ namespace ecommerce.Data
     //  }
     //}
 
-    public async Task<bool> UpdateCategory(ProductCategory category, IFormFile photoFile)
+    public async Task<string> UpdateCategory(ProductCategory category)
     {
       using (MySqlConnection connection = new MySqlConnection(dbConnection))
       {
@@ -127,45 +127,29 @@ namespace ecommerce.Data
           Connection = connection
         };
 
-        string query = "UPDATE productcategories SET Category = @Category, SubCategory = @SubCategory WHERE CategoryId = @CategoryId";
+        string query = "UPDATE productcategories SET Category = @Category, SubCategory = @SubCategory, PhotoUrl= @PhotoUrl WHERE CategoryId = @CategoryId";
         command.CommandText = query;
         command.Parameters.AddWithValue("@CategoryId", category.Id);
         command.Parameters.AddWithValue("@Category", category.Category);
         command.Parameters.AddWithValue("@SubCategory", category.SubCategory);
+        command.Parameters.AddWithValue("@PhotoUrl", category.PhotoUrl);
 
         try
         {
           await connection.OpenAsync();
 
-          // Retrieve the previous SubCategory associated with the CategoryId
-          string previousSubCategory = GetPreviousSubCategory(connection, category.Id);
-
           int rowsAffected = await command.ExecuteNonQueryAsync();
-
-          // If the SubCategory is updated and a new photo is provided, update the image file
-          if (rowsAffected > 0 && !string.IsNullOrEmpty(category.SubCategory) && photoFile != null)
+          if (rowsAffected > 0)
           {
-            // Delete the old image associated with the previous SubCategory
-            DeleteImage(previousSubCategory);
-
-            // Save the new photo file to the "Resources/Banner" folder using the updated SubCategory name as the filename
-            string fileName = category.SubCategory + Path.GetExtension(photoFile.FileName);
-            string imagePath = Path.Combine("Resources", "Banner", fileName);
-            using (var stream = new FileStream(imagePath, FileMode.Create))
-            {
-              await photoFile.CopyToAsync(stream);
-            }
+            return "ok";
           }
-
-          return rowsAffected > 0;
         }
         catch (Exception ex)
         {
-          // Handling any potential exceptions
-          Console.WriteLine($"Error updating category: {ex.Message}");
-          return false;
+          return ex.Message;
         }
       }
+      return "Failed to update Category";
     }
 
     private string GetPreviousSubCategory(MySqlConnection connection, int categoryId)

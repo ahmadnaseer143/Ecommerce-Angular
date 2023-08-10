@@ -77,22 +77,18 @@ namespace ecommerce.Controllers
     //}
 
     [HttpPut("EditCategory")]
-    public async Task<IActionResult> EditCategory([FromForm] EditCategoryRequest editCategoryRequest)
+    public async Task<IActionResult> EditCategory(ProductCategory category)
     {
-        ProductCategory categoryToUpdate = editCategoryRequest.Category;
 
-        // Check if a new photo file is provided
-        IFormFile photoFile = editCategoryRequest.PhotoFile;
-
-        bool isUpdated = await dataAccess.UpdateCategory(categoryToUpdate, photoFile);
-        if (isUpdated)
+        string result = await dataAccess.UpdateCategory(category);
+        if (result=="ok")
         {
-            return Ok(isUpdated);
+            return Ok(result);
         }
         else
         {
-            return BadRequest("Failed to update category.");
-        }
+        return BadRequest(new { error = "Failed to update category.", msg = result });
+      }
     }
 
 

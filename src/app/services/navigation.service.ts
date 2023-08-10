@@ -57,16 +57,8 @@ export class NavigationService {
     return this.http.post(this.baseurlCategory + 'InsertCategory', category, { responseType: 'text' });
   }
 
-  editCategory(category: Category, photoFile: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('Category.Id', category?.id?.toString());
-    formData.append('Category.Category', category.category);
-    formData.append('Category.SubCategory', category.subCategory);
-
-    if (photoFile) {
-      formData.append('PhotoFile', photoFile);
-    }
-    return this.http.put(this.baseurlCategory + "EditCategory", formData);
+  editCategory(category: Category): Observable<any> {
+    return this.http.put(this.baseurlCategory + "EditCategory", category, { responseType: 'text' });
   }
 
   deleteCategory(id: number): Observable<any> {
