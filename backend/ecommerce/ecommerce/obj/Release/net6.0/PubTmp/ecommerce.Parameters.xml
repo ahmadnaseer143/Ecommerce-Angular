@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="ecommerce-backend-apis" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Naseer\.Ahmad2\\Desktop\\Workspace\\E-commerce\\combined\\Ecommerce-Angular\\backend\\ecommerce\\ecommerce\\obj\\Release\\net6\.0\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>

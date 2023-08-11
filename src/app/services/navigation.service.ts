@@ -19,14 +19,14 @@ import {
   providedIn: 'root',
 })
 export class NavigationService {
-  baseurlCategory = 'https://localhost:44376/api/Categories/';
-  baseurlCarts = 'https://localhost:44376/api/Carts/';
-  baseurlOffers = 'https://localhost:44376/api/Offers/';
-  baseurlOrders = 'https://localhost:44376/api/Orders/';
-  baseurlPayments = 'https://localhost:44376/api/Payments/';
-  baseurlProducts = 'https://localhost:44376/api/Products/';
-  baseurlReviews = 'https://localhost:44376/api/Reviews/';
-  baseurlUsers = 'https://localhost:44376/api/Users/';
+  baseurlCategory = 'https://ecommerce-backend-apis.azurewebsites.net/api/Categories/';
+  baseurlCarts = 'https://ecommerce-backend-apis.azurewebsites.net/api/Carts/';
+  baseurlOffers = 'https://ecommerce-backend-apis.azurewebsites.net/api/Offers/';
+  baseurlOrders = 'https://ecommerce-backend-apis.azurewebsites.net/api/Orders/';
+  baseurlPayments = 'https://ecommerce-backend-apis.azurewebsites.net/api/Payments/';
+  baseurlProducts = 'https://ecommerce-backend-apis.azurewebsites.net/api/Products/';
+  baseurlReviews = 'https://ecommerce-backend-apis.azurewebsites.net/api/Reviews/';
+  baseurlUsers = 'https://ecommerce-backend-apis.azurewebsites.net/api/Users/';
 
   constructor(private http: HttpClient) { }
 
