@@ -1,8 +1,8 @@
 <div class="grid-view" *ngIf="view === 'grid'">
   <div class="card">
     <div class="card-header">Header</div>
-    <div *ngIf="imageSrc">
-      <img [src]="imageSrc" class="card-img-top img-fluid" alt="Card Image" OpenProductDetails
+    <div *ngIf="product.imageFile">
+      <img [src]="product.imageFile" class="card-img-top img-fluid" alt="Card Image" OpenProductDetails
         [productId]="product.id" />
       <!-- <img src="../../assets/Images/{{product.productCategory.subCategory}}/{{product.id}}/1.jpg"
         class="card-img-top img-fluid" alt="Card Image" OpenProductDetails [productId]="product.id" /> -->

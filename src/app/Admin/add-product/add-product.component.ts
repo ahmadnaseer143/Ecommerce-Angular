@@ -170,7 +170,9 @@ export class AddProductComponent {
       return;
     }
 
-    const path = `products/${this.photoFile.name}`;
+    const timestamp = new Date().getTime(); // Unique timestamp
+    const fileName = `${timestamp}_${this.photoFile.name}`;
+    const path = `products/${fileName}`;
     const uploadTask = await this.fireStorage.upload(path, this.photoFile);
     const url = await uploadTask.ref.getDownloadURL();
 

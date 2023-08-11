@@ -293,6 +293,7 @@ namespace ecommerce.Data
           productCategory.Id = (int)reader["CategoryId"];
           productCategory.Category = (string)reader["Category"];
           productCategory.SubCategory = (string)reader["SubCategory"];
+          productCategory.PhotoUrl = (string)reader["PhotoUrl"];
         }
       }
       return productCategory;

@@ -5,7 +5,7 @@
                 [queryParams]="{ category: product.category, subcategory: product.subCategory }">
                 <button class="btn btn-outline-light btn-lg">Shop Now</button>
             </a>
-            <img [src]="product.image" class="w-100" alt="">
+            <img [src]="product.photoUrl" class="w-100" alt="">
         </div>
         <div class="product-list py-5">
             <app-suggested-product [category]="product"></app-suggested-product>

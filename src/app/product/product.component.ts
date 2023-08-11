@@ -28,6 +28,7 @@ export class ProductComponent {
     },
     quantity: 0,
     imageName: '',
+    imageFile: ''
   };
 
   imageSrc: string | undefined;
@@ -37,14 +38,14 @@ export class ProductComponent {
   constructor(public utilityService: UtilityService, public navigationService: NavigationService) { }
 
   ngOnInit() {
-    this.navigationService.getImage(this.product.id).subscribe(
-      (imageBlob: Blob) => {
-        this.imageSrc = URL.createObjectURL(imageBlob);
-      },
-      (error: any) => {
-        console.error('Failed to load product image:', error);
-      }
-    );
+    // this.navigationService.getImage(this.product.id).subscribe(
+    //   (imageBlob: Blob) => {
+    //     this.imageSrc = URL.createObjectURL(imageBlob);
+    //   },
+    //   (error: any) => {
+    //     console.error('Failed to load product image:', error);
+    //   }
+    // );
   }
 
   onRemoveFromCart() {

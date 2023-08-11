@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Category } from '../models/models';
 import { NavigationService } from '../services/navigation.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class HomeComponent {
   suggestedProducts: any[] = [];
 
-  constructor(private navigationService: NavigationService, private sanitizer: DomSanitizer) { }
+  constructor(private navigationService: NavigationService, private sanitizer: DomSanitizer, private fireStorage: AngularFireStorage) { }
 
   ngOnInit() {
     this.loadCategories();
@@ -22,7 +23,7 @@ export class HomeComponent {
     this.navigationService.getCategoryList().subscribe((res: any) => {
       console.log(res);
       this.suggestedProducts = res;
-      this.loadImages(res);
+      // this.loadImages(res);
     }, error => console.log("Error in getting categroies list", error))
   }
 

@@ -53,6 +53,7 @@ namespace ecommerce.Data
             Price = Convert.ToDouble(reader["Price"]),
             Quantity = (int)reader["Quantity"],
             ImageName = (string)reader["ImageName"],
+            ImageFile = (string)reader["ImageData"],
           };
 
           var categoryId = (int)reader["CategoryId"];

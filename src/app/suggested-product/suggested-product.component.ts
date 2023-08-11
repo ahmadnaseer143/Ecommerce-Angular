@@ -13,6 +13,7 @@ export class SuggestedProductComponent {
     id: 0,
     category: '',
     subCategory: '',
+    photoUrl: ''
   };
 
   products: Product[] = [];
@@ -27,8 +28,8 @@ export class SuggestedProductComponent {
         this.count
       )
       .subscribe((res: any[]) => {
-        // console.log("res")
-        // console.log(res)
+        console.log("res")
+        console.log(res)
         for (let product of res) {
           this.products.push(product);
         }

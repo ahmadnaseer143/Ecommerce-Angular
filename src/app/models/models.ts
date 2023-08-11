@@ -44,6 +44,7 @@ export interface Product {
   price: number;
   quantity: number;
   imageName: string;
+  imageFile?: string;
 }
 
 export interface User {
